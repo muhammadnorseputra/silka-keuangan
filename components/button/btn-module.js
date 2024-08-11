@@ -1,0 +1,82 @@
+"use client";
+
+import { useRouter } from "next-nprogress-bar";
+import { setCookie } from "cookies-next";
+import { toast } from "react-hot-toast";
+import { useState } from "react";
+import { useSession } from "@/lib/session";
+import { ArrowRightCircleFill } from "react-bootstrap-icons";
+import { Spinner } from "@nextui-org/react";
+
+async function getGapok() {
+  const account = {
+    username: process.env.NEXT_PUBLIC_GAPOK_USERNAME,
+    password: process.env.NEXT_PUBLIC_GAPOK_PASSWORD,
+    kddati1: process.env.NEXT_PUBLIC_GAPOK_KDDATI1,
+    kddati2: process.env.NEXT_PUBLIC_GAPOK_KDDATI2,
+  };
+  const getUserGapok = await fetch(
+    `${process.env.NEXT_PUBLIC_GAPOK_BASE_URL}/${process.env.NEXT_PUBLIC_GAPOK_PATH}/login`,
+    {
+      method: "POST",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(account),
+    }
+  );
+  const response = await getUserGapok.json();
+  return response;
+}
+
+const BtnModule = ({ goTo, isDisabled }) => {
+  const [stateLoading, setStateLoading] = useState(false);
+  const router = useRouter();
+  const session = useSession("USER_GAPOK");
+
+  const hendleModule = () => {
+    setStateLoading(true);
+
+    if (session === true) {
+      router.refresh();
+      toast.remove();
+      return router.push(goTo);
+    }
+
+    toast.promise(getGapok(), {
+      loading: "Proccesing",
+      success: (data) => {
+        setStateLoading(false);
+        router.push(goTo);
+        setCookie("USER_GAPOK", data, { maxAge: 3600 });
+        // return `Authorize succes (${data?.datauser[0]?.nama_user})`;
+        return `Authorize succes`;
+      },
+      error: (err) => {
+        setStateLoading(false);
+        return `Gagal menghubungi server ${process.env.NEXT_PUBLIC_GAPOK_BASE_URL} (${err})`;
+      },
+    });
+  };
+
+  return (
+    <>
+      <button
+        onClick={hendleModule}
+        className="inline-flex w-full justify-center disabled:opacity-30 disabled:cursor-not-allowed items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg dark:shadow-sm shadow-lg shadow-blue-500 disabled:shadow-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 group"
+        disabled={stateLoading || isDisabled}>
+        {stateLoading ? (
+          <Spinner size="sm" color="default" />
+        ) : (
+          <div className="flex justify-center items-center gap-x-4">
+            Pilih
+            <ArrowRightCircleFill className="size-6 group-hover:text-white/30 group-hover:translate-x-9 ease-in duration-300 group-hover:transition-all" />
+          </div>
+        )}
+      </button>
+    </>
+  );
+};
+
+export { BtnModule };
