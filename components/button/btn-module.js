@@ -4,7 +4,7 @@ import { useRouter } from "next-nprogress-bar";
 import { setCookie } from "cookies-next";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
-import { useSession } from "@/lib/session";
+import { hasSession } from "@/lib/session";
 import { ArrowRightCircleFill } from "react-bootstrap-icons";
 import { Spinner } from "@nextui-org/react";
 
@@ -33,13 +33,12 @@ async function getGapok() {
 const BtnModule = ({ goTo, isDisabled }) => {
   const [stateLoading, setStateLoading] = useState(false);
   const router = useRouter();
-  const session = useSession("USER_GAPOK");
+  const session_has = hasSession("USER_GAPOK");
 
   const hendleModule = () => {
     setStateLoading(true);
 
-    if (session === true) {
-      router.refresh();
+    if (session_has === true) {
       toast.remove();
       return router.push(goTo);
     }

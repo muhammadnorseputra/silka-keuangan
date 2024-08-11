@@ -1,15 +1,12 @@
 import { BtnBackNextUi } from "@/components/button/btn-back";
 import { TablePegawai } from "@/components/tables/table-pegawai";
-import { Card, CardHeader, CardBody, Button } from "@nextui-org/react";
+import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import { redirect } from "next/navigation";
 import { hasSessionServer, useSessionServer } from "../server-session";
 import { getPegawaiByUnor } from "@/dummy/data-pegawai-by-unor";
 import { BtnProfile } from "@/components/button/btn-profile";
 import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 import { decrypt } from "@/helpers/encrypt";
-import Image from "next/image";
-import { revalidatePath } from "next/cache";
-import { Reload } from "@/components/button/btn-reload";
 import { Error500 } from "@/components/errors/500";
 
 async function Page({ searchParams }) {
@@ -37,7 +34,7 @@ async function Page({ searchParams }) {
       <>
         <TablePegawai
           silka={silka_session}
-          unorlist={getUnorByRole}
+          unors={getUnorByRole}
           pegawais={getPegawaiByUnorId}
         />
       </>

@@ -3,6 +3,7 @@ import ModalProvider from "@/lib/context/modal-context";
 import { Providers } from "@/lib/nextuiproviders";
 import { Toaster } from "react-hot-toast";
 import ProgressProviders from "@/lib/ProgressBarProvider";
+import { FetchQueryProvider } from "@/lib/FetchQueryProvider";
 
 export const metadata = {
   title: "Welcome SILKa Keuangan Daerah",
@@ -12,11 +13,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="light">
+    <html lang="en" className="dark">
       <body>
-        <Providers>
+        <Providers
+          disableAnimation
+          skipFramerMotionAnimations
+          validationBehavior="native">
           <ProgressProviders>
-            <ModalProvider>{children}</ModalProvider>
+            <ModalProvider>
+              <FetchQueryProvider>{children}</FetchQueryProvider>
+            </ModalProvider>
           </ProgressProviders>
         </Providers>
         <Toaster position="top-center" />

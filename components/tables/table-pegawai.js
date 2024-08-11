@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useMemo } from "react";
+import { useCallback, useState, useMemo, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -32,18 +32,20 @@ import {
 } from "@heroicons/react/24/solid";
 import { useRouter } from "next-nprogress-bar";
 import { encrypt } from "@/helpers/encrypt";
+// import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 
 const INITIAL_VISIBLE_COLUMNS = ["nip", "nama", "jabatan", "aksi"];
 
-export const TablePegawai = ({ silka, unorlist, pegawais }) => {
+export const TablePegawai = ({ silka, unors, pegawais }) => {
   const router = useRouter();
   const { data: datapegawai } = pegawais;
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingTable, setIsLoadingTable] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [visibleColumns, setVisibleColumns] = useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-  const [selectedKeyUnor, setSelectedKeyUnor] = useState(1120);
+  // const [dataUnor, setDataUnor] = useState([]);
+  const [selectedKeyUnor, setSelectedKeyUnor] = useState(0);
   const [statusFilter, setStatusFilter] = useState("all");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sortDescriptor, setSortDescriptor] = useState({
@@ -53,6 +55,17 @@ export const TablePegawai = ({ silka, unorlist, pegawais }) => {
   const [page, setPage] = useState(1);
 
   const hasSearchFilter = Boolean(filterValue);
+
+  // const { nip, level } = silka?.data;
+  // useEffect(() => {
+  //   setIsLoadingTable(true);
+  //   const getUnorByRole = async () => {
+  //     const getUnorByRole = await dataUnorByRole(nip, level);
+  //     setDataUnor(getUnorByRole?.data);
+  //     setIsLoadingTable(false);
+  //   };
+  //   getUnorByRole();
+  // }, [level, nip, silka.data]);
 
   const headerColumns = useMemo(() => {
     if (!visibleColumns) return columns;
@@ -123,7 +136,7 @@ export const TablePegawai = ({ silka, unorlist, pegawais }) => {
         case "aksi":
           return (
             <div className="relative flex justify-end items-center gap-2">
-              <Dropdown>
+              <Dropdown backdrop="blur">
                 <DropdownTrigger>
                   <Button
                     className="group"
@@ -137,7 +150,7 @@ export const TablePegawai = ({ silka, unorlist, pegawais }) => {
                     Layanan
                   </Button>
                 </DropdownTrigger>
-                <DropdownMenu>
+                <DropdownMenu color="primary" variant="faded">
                   <DropdownItem
                     key="peremajaan"
                     onClick={() =>
@@ -236,6 +249,7 @@ export const TablePegawai = ({ silka, unorlist, pegawais }) => {
         <div className="flex justify-between gap-3 items-start">
           <Autocomplete
             size="md"
+            isLoading={isLoadingTable}
             placeholder={`Pilih Unit Kerja`}
             selectedKey={`${selectedKeyUnor}`}
             classNames={{
@@ -255,7 +269,7 @@ export const TablePegawai = ({ silka, unorlist, pegawais }) => {
               />
             }
             labelPlacement="outside-left">
-            {unorlist?.map((unor) => (
+            {unors?.map((unor) => (
               <AutocompleteItem
                 key={encrypt(unor.id_unit_kerja, "bkpsdm@6811")}
                 value={encrypt(unor.id_unit_kerja, "bkpsdm@6811")}
@@ -304,11 +318,12 @@ export const TablePegawai = ({ silka, unorlist, pegawais }) => {
     );
   }, [
     filterValue,
+    isLoadingTable,
     onClear,
     onSearchChange,
     onSelectionChange,
     selectedKeyUnor,
-    unorlist,
+    unors,
     visibleColumns,
   ]);
 
@@ -343,7 +358,6 @@ export const TablePegawai = ({ silka, unorlist, pegawais }) => {
       </div>
     );
   }, [datapegawai.length, onRowsPerPageChange, page, pages]);
-
   return (
     <Table
       isStriped
@@ -369,7 +383,7 @@ export const TablePegawai = ({ silka, unorlist, pegawais }) => {
         )}
       </TableHeader>
       <TableBody
-        isLoading={isLoading}
+        isLoading={isLoadingTable}
         emptyContent={"No rows to display."}
         loadingContent={<Spinner label="Loading..." />}
         items={sortedItems}>

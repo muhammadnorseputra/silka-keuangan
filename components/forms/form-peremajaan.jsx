@@ -1,26 +1,28 @@
 "use client";
 
+import { getBankSigapok } from "@/dummy/sigapok-get-bank";
+import { useModalContext } from "@/lib/context/modal-context";
+import {
+  useBank,
+  useJenisPegawai,
+  usePangkat,
+  useSatkers,
+  useSkpds,
+  useStatusPegawai,
+} from "@/lib/FetchQuery";
 import {
   CircleStackIcon,
   SparklesIcon,
   UserCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
-import {
-  // @ts-ignore
-  Briefcase,
-  BriefcaseFill,
-  // @ts-ignore
-  CheckCircleFill,
-} from "react-bootstrap-icons";
-// @ts-ignore
-import { AlertDanger, AlertWarning } from "../alert";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { BriefcaseFill } from "react-bootstrap-icons";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { AlertWarning } from "../alert";
 import { ModalPeremajaan } from "../modal/modal-peremajaan";
-import { useModalContext } from "@/lib/context/modal-context";
 const {
   Tabs,
   CardBody,
@@ -32,28 +34,16 @@ const {
   Autocomplete,
   AutocompleteItem,
   CardHeader,
-  // @ts-ignore
-  Select,
-  // @ts-ignore
-  SelectItem,
   Textarea,
 } = require("@nextui-org/react");
 
-const FormPeremajaan = ({
-  skpd,
-  satker,
-  jenispegawai,
-  pangkat,
-  statuspegawai,
-  bank,
-  pegawais,
-}) => {
+const FormPeremajaan = ({ sigapok, pegawais }) => {
+  const [data, setData] = useState([]);
   const { isOpen, setIsOpen } = useModalContext();
   const {
     register,
     handleSubmit,
     formState: { errors, isLoading, isSubmitting, isValid },
-    setValue,
   } = useForm();
 
   const {
@@ -82,10 +72,57 @@ const FormPeremajaan = ({
     kode_status_pegawai,
     kode_pangkat,
     kode_jenis_pegawai,
-    kode_jenkel,
     status_data,
     gapok,
   } = pegawais;
+
+  const {
+    data: skpds,
+    error: errorSkpd,
+    isLoading: isLoadingSkpd,
+    isFetching: isFetchingSkpd,
+    isError: isErrorSkpd,
+  } = useSkpds(sigapok);
+
+  const {
+    data: statusPegawais,
+    error: errorStatusPegawai,
+    isLoading: isLoadingStatusPegawai,
+    isFetching: isFetchingStatusPegawai,
+    isError: isErrorStatusPegawai,
+  } = useStatusPegawai(sigapok);
+
+  const {
+    data: satkers,
+    error: errorSatkers,
+    isLoading: isLoadingSatkers,
+    isFetching: isFetchingSatkers,
+    isError: isErrorSatkers,
+  } = useSatkers(sigapok);
+
+  const {
+    data: jenisPegawais,
+    error: errorJenisPegawai,
+    isLoading: isLoadingJenisPegawai,
+    isFetching: isFetchingJenisPegawai,
+    isError: isErrorJenisPegawai,
+  } = useJenisPegawai(sigapok);
+
+  const {
+    data: pangkats,
+    error: errorPangkat,
+    isLoading: isLoadingPangkat,
+    isFetching: isFetchingPangkat,
+    isError: isErrorPangkat,
+  } = usePangkat(sigapok);
+
+  const {
+    data: banks,
+    error: errorBank,
+    isLoading: isLoadingBank,
+    isFetching: isFetchingBank,
+    isError: isErrorBank,
+  } = useBank(sigapok);
 
   useEffect(() => {
     if (!isValid && isSubmitting) {
@@ -93,8 +130,14 @@ const FormPeremajaan = ({
     }
   }, [isSubmitting, isValid]);
 
-  const isSubmit = async (FormFileds) => {
+  const isConfirm = async (form) => {
     setIsOpen(true);
+    setData(form);
+  };
+
+  const isYakin = () => {
+    setIsOpen(false);
+    console.log(data);
   };
 
   const renderForm = () => {
@@ -121,10 +164,10 @@ const FormPeremajaan = ({
         <ModalPeremajaan
           isOpenModal={isOpen}
           onClose={() => setIsOpen(false)}
-          handlePeremajaan={isSubmit}
+          handlePeremajaan={isYakin}
         />
         <form
-          onSubmit={handleSubmit(isSubmit)}
+          onSubmit={handleSubmit(isConfirm)}
           method="POST"
           autoComplete="off"
           noValidate>
@@ -314,6 +357,9 @@ const FormPeremajaan = ({
                 <CardBody className="grid grid-flow-row-dense grid-cols-4 grid-rows-4 gap-6 py-8 px-6">
                   <Autocomplete
                     isRequired
+                    allowsCustomValue
+                    isLoading={isLoadingSatkers || isFetchingSatkers}
+                    isDisabled={isLoadingSatkers || isFetchingSatkers}
                     className="col-span-4 sm:col-span-2"
                     labelPlacement="outside"
                     size="lg"
@@ -323,21 +369,28 @@ const FormPeremajaan = ({
                     defaultSelectedKey={kode_satker}
                     variant="flat"
                     errorMessage={
-                      errors?.kodesatker?.message &&
-                      `${errors.kodesatker.message}`
+                      (errors?.kodesatker?.message &&
+                        `${errors.kodesatker.message}`) ||
+                      (isErrorSatkers && errorSatkers.message)
                     }
-                    isInvalid={errors?.kodesatker ? true : false}
+                    isInvalid={
+                      errors?.kodesatker || isErrorSatkers ? true : false
+                    }
                     {...register("kodesatker", {
                       required: "Pilih Satker",
                     })}>
-                    {satker.map((s) => (
-                      <AutocompleteItem key={s.kodesatker} value={s.kodesatker}>
-                        {s.nama_satker}
+                    {satkers?.data.map((satker) => (
+                      <AutocompleteItem
+                        key={satker.kodesatker}
+                        value={satker.kodesatker}>
+                        {satker.nama_satker}
                       </AutocompleteItem>
                     ))}
                   </Autocomplete>
                   <Autocomplete
                     isRequired
+                    isLoading={isLoadingSkpd || isFetchingSkpd}
+                    isDisabled={isLoadingSkpd || isFetchingSkpd}
                     className="col-span-4 sm:col-span-2"
                     labelPlacement="outside"
                     size="lg"
@@ -347,23 +400,27 @@ const FormPeremajaan = ({
                     defaultSelectedKey={kode_skpd}
                     variant="flat"
                     errorMessage={
-                      errors?.kodeskpd?.message && `${errors.kodeskpd.message}`
+                      (errors?.kodeskpd?.message &&
+                        `${errors.kodeskpd.message}`) ||
+                      (isErrorSkpd && errorSkpd.message)
                     }
-                    isInvalid={errors?.kodeskpd ? true : false}
+                    isInvalid={errors?.kodeskpd || isErrorSkpd ? true : false}
                     {...register("kodeskpd", {
                       required: "Pilih SKPD",
                     })}>
-                    {skpd.map((s) => (
+                    {skpds?.data.map((skpd) => (
                       <AutocompleteItem
-                        key={s.kodeskpd}
-                        value={s.kodeskpd}
-                        textValue={s.nama_skpd}>
-                        {s.nama_skpd}
+                        key={skpd.kodeskpd}
+                        value={skpd.kodeskpd}
+                        textValue={skpd.nama_skpd}>
+                        {skpd.nama_skpd}
                       </AutocompleteItem>
                     ))}
                   </Autocomplete>
                   <Autocomplete
                     isRequired
+                    isLoading={isLoadingJenisPegawai || isFetchingJenisPegawai}
+                    isDisabled={isLoadingJenisPegawai || isFetchingJenisPegawai}
                     className="col-span-4 sm:col-span-2"
                     labelPlacement="outside"
                     size="lg"
@@ -373,14 +430,17 @@ const FormPeremajaan = ({
                     defaultSelectedKey={kode_jenis_pegawai}
                     variant="flat"
                     errorMessage={
-                      errors?.kode_jenis?.message &&
-                      `${errors.kode_jenis.message}`
+                      (errors?.kode_jenis?.message &&
+                        `${errors.kode_jenis.message}`) ||
+                      (isErrorJenisPegawai && errorJenisPegawai.message)
                     }
-                    isInvalid={errors?.kode_jenis ? true : false}
+                    isInvalid={
+                      errors?.kode_jenis || isErrorJenisPegawai ? true : false
+                    }
                     {...register("kode_jenis", {
                       required: "Pilih Jenis Pegawai",
                     })}>
-                    {jenispegawai.map((js) => (
+                    {jenisPegawais?.data.map((js) => (
                       <AutocompleteItem
                         key={js.kode_jenis}
                         value={js.kode_jenis}
@@ -391,6 +451,8 @@ const FormPeremajaan = ({
                   </Autocomplete>
                   <Autocomplete
                     isRequired
+                    isLoading={isLoadingPangkat || isFetchingPangkat}
+                    isDisabled={isLoadingPangkat || isFetchingPangkat}
                     className="col-span-4 sm:col-span-2"
                     labelPlacement="outside"
                     size="lg"
@@ -400,24 +462,33 @@ const FormPeremajaan = ({
                     defaultSelectedKey={kode_pangkat}
                     variant="flat"
                     errorMessage={
-                      errors?.kode_pangkat?.message &&
-                      `${errors.kode_pangkat.message}`
+                      (errors?.kode_pangkat?.message &&
+                        `${errors.kode_pangkat.message}`) ||
+                      (isErrorPangkat && errorPangkat.message)
                     }
-                    isInvalid={errors?.kode_pangkat ? true : false}
+                    isInvalid={
+                      errors?.kode_pangkat || isErrorPangkat ? true : false
+                    }
                     {...register("kode_pangkat", {
                       required: "Pilih Pangkat Pegawai",
                     })}>
-                    {pangkat.map((kp) => (
+                    {pangkats?.data.map((pangkat) => (
                       <AutocompleteItem
-                        key={kp.kode_pangkat}
-                        value={kp.kode_pangkat}
-                        textValue={`${kp.nama_golongan} - ${kp.ket_pangkat}`}>
-                        {kp.nama_golongan} - {kp.ket_pangkat}
+                        key={pangkat.kode_pangkat}
+                        value={pangkat.kode_pangkat}
+                        textValue={`${pangkat.nama_golongan} - ${pangkat.ket_pangkat}`}>
+                        {pangkat.nama_golongan} - {pangkat.ket_pangkat}
                       </AutocompleteItem>
                     ))}
                   </Autocomplete>
                   <Autocomplete
                     isRequired
+                    isDisabled={
+                      isLoadingStatusPegawai || isFetchingStatusPegawai
+                    }
+                    isLoading={
+                      isLoadingStatusPegawai || isFetchingStatusPegawai
+                    }
                     className="col-span-4 sm:col-span-2"
                     labelPlacement="outside"
                     size="lg"
@@ -427,14 +498,17 @@ const FormPeremajaan = ({
                     defaultSelectedKey={kode_status_pegawai}
                     variant="flat"
                     errorMessage={
-                      errors?.kode_stapeg?.message &&
-                      `${errors.kode_stapeg.message}`
+                      (errors?.kode_stapeg?.message &&
+                        `${errors.kode_stapeg.message}`) ||
+                      (isErrorStatusPegawai && errorStatusPegawai.message)
                     }
-                    isInvalid={errors?.kode_stapeg ? true : false}
+                    isInvalid={
+                      errors?.kode_stapeg || isErrorStatusPegawai ? true : false
+                    }
                     {...register("kode_stapeg", {
                       required: "Pilih Status Pegawai",
                     })}>
-                    {statuspegawai?.map((statuspeg) => (
+                    {statusPegawais?.data.map((statuspeg) => (
                       <AutocompleteItem
                         key={statuspeg.kode_stapeg}
                         value={statuspeg.kode_stapeg}
@@ -565,6 +639,8 @@ const FormPeremajaan = ({
                 <CardBody className="grid grid-flow-row-dense grid-cols-2 grid-rows-2 gap-6 py-8 px-6">
                   <Autocomplete
                     isRequired
+                    isLoading={isErrorBank || isFetchingBank}
+                    isDisabled={isErrorBank || isFetchingBank}
                     allowsCustomValue
                     labelPlacement="outside"
                     size="lg"
@@ -574,29 +650,22 @@ const FormPeremajaan = ({
                     name="kode_bank"
                     variant="flat"
                     defaultSelectedKey={induk_bank}
-                    defaultItems={bank}
                     errorMessage={
-                      errors?.kode_bank?.message &&
-                      `${errors.kode_bank.message}`
+                      (errors?.kode_bank?.message &&
+                        `${errors.kode_bank.message}`) ||
+                      (isErrorBank && errorBank.message)
                     }
-                    isInvalid={errors?.kode_bank ? true : false}
+                    isInvalid={errors?.kode_bank || isErrorBank ? true : false}
                     {...register("kode_bank", {
                       required: "Pilih BANK",
                     })}>
-                    {(item) => (
+                    {banks?.data.map((item) => (
                       <AutocompleteItem
-                        key={
-                          // @ts-ignore
-                          item.id_bank
-                        }
-                        // @ts-ignore
+                        key={item.id_bank}
                         value={item.kode_bank}>
-                        {
-                          // @ts-ignore
-                          item.nama_bank
-                        }
+                        {item.nama_bank}
                       </AutocompleteItem>
-                    )}
+                    ))}
                   </Autocomplete>
                   <Input
                     isRequired

@@ -122,7 +122,7 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
         case "aksi":
           return (
             <div className="relative flex justify-end items-center gap-2">
-              <Dropdown>
+              <Dropdown backdrop="blur">
                 <DropdownTrigger>
                   <Button
                     className="group"
@@ -215,19 +215,19 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
   // top content
   const topContent = useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
+      <>
         <div className="flex justify-between gap-3 items-start">
           <Autocomplete
+            fullWidth
+            disableAnimation={false}
             size="md"
+            variant="bordered"
             placeholder={`Pilih Unit Kerja`}
             defaultItems={unorlist}
             selectedKey={`${selectedKeyUnor}`}
             classNames={{
-              base: "max-w-xl",
-              listboxWrapper: "max-h-[320px]",
-              selectorButton: "text-default-500",
+              selectorButton: "text-default-800",
             }}
-            style={{ width: "500px" }}
             allowsCustomValue={true}
             onSelectionChange={onSelectionChange}
             label={
@@ -247,11 +247,10 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
               </AutocompleteItem>
             ))}
           </Autocomplete>
-
-          <div className="flex align-items-end justify-content-end gap-3">
+          <div className="flex items-start justify-start gap-3">
             <Input
               isClearable
-              className="w-full sm:max-w-[70%]"
+              className="w-full sm:max-w-[80%]"
               placeholder="Search by nama pegawai..."
               startContent={<Icon iconName="Search" />}
               value={filterValue}
@@ -283,7 +282,7 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
             </Dropdown>
           </div>
         </div>
-      </div>
+      </>
     );
   }, [
     filterValue,

@@ -27,15 +27,9 @@ export default async function Page({ params, searchParams }) {
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }
-  const $getNip = decrypt(params?.slug[0], "bkpsdm");
+  const getNip = decrypt(params?.slug[0], "bkpsdm");
 
-  const getSatker = await getSatkerSigapok(sigapok.access_token);
-  const getSkpd = await getSkpdSigapok(sigapok.access_token);
-  const getJenisPegawai = await getJenisPegawaiSigapok(sigapok.access_token);
-  const getPangkat = await getPangkatSigapok(sigapok.access_token);
-  const getStatusPegawai = await getStatusPegawaiSigapok(sigapok.access_token);
-  const getBank = await getBankSigapok(sigapok.access_token);
-  const getPegawais = await getPegawaiByNip($getNip);
+  const getPegawais = await getPegawaiByNip(getNip);
 
   const { nama, nip, gelar_depan, gelar_belakang } = getPegawais;
   const renderForm = () => {
@@ -43,17 +37,7 @@ export default async function Page({ params, searchParams }) {
       return <Error500 />;
     }
 
-    return (
-      <FormPeremajaan
-        satker={getSatker?.data}
-        skpd={getSkpd?.data}
-        jenispegawai={getJenisPegawai?.data}
-        pangkat={getPangkat?.data}
-        statuspegawai={getStatusPegawai?.data}
-        bank={getBank?.data}
-        pegawais={getPegawais}
-      />
-    );
+    return <FormPeremajaan sigapok={sigapok} pegawais={getPegawais} />;
   };
 
   return (

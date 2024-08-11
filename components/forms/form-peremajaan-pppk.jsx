@@ -1,4 +1,6 @@
 "use client";
+
+import { useSkpds, useStatusPegawai } from "@/lib/FetchQuery";
 import { CircleStackIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import {
   Tabs,
@@ -12,33 +14,63 @@ import {
   AutocompleteItem,
   Textarea,
 } from "@nextui-org/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BriefcaseFill } from "react-bootstrap-icons";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useModalContext } from "@/lib/context/modal-context";
+import { ModalPeremajaan } from "../modal/modal-peremajaan";
 
-export const FormPeremajaan = ({ skpds, statuspegawais }) => {
+export const FormPeremajaan = ({ sigapok }) => {
+  const [data, setData] = useState([]);
+  const { isOpen, setIsOpen } = useModalContext();
+  const {
+    data: skpds,
+    isLoading: loadingSkpds,
+    isFetching: fetchingSkpds,
+    isError: isErrorSkpds,
+    error: errorSkpds,
+  } = useSkpds(sigapok);
+
+  const {
+    data: statusPegawai,
+    isLoading: loadingStatusPegawai,
+    isFetching: fetchingStatusPegawai,
+    isError: isErrorStatusPegawai,
+    error: errorStatusPegawai,
+  } = useStatusPegawai(sigapok);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isLoading, isSubmitting, isValid },
-    setValue,
   } = useForm();
 
   useEffect(() => {
     if (!isValid && isSubmitting) {
       toast.error("Formulir Tidak Lengkap");
     }
-  }, [isSubmitting, isValid]);
+  }, [isSubmitting, isValid, skpds]);
 
-  const isSubmit = async (FormFileds) => {
-    console.log(FormFileds);
+  const isConfirm = async (form) => {
+    setIsOpen(true);
+    setData(form);
+  };
+
+  const isSubmit = async () => {
+    setIsOpen(false);
+    console.log(data);
   };
 
   return (
     <>
+      <ModalPeremajaan
+        isOpenModal={isOpen}
+        onClose={() => setIsOpen(false)}
+        handlePeremajaan={isSubmit}
+      />
       <form
-        onSubmit={handleSubmit(isSubmit)}
+        onSubmit={handleSubmit(isConfirm)}
         method="POST"
         autoComplete="off"
         noValidate>
@@ -186,6 +218,7 @@ export const FormPeremajaan = ({ skpds, statuspegawais }) => {
               <CardBody className="grid grid-flow-row-dense grid-cols-4 grid-rows-4 gap-6 py-8 px-6">
                 <Autocomplete
                   isRequired
+                  isLoading={loadingSkpds || fetchingSkpds}
                   className="col-span-4 sm:col-span-2"
                   labelPlacement="outside"
                   size="lg"
@@ -194,47 +227,64 @@ export const FormPeremajaan = ({ skpds, statuspegawais }) => {
                   name="kodeskpd"
                   variant="flat"
                   errorMessage={
-                    errors?.kodeskpd?.message && `${errors.kodeskpd.message}`
+                    (errors?.kodeskpd?.message &&
+                      `${errors.kodeskpd.message}`) ||
+                    (errorSkpds && errorSkpds.message)
                   }
-                  isInvalid={errors?.kodeskpd ? true : false}
+                  isInvalid={errors?.kodeskpd || isErrorSkpds ? true : false}
                   {...register("kodeskpd", {
                     required: "Pilih SKPD",
                   })}>
-                  {skpds.map((skpd) => (
+                  {skpds?.data.map((skpd) => (
                     <AutocompleteItem
+                      // @ts-ignore
                       key={skpd.kodeskpd}
+                      // @ts-ignore
                       value={skpd.kodeskpd}
+                      // @ts-ignore
                       textValue={skpd.nama_skpd}>
-                      {skpd.nama_skpd}
+                      {
+                        // @ts-ignore
+                        skpd.nama_skpd
+                      }
                     </AutocompleteItem>
                   ))}
                 </Autocomplete>
                 <Autocomplete
                   isReadOnly
+                  isLoading={loadingStatusPegawai || fetchingStatusPegawai}
                   className="col-span-4 sm:col-span-2"
                   labelPlacement="outside"
                   size="lg"
                   placeholder="Pilih status pegawai"
                   label="Status Pegawai"
                   name="kode_stapeg"
-                  defaultItems={statuspegawais}
                   defaultSelectedKey="12"
                   selectedKey="12"
                   variant="flat"
                   errorMessage={
-                    errors?.kode_stapeg?.message &&
-                    `${errors.kode_stapeg.message}`
+                    (errors?.kode_stapeg?.message &&
+                      `${errors.kode_stapeg.message}`) ||
+                    (errorStatusPegawai && errorStatusPegawai.message)
                   }
-                  isInvalid={errors?.kode_stapeg ? true : false}
+                  isInvalid={
+                    errors?.kode_stapeg || isErrorStatusPegawai ? true : false
+                  }
                   {...register("kode_stapeg", {
                     required: "Pilih Status Pegawai",
                   })}>
-                  {statuspegawais.map((item) => (
+                  {statusPegawai?.data.map((item) => (
                     <AutocompleteItem
+                      // @ts-ignore
                       key={item.kode_stapeg}
+                      // @ts-ignore
                       value={item.kode_stapeg}
+                      // @ts-ignore
                       textValue={item.stapeg_nama}>
-                      {item.stapeg_nama}
+                      {
+                        // @ts-ignore
+                        item.stapeg_nama
+                      }
                     </AutocompleteItem>
                   ))}
                 </Autocomplete>
@@ -381,7 +431,7 @@ export const FormPeremajaan = ({ skpds, statuspegawais }) => {
             variant="shadow"
             size="lg"
             type="submit"
-            isDisabled={isLoading || isSubmitting}
+            isDisabled={isLoading || isSubmitting || !isValid}
             isLoading={isLoading || isSubmitting}>
             <CircleStackIcon className="size-5" />
             <Divider orientation="vertical" /> Perbaharui Data PPPK

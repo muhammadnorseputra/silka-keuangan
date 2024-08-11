@@ -6,6 +6,7 @@ import {
   Input,
   Select,
   SelectItem,
+  Spinner,
   Tooltip,
 } from "@nextui-org/react";
 import { useState } from "react";
@@ -25,8 +26,9 @@ import { useRouter } from "next-nprogress-bar";
 
 export const FormAuth = () => {
   const router = useRouter();
-
   const [isVisible, setIsVisible] = useState(false);
+  const [loadingBtn, setLoadingBtn] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -42,9 +44,11 @@ export const FormAuth = () => {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
   const isSubmit = async (FormFileds) => {
+    setLoadingBtn(true);
     let toastLoading;
     const result = await proseslogin(FormFileds);
     if (!result) {
+      setLoadingBtn(false);
       toast.error(result?.response?.message, {
         id: toastLoading,
       });
@@ -52,6 +56,7 @@ export const FormAuth = () => {
 
     // pesan error jika response false
     if (result?.response?.status === false) {
+      setLoadingBtn(false);
       toast.error(result?.response?.message, {
         id: toastLoading,
       });
@@ -62,9 +67,17 @@ export const FormAuth = () => {
       toast.success(result?.response?.message, {
         id: toastLoading,
       });
+
+      setTimeout(() => {
+        toast.loading("Mengalihkan halaman, mohon tunggu", {
+          id: toastLoading,
+        });
+      }, 1000);
+
       setTimeout(() => {
         toast.remove(toastLoading);
-        router.push("/app-integrasi/dashboard");
+        // setLoadingBtn(false); comment => agar selalu loading hingga halaman dialihkan
+        router.replace("/app-integrasi/dashboard");
       }, 2000);
     }
   };
@@ -79,6 +92,7 @@ export const FormAuth = () => {
         className="flex flex-col gap-y-4">
         <Select
           isRequired
+          isDisabled={isLoading || isSubmitting || loadingBtn}
           selectorIcon={<ChevronUpDownIcon className="size-8" />}
           label="Login sebagai ?"
           placeholder="Pilih type account"
@@ -107,6 +121,7 @@ export const FormAuth = () => {
         </Select>
         <Input
           isRequired
+          isDisabled={isLoading || isSubmitting || loadingBtn}
           variant="flat"
           type="text"
           radius="sm"
@@ -132,6 +147,7 @@ export const FormAuth = () => {
         />
         <Input
           isRequired
+          isDisabled={isLoading || isSubmitting || loadingBtn}
           label="Password"
           variant="flat"
           size="lg"
@@ -170,12 +186,33 @@ export const FormAuth = () => {
           type={isVisible ? "text" : "password"}
         />
         <Button
-          isDisabled={isLoading || isSubmitting || !isValid}
-          isLoading={isLoading || isSubmitting}
+          isDisabled={isLoading || isSubmitting || loadingBtn || !isValid}
+          isLoading={isLoading || isSubmitting || loadingBtn}
           type="submit"
           fullWidth
           color="primary"
           size="lg"
+          spinner={
+            <svg
+              className="animate-spin h-5 w-5 text-current"
+              fill="none"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                fill="currentColor"
+              />
+            </svg>
+          }
           radius="sm">
           Login Sekarang
         </Button>
