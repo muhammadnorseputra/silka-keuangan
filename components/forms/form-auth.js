@@ -1,28 +1,20 @@
 "use client";
 
+import { proseslogin } from "@/lib/auth-actions";
 import {
-  Button,
-  Divider,
-  Input,
-  Select,
-  SelectItem,
-  Spinner,
-  Tooltip,
-} from "@nextui-org/react";
-import { useEffect, useState } from "react";
-import {
-  EyeSlashIcon,
-  EyeIcon,
-  UserIcon,
-  KeyIcon,
   ChevronUpDownIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  KeyIcon,
   UserCircleIcon,
   UserGroupIcon,
+  UserIcon,
 } from "@heroicons/react/24/solid";
-import { proseslogin } from "@/lib/auth-actions";
+import { Button, Input, Select, SelectItem, Tooltip } from "@nextui-org/react";
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useRouter } from "next-nprogress-bar";
 
 export const FormAuth = () => {
   const router = useRouter();
@@ -32,20 +24,8 @@ export const FormAuth = () => {
   const {
     register,
     handleSubmit,
-    setFocus,
-    formState: {
-      errors,
-      isLoading,
-      isSubmitting,
-      isValid,
-      isDirty,
-      touchedFields,
-    },
+    formState: { errors, isLoading, isSubmitting, isValid },
   } = useForm();
-
-  useEffect(() => {
-    setFocus("username");
-  }, [setFocus]);
 
   function toggleVisibility() {
     return setIsVisible(!isVisible);
@@ -227,6 +207,3 @@ export const FormAuth = () => {
     </>
   );
 };
-function setFocus(arg0) {
-  throw new Error("Function not implemented.");
-}

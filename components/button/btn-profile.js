@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next-nprogress-bar";
 import { deleteCookie, hasCookie } from "cookies-next";
 import {
   Avatar,
@@ -12,9 +11,8 @@ import {
 import ModalLogout from "../modal/modal-logout";
 import { useModalContext } from "@/lib/context/modal-context";
 export const BtnProfile = ({ profile, size = "md" }) => {
-  const router = useRouter();
   const { isOpen, setIsOpen } = useModalContext();
-  const { picture, nama_lengkap, level, pegawai } = profile?.data;
+  const { picture, nama_lengkap, level } = profile?.data;
   const handleLogout = async () => {
     deleteCookie("USER_SILKA");
     let isCookie = hasCookie("USER_SILKA");
@@ -47,7 +45,7 @@ export const BtnProfile = ({ profile, size = "md" }) => {
           <DropdownItem
             key="logout"
             color="danger"
-            onClick={() => setIsOpen(true)}>
+            onPress={() => setIsOpen(true)}>
             Log Out
           </DropdownItem>
         </DropdownMenu>

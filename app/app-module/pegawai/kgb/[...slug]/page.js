@@ -9,8 +9,7 @@ import {
   Divider,
   Link,
 } from "@nextui-org/react";
-import { hasSessionServer, useSessionServer } from "../../../server-session";
-import { redirect } from "next/navigation";
+import { useSessionServer } from "../../../server-session";
 import { formatRupiahManual, formatTanggalIndonesia } from "@/helpers/cx";
 import { DocumentTextIcon } from "@heroicons/react/24/solid";
 import { CloudArrowUp, ExclamationCircle } from "react-bootstrap-icons";
@@ -19,19 +18,16 @@ import { getPerubahanData } from "@/dummy/sigapok-get-perubahan";
 
 export const revalidate = 0;
 
-export default async function Page({ params, searchParams }) {
-  const session = hasSessionServer("USER_GAPOK");
+export default async function Page({ params }) {
   const sigapok = useSessionServer("USER_GAPOK");
-  if (session === false) {
-    return redirect("/app-integrasi/dashboard");
-  }
   const $getNip = decrypt(params.slug[0], "bkpsdm");
   const resultDataKgb = await getKgbByNip($getNip);
-
+  const tmt_sk = "2024-01-01";
   const resultDataPerubaahan = await getPerubahanData(
     sigapok.access_token,
     2,
     $getNip,
+    tmt_sk,
     2
   );
 
@@ -134,7 +130,7 @@ export default async function Page({ params, searchParams }) {
         </div>
       );
     }
-
+    console.log(resultDataPerubaahan);
     return (
       <div className="flex flex-col items-center justify-center h-screen">
         OKE
