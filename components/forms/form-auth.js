@@ -9,7 +9,7 @@ import {
   Spinner,
   Tooltip,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   EyeSlashIcon,
   EyeIcon,
@@ -32,6 +32,7 @@ export const FormAuth = () => {
   const {
     register,
     handleSubmit,
+    setFocus,
     formState: {
       errors,
       isLoading,
@@ -42,7 +43,13 @@ export const FormAuth = () => {
     },
   } = useForm();
 
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  useEffect(() => {
+    setFocus("username");
+  }, [setFocus]);
+
+  function toggleVisibility() {
+    return setIsVisible(!isVisible);
+  }
   const isSubmit = async (FormFileds) => {
     setLoadingBtn(true);
     let toastLoading;
@@ -72,7 +79,7 @@ export const FormAuth = () => {
         toast.loading("Mengalihkan halaman, mohon tunggu", {
           id: toastLoading,
         });
-      }, 1000);
+      }, 500);
 
       setTimeout(() => {
         toast.remove(toastLoading);
@@ -220,3 +227,6 @@ export const FormAuth = () => {
     </>
   );
 };
+function setFocus(arg0) {
+  throw new Error("Function not implemented.");
+}
