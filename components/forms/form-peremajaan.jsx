@@ -1,6 +1,5 @@
 "use client";
 
-import { getBankSigapok } from "@/dummy/sigapok-get-bank";
 import { useModalContext } from "@/lib/context/modal-context";
 import {
   useBank,
@@ -23,6 +22,9 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AlertWarning } from "../alert";
 import { ModalPeremajaan } from "../modal/modal-peremajaan";
+import { useMutation } from "@tanstack/react-query";
+import { headers } from "@/lib/req-headers";
+import { PostDataPegawai } from "@/dummy/post-data-pegawai";
 const {
   Tabs,
   CardBody,
@@ -40,6 +42,7 @@ const {
 const FormPeremajaan = ({ sigapok, pegawais }) => {
   const [data, setData] = useState([]);
   const { isOpen, setIsOpen } = useModalContext();
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const {
     register,
     handleSubmit,
@@ -55,25 +58,26 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     tmp_lahir,
     tgl_lahir,
     jenis_kelamin,
-    makertotal_tahun,
-    makertotal_bulan,
+    fid_golru_skr,
+    // makertotal_tahun,
+    // makertotal_bulan,
     nama_agama,
     nama_tingkat_pendidikan,
     alamat_ktp,
     no_npwp,
     no_ktp,
     whatsapp,
-    norek,
-    induk_bank,
+    // norek,
+    // induk_bank,
     jumlah_anak,
-    jumlah_istri,
+    jumlah_sutri,
     kode_skpd,
     kode_satker,
     kode_status_pegawai,
     kode_pangkat,
     kode_jenis_pegawai,
     status_data,
-    gapok,
+    // gapok,
   } = pegawais;
 
   const {
@@ -116,13 +120,13 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     isError: isErrorPangkat,
   } = usePangkat(sigapok);
 
-  const {
-    data: banks,
-    error: errorBank,
-    isLoading: isLoadingBank,
-    isFetching: isFetchingBank,
-    isError: isErrorBank,
-  } = useBank(sigapok);
+  // const {
+  //   data: banks,
+  //   error: errorBank,
+  //   isLoading: isLoadingBank,
+  //   isFetching: isFetchingBank,
+  //   isError: isErrorBank,
+  // } = useBank(sigapok);
 
   useEffect(() => {
     if (!isValid && isSubmitting) {
@@ -135,9 +139,49 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     setData(form);
   };
 
+  const {
+    mutate,
+    isPending: isPendingSubmit,
+    isError: isErrorSubmit,
+    error: errorSubmit,
+  } = useMutation({
+    mutationKey: ["updatePegawai"],
+    mutationFn: async (body) => {
+      const updatePegawai = await PostDataPegawai(body);
+      return updatePegawai;
+    },
+  });
+
   const isYakin = () => {
-    setIsOpen(false);
-    console.log(data);
+    if (isPendingSubmit) {
+      toast.loading("Processing ...");
+      setIsLoadingSubmit(true);
+      return;
+    }
+
+    if (isErrorSubmit) {
+      toast.loading(errorSubmit.message);
+      setIsLoadingSubmit(false);
+      return;
+    }
+
+    const dataSubmit = {
+      nip: nip,
+      nama: nama,
+    };
+    // @ts-ignore
+    mutate(dataSubmit, {
+      onSuccess: () => {
+        toast.success("Data Terkirim");
+        setIsLoadingSubmit(false);
+        setIsOpen(false);
+      },
+      onError: (err) => {
+        // @ts-ignore
+        toast.error(err);
+        setIsLoadingSubmit(false);
+      },
+    });
   };
 
   const renderForm = () => {
@@ -165,13 +209,14 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
           isOpenModal={isOpen}
           onClose={() => setIsOpen(false)}
           handlePeremajaan={isYakin}
+          isLoading={isPendingSubmit}
         />
         <form
           onSubmit={handleSubmit(isConfirm)}
           method="POST"
           autoComplete="off"
           noValidate>
-          <input type="hidden" name="test" value="test" {...register("test")} />
+          {/* <input type="hidden" name="test" value="test" {...register("test")} /> */}
           <Tabs
             color="primary"
             radius="full"
@@ -359,7 +404,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     isRequired
                     allowsCustomValue
                     isLoading={isLoadingSatkers || isFetchingSatkers}
-                    isDisabled={isLoadingSatkers || isFetchingSatkers}
+                    isReadOnly={isLoadingSatkers || isFetchingSatkers}
                     className="col-span-4 sm:col-span-2"
                     labelPlacement="outside"
                     size="lg"
@@ -390,7 +435,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                   <Autocomplete
                     isRequired
                     isLoading={isLoadingSkpd || isFetchingSkpd}
-                    isDisabled={isLoadingSkpd || isFetchingSkpd}
+                    isReadOnly={isLoadingSkpd || isFetchingSkpd}
                     className="col-span-4 sm:col-span-2"
                     labelPlacement="outside"
                     size="lg"
@@ -420,14 +465,14 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                   <Autocomplete
                     isRequired
                     isLoading={isLoadingJenisPegawai || isFetchingJenisPegawai}
-                    isDisabled={isLoadingJenisPegawai || isFetchingJenisPegawai}
+                    isReadOnly={isLoadingJenisPegawai || isFetchingJenisPegawai}
                     className="col-span-4 sm:col-span-2"
                     labelPlacement="outside"
                     size="lg"
                     placeholder="Pilih jenis pegawai"
                     label="Jenis Pegawai"
                     name="kode_jenis"
-                    defaultSelectedKey={kode_jenis_pegawai}
+                    defaultSelectedKey="2"
                     variant="flat"
                     errorMessage={
                       (errors?.kode_jenis?.message &&
@@ -450,16 +495,15 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     ))}
                   </Autocomplete>
                   <Autocomplete
-                    isRequired
+                    isReadOnly
                     isLoading={isLoadingPangkat || isFetchingPangkat}
-                    isDisabled={isLoadingPangkat || isFetchingPangkat}
                     className="col-span-4 sm:col-span-2"
                     labelPlacement="outside"
                     size="lg"
                     placeholder="Pilih pangkat"
                     label="Pangkat"
                     name="kode_pangkat"
-                    defaultSelectedKey={kode_pangkat}
+                    defaultSelectedKey={fid_golru_skr}
                     variant="flat"
                     errorMessage={
                       (errors?.kode_pangkat?.message &&
@@ -474,8 +518,8 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     })}>
                     {pangkats?.data.map((pangkat) => (
                       <AutocompleteItem
-                        key={pangkat.kode_pangkat}
-                        value={pangkat.kode_pangkat}
+                        key={pangkat.kode_golongan}
+                        value={pangkat.kode_golongan}
                         textValue={`${pangkat.nama_golongan} - ${pangkat.ket_pangkat}`}>
                         {pangkat.nama_golongan} - {pangkat.ket_pangkat}
                       </AutocompleteItem>
@@ -483,7 +527,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                   </Autocomplete>
                   <Autocomplete
                     isRequired
-                    isDisabled={
+                    isReadOnly={
                       isLoadingStatusPegawai || isFetchingStatusPegawai
                     }
                     isLoading={
@@ -517,7 +561,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                       </AutocompleteItem>
                     ))}
                   </Autocomplete>
-                  <Input
+                  {/* <Input
                     isReadOnly
                     size="lg"
                     className="col-span-4 sm:col-span-1"
@@ -560,8 +604,8 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                         message: "Tidak valid, hanya boleh angka",
                       },
                     })}
-                  />
-                  <Input
+                  /> */}
+                  {/* <Input
                     isReadOnly
                     size="lg"
                     className="col-span-4 sm:col-span-1"
@@ -582,7 +626,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                         message: "Tidak valid, hanya boleh angka",
                       },
                     })}
-                  />
+                  /> */}
                 </CardBody>
               </Card>
             </Tab>
@@ -605,10 +649,10 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     labelPlacement="outside"
                     type="number"
                     label="Jumlah Istri / Suami"
-                    name="jumlah_istri"
+                    name="jumlah_sutri"
                     variant="flat"
-                    defaultValue={jumlah_istri}
-                    {...register("jumlah_istri")}
+                    defaultValue={jumlah_sutri}
+                    {...register("jumlah_sutri")}
                   />
                   <Input
                     isReadOnly
@@ -637,10 +681,10 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
               }>
               <Card>
                 <CardBody className="grid grid-flow-row-dense grid-cols-2 grid-rows-2 gap-6 py-8 px-6">
-                  <Autocomplete
+                  {/* <Autocomplete
                     isRequired
-                    isLoading={isErrorBank || isFetchingBank}
-                    isDisabled={isErrorBank || isFetchingBank}
+                    isLoading={isLoadingBank || isFetchingBank}
+                    isDisabled={isLoadingBank || isFetchingBank}
                     allowsCustomValue
                     labelPlacement="outside"
                     size="lg"
@@ -666,8 +710,8 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                         {item.nama_bank}
                       </AutocompleteItem>
                     ))}
-                  </Autocomplete>
-                  <Input
+                  </Autocomplete> */}
+                  {/* <Input
                     isRequired
                     size="lg"
                     className="col-span-2 sm:col-span-1"
@@ -685,7 +729,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     {...register("norek", {
                       required: "Isi Nomor Rekening",
                     })}
-                  />
+                  /> */}
                   <Input
                     isReadOnly
                     size="lg"
