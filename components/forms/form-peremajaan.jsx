@@ -22,9 +22,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AlertWarning } from "../alert";
 import { ModalPeremajaan } from "../modal/modal-peremajaan";
-import { useMutation } from "@tanstack/react-query";
-import { headers } from "@/lib/req-headers";
-import { PostDataPegawai } from "@/dummy/post-data-pegawai";
+import { useActionPegawai } from "@/dummy/post-data-pegawai";
 const {
   Tabs,
   CardBody,
@@ -128,6 +126,13 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
   //   isError: isErrorBank,
   // } = useBank(sigapok);
 
+  const {
+    mutate,
+    isPending: isPendingSubmit,
+    isError: isErrorSubmit,
+    error: errorSubmit,
+  } = useActionPegawai(data);
+
   useEffect(() => {
     if (!isValid && isSubmitting) {
       toast.error("Formulir Tidak Lengkap");
@@ -138,19 +143,6 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     setIsOpen(true);
     setData(form);
   };
-
-  const {
-    mutate,
-    isPending: isPendingSubmit,
-    isError: isErrorSubmit,
-    error: errorSubmit,
-  } = useMutation({
-    mutationKey: ["updatePegawai"],
-    mutationFn: async (body) => {
-      const updatePegawai = await PostDataPegawai(body);
-      return updatePegawai;
-    },
-  });
 
   const isYakin = () => {
     if (isPendingSubmit) {
@@ -171,8 +163,11 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     };
     // @ts-ignore
     mutate(dataSubmit, {
-      onSuccess: () => {
-        toast.success("Data Terkirim");
+      onSuccess: (data) => {
+        if (data.status === false) {
+          return toast.error(`Terjadi Kesalahan ${data.message}`);
+        }
+        toast.success(`Data berhasil disimpan (${data.status})`);
         setIsLoadingSubmit(false);
         setIsOpen(false);
       },
@@ -209,7 +204,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
           isOpenModal={isOpen}
           onClose={() => setIsOpen(false)}
           handlePeremajaan={isYakin}
-          isLoading={isPendingSubmit}
+          isLoading={isPendingSubmit || isLoadingSubmit}
         />
         <form
           onSubmit={handleSubmit(isConfirm)}
@@ -221,7 +216,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
             color="primary"
             radius="full"
             size="lg"
-            aria-label="Options"
+            aria-label="Tabs Pegawai"
             destroyInactiveTabPanel={false}
             classNames={{
               tab: "min-h-12",
@@ -230,6 +225,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
             {/* Tabs Pribadi */}
             <Tab
               key="personal"
+              aria-label="personal"
               title={
                 <div className="flex items-center space-x-2">
                   <UserCircleIcon className="size-6" />
@@ -392,6 +388,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
             {/* Tabs Kepegawaian */}
             <Tab
               key="kepegawian"
+              aria-label="kepegawaian"
               title={
                 <div className="flex items-center space-x-2">
                   <BriefcaseFill className="size-6" />
@@ -402,10 +399,10 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                 <CardBody className="grid grid-flow-row-dense grid-cols-4 grid-rows-4 gap-6 py-8 px-6">
                   <Autocomplete
                     isRequired
-                    allowsCustomValue
                     isLoading={isLoadingSatkers || isFetchingSatkers}
                     isReadOnly={isLoadingSatkers || isFetchingSatkers}
                     className="col-span-4 sm:col-span-2"
+                    aria-label="Satuan Kerja"
                     labelPlacement="outside"
                     size="lg"
                     placeholder="Pilih Satuan Kerja"
@@ -633,6 +630,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
             {/* Tabs Keluarga */}
             <Tab
               key="keluarga"
+              aria-label="keluarga"
               title={
                 <div className="flex items-center space-x-2">
                   <UserGroupIcon className="size-6" />
@@ -673,6 +671,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
             {/* Tabs Lainnya */}
             <Tab
               key="lainnya"
+              aria-label="lainnya"
               title={
                 <div className="flex items-center space-x-2">
                   <SparklesIcon className="size-6" />

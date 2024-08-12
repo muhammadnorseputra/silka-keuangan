@@ -24,7 +24,7 @@ export const BtnBackNextUi = ({
     // window.location.replace(goTo);
     // router.replace(goTo);
     router.back();
-  }, [goTo, router]);
+  }, [router]);
 
   return (
     <Tooltip content={title} placement="bottom" color="foreground">

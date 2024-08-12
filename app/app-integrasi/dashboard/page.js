@@ -5,6 +5,7 @@ import { BtnProfile } from "@/components/button/btn-profile";
 import { hasSessionServer } from "@/app/app-module/server-session";
 import { redirect } from "next/navigation";
 import { encrypt } from "@/helpers/encrypt";
+import { loginSigapok } from "@/dummy/sigapok-login";
 
 export default async function Dashboard() {
   let getProfile = cookies().get("USER_SILKA");
@@ -16,6 +17,7 @@ export default async function Dashboard() {
   if (session === false) {
     return redirect("/auth");
   }
+
   const renderModule = () => {
     if (level === "PNS") {
       return (

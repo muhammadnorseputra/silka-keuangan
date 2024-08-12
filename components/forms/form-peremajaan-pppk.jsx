@@ -21,7 +21,7 @@ import toast from "react-hot-toast";
 import { useModalContext } from "@/lib/context/modal-context";
 import { ModalPeremajaan } from "../modal/modal-peremajaan";
 
-export const FormPeremajaan = ({ sigapok }) => {
+export const FormPeremajaan = ({ sigapok, silka }) => {
   const [data, setData] = useState([]);
   const { isOpen, setIsOpen } = useModalContext();
   const {
@@ -105,6 +105,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                   type="text"
                   label="Nomor Induk PPPK"
                   name="nipppk"
+                  defaultValue={silka.nipppk}
                   {...register("nipppk")}
                 />
                 <Input
@@ -117,6 +118,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                   type="text"
                   label="Gelar Depan"
                   name="gelar_depan"
+                  defaultValue={silka.gelar_depan}
                   {...register("gelar_depan")}
                 />
                 <Input
@@ -129,6 +131,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                   type="text"
                   label="Gelar Belakang"
                   name="gelar_belakang"
+                  defaultValue={silka.gelar_blk}
                   {...register("gelar_belakang")}
                 />
                 <Input
@@ -141,6 +144,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                   type="text"
                   label="Nama"
                   name="nama"
+                  defaultValue={silka.nama}
                   {...register("nama")}
                 />
                 <Input
@@ -153,6 +157,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                   type="text"
                   label="Tempat Lahir"
                   name="tempat_lahir"
+                  defaultValue={silka.tempat_lahir}
                   {...register("tempat_lahir")}
                 />
                 <Input
@@ -165,6 +170,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                   type="text"
                   label="Tanggal Lahir"
                   name="tanggal_lahir"
+                  defaultValue={silka.tgl_lahir}
                   {...register("tanggal_lahir")}
                 />
                 <Input
@@ -177,6 +183,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                   type="number"
                   label="Jumlah Istri/Suami"
                   name="jumlah_sutri"
+                  defaultValue={silka.jumlah_sutri}
                   {...register("jumlah_sutri")}
                 />
                 <Input
@@ -189,6 +196,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                   type="number"
                   label="Jumlah Anak"
                   name="jumlah_anak"
+                  defaultValue={silka.jumlah_anak}
                   {...register("jumlah_anak")}
                 />
 
@@ -200,6 +208,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                   labelPlacement="outside"
                   placeholder="Alamat anda"
                   name="alamat"
+                  defaultValue={silka.alamat}
                   {...register("alamat")}
                 />
               </CardBody>
@@ -288,7 +297,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                     </AutocompleteItem>
                   ))}
                 </Autocomplete>
-                <Input
+                {/* <Input
                   isReadOnly
                   variant="flat"
                   size="lg"
@@ -311,7 +320,7 @@ export const FormPeremajaan = ({ sigapok }) => {
                   label="Gaji Pokok"
                   name="gapok"
                   {...register("gapok")}
-                />
+                /> */}
                 <Input
                   isReadOnly
                   variant="flat"

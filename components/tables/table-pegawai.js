@@ -153,7 +153,7 @@ export const TablePegawai = ({ silka, unors, pegawais }) => {
                 <DropdownMenu color="primary" variant="faded">
                   <DropdownItem
                     key="peremajaan"
-                    onClick={() =>
+                    onPress={() =>
                       router.push(
                         `/app-module/pegawai/peremajaan/${encrypt(
                           datapegawai.nip_baru,
@@ -169,7 +169,7 @@ export const TablePegawai = ({ silka, unors, pegawais }) => {
                   </DropdownItem>
                   <DropdownItem
                     key="kgb"
-                    onClick={() =>
+                    onPress={() =>
                       router.push(
                         `/app-module/pegawai/kgb/${encrypt(
                           datapegawai.nip_baru,
@@ -185,7 +185,7 @@ export const TablePegawai = ({ silka, unors, pegawais }) => {
                   </DropdownItem>
                   <DropdownItem
                     key="tpp"
-                    onClick={() =>
+                    onPress={() =>
                       router.push(
                         `/app-module/pegawai/tpp/${encrypt(
                           datapegawai.nip_baru,

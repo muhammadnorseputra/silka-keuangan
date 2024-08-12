@@ -4,6 +4,7 @@ import { decrypt } from "@/helpers/encrypt";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { redirect } from "next/navigation";
 import { hasSessionServer, useSessionServer } from "../../../server-session";
+import { getProfilePppk } from "@/dummy/data-pppk-by-nipppk";
 
 export default async function Page({ params }) {
   const session = hasSessionServer("USER_GAPOK");
@@ -11,10 +12,11 @@ export default async function Page({ params }) {
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }
-  const $getNip = decrypt(params?.slug[0], "bkpsdm");
+  const nipppk = decrypt(params?.slug[0], "bkpsdm");
+  const silka = await getProfilePppk(nipppk);
 
   const renderForm = () => {
-    return <FormPeremajaan sigapok={sigapok} />;
+    return <FormPeremajaan sigapok={sigapok} silka={silka} />;
   };
   return (
     <>
@@ -29,7 +31,7 @@ export default async function Page({ params }) {
                     <span className="uppercase font-bold">
                       Peremajaan Data PPPK
                     </span>
-                    <span className="text-base">{$getNip}</span>
+                    <span className="text-base">{nipppk}</span>
                   </p>
                 </div>
               </div>

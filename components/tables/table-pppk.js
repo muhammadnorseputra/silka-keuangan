@@ -139,7 +139,7 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
                 <DropdownMenu>
                   <DropdownItem
                     key="peremajaan"
-                    onClick={() =>
+                    onPress={() =>
                       router.push(
                         `/app-module/pppk/peremajaan/${encrypt(
                           datapegawai.nipppk,
@@ -155,7 +155,7 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
                   </DropdownItem>
                   <DropdownItem
                     key="kgb"
-                    onClick={() =>
+                    onPress={() =>
                       router.push(
                         `/app-module/pppk/kgb/${encrypt(
                           datapegawai.nipppk,
@@ -163,7 +163,7 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
                         )}`
                       )
                     }
-                    description="Marge & Commit"
+                    description="Verifikasi dan Kirim"
                     startContent={
                       <DocumentCurrencyDollarIcon className="size-6 text-green-600" />
                     }>
@@ -202,7 +202,7 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
       }
       setFilterValue("");
       setPage(1);
-      router.replace(`?unor_id=${id}`);
+      router.replace(`?unor_id=${encrypt(id, "bkpsdm@6811")}`);
     },
     [router]
   );

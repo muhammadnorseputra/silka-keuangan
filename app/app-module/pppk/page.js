@@ -6,6 +6,7 @@ import { BtnProfile } from "@/components/button/btn-profile";
 import { TablePppk } from "@/components/tables/table-pppk";
 import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 import { getPppkByUnor } from "@/dummy/data-pppk-by-unor";
+import { decrypt } from "@/helpers/encrypt";
 
 async function Page({ searchParams }) {
   const session = hasSessionServer("USER_GAPOK");
@@ -19,7 +20,9 @@ async function Page({ searchParams }) {
   const { nip, level } = silka_session?.data;
 
   const getUnorByRole = await dataUnorByRole(nip, level);
-  const getIdUnker = searchParams.unor_id ? searchParams.unor_id : unker_id;
+  const getIdUnker = searchParams.unor_id
+    ? decrypt(searchParams.unor_id, "bkpsdm@6811")
+    : unker_id;
   const pegawais = await getPppkByUnor(getIdUnker);
   return (
     <>

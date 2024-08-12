@@ -7,30 +7,7 @@ import { useState } from "react";
 import { hasSession } from "@/lib/session";
 import { ArrowRightCircleFill } from "react-bootstrap-icons";
 import { Spinner } from "@nextui-org/react";
-
-async function getGapok() {
-  const account = {
-    username: process.env.NEXT_PUBLIC_GAPOK_USERNAME,
-    password: process.env.NEXT_PUBLIC_GAPOK_PASSWORD,
-    kddati1: process.env.NEXT_PUBLIC_GAPOK_KDDATI1,
-    kddati2: process.env.NEXT_PUBLIC_GAPOK_KDDATI2,
-  };
-  const getUserGapok = await fetch(
-    `${process.env.NEXT_PUBLIC_GAPOK_BASE_URL}/${process.env.NEXT_PUBLIC_GAPOK_PATH}/login`,
-    {
-      method: "POST",
-      cache: "no-store",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(account),
-    }
-  );
-  const response = await getUserGapok.json();
-  return response;
-}
-
-const BtnModule = ({ goTo, isDisabled }) => {
+const BtnModule = ({ goTo, isDisabled, sigapok }) => {
   const [stateLoading, setStateLoading] = useState(false);
   const router = useRouter();
   const session_has = hasSession("USER_GAPOK");
@@ -43,10 +20,10 @@ const BtnModule = ({ goTo, isDisabled }) => {
       return router.push(goTo);
     }
 
-    toast.promise(getGapok(), {
+    toast.promise(sigapok, {
       loading: "Proccesing",
       success: (data) => {
-        setStateLoading(false);
+        // setStateLoading(false); //agar loading terus sebelum halaman dialihkan
         router.push(goTo);
         setCookie("USER_GAPOK", data, { maxAge: 3600 });
         // return `Authorize succes (${data?.datauser[0]?.nama_user})`;
