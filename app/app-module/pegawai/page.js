@@ -10,11 +10,6 @@ import { decrypt } from "@/helpers/encrypt";
 import { Error500 } from "@/components/errors/500";
 
 async function Page({ searchParams }) {
-  const session = hasSessionServer("USER_GAPOK");
-  if (session === false) {
-    return redirect("/app-integrasi/dashboard");
-  }
-
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const silka_session = useSessionServer("USER_SILKA");
   const { unker, unker_id } = silka_session?.data?.pegawai;

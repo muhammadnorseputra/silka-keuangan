@@ -27,5 +27,5 @@ export async function middleware(request) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/auth", "/app-integrasi/dashboard", "/app-module/pegawai/:path"],
+  matcher: ["/auth", "/app-integrasi/dashboard", "/app-module/:path"],
 };

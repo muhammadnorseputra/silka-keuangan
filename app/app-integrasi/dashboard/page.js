@@ -2,21 +2,13 @@ import Image from "next/image";
 import { cookies } from "next/headers";
 import { CardModule } from "@/components/cards/card-module";
 import { BtnProfile } from "@/components/button/btn-profile";
-import { hasSessionServer } from "@/app/app-module/server-session";
-import { redirect } from "next/navigation";
 import { encrypt } from "@/helpers/encrypt";
-import { loginSigapok } from "@/dummy/sigapok-login";
 
 export default async function Dashboard() {
   let getProfile = cookies().get("USER_SILKA");
   let profile = JSON.parse(getProfile?.value);
   const { level, nip } = profile?.data;
   const { unker } = profile?.data?.pegawai;
-
-  const session = hasSessionServer("USER_SILKA");
-  if (session === false) {
-    return redirect("/auth");
-  }
 
   const renderModule = () => {
     if (level === "PNS") {

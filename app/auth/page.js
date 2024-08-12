@@ -11,7 +11,7 @@ import { LockClosedIcon } from "@heroicons/react/24/solid";
 export default function Login() {
   return (
     <>
-      <div className="p-5 max-w-2xl">
+      <div className="p-5 max-w-2xl hidden lg:block">
         <Image
           isBlurred
           loading="lazy"

@@ -17,16 +17,17 @@ const BtnModule = ({ goTo, isDisabled, sigapok }) => {
 
     if (session_has === true) {
       toast.remove();
-      return router.push(goTo);
+      router.push(goTo);
+      return;
     }
 
     toast.promise(sigapok, {
       loading: "Proccesing",
       success: (data) => {
         // setStateLoading(false); //agar loading terus sebelum halaman dialihkan
-        router.push(goTo);
         setCookie("USER_GAPOK", data, { maxAge: 3600 });
         // return `Authorize succes (${data?.datauser[0]?.nama_user})`;
+        setTimeout(() => router.push(goTo), 1000);
         return `Authorize succes`;
       },
       error: (err) => {
