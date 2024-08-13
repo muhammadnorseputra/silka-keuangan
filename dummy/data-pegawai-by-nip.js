@@ -1,5 +1,6 @@
-import { headers } from "@/lib/req-headers";
+"use server";
 
+import { headers } from "@/lib/req-headers";
 export const getPegawaiByNip = async (nip) => {
   const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
 
@@ -10,7 +11,7 @@ export const getPegawaiByNip = async (nip) => {
         method: "GET",
         cache: "no-store",
         headers,
-        next: { tags: ["datapegawaibynip"] },
+        next: { tags: ["dataPegawaiByNip"] },
       }
     );
 

@@ -1,3 +1,4 @@
+"use server";
 import { BtnBackNextUi } from "@/components/button/btn-back";
 import {
   Button,
@@ -7,26 +8,16 @@ import {
   CardHeader,
   Divider,
 } from "@nextui-org/react";
-import { hasSessionServer, useSessionServer } from "../../../server-session";
-import { redirect } from "next/navigation";
+import { useSessionServer } from "../../../server-session";
 import { decrypt } from "@/helpers/encrypt";
 import { FormPeremajaan } from "@/components/forms/form-peremajaan";
-import { getSatkerSigapok } from "@/dummy/sigapok-get-satker";
-import { getSkpdSigapok } from "@/dummy/sigapok-get-skpd";
-import { getJenisPegawaiSigapok } from "@/dummy/sigapok-get-jenispegawai";
-import { getPangkatSigapok } from "@/dummy/sigapok-get-pangkat";
-import { getStatusPegawaiSigapok } from "@/dummy/sigapok-get-statuspegawai";
-import { getBankSigapok } from "@/dummy/sigapok-get-bank";
 import { getPegawaiByNip } from "@/dummy/data-pegawai-by-nip";
-import { Error500 } from "@/components/errors/500";
-export const revalidate = 0;
+import DataNotFound from "@/components/errors/DataNotFound";
+// import { Error500 } from "@/components/errors/500";
 
 export default async function Page({ params, searchParams }) {
-  const session = hasSessionServer("USER_GAPOK");
   const sigapok = useSessionServer("USER_GAPOK");
-  if (session === false) {
-    return redirect("/app-integrasi/dashboard");
-  }
+
   const getNip = decrypt(params?.slug[0], "bkpsdm");
 
   const getPegawais = await getPegawaiByNip(getNip);
@@ -34,7 +25,13 @@ export default async function Page({ params, searchParams }) {
   const { nama, nip, gelar_depan, gelar_belakang } = getPegawais;
   const renderForm = () => {
     if (getPegawais.status === false) {
-      return <Error500 />;
+      return (
+        <Card className="w-full h-screen">
+          <CardBody className="flex flex-col items-center justify-center gap-6">
+            <DataNotFound message={getPegawais.message} />
+          </CardBody>
+        </Card>
+      );
     }
 
     return <FormPeremajaan sigapok={sigapok} pegawais={getPegawais} />;

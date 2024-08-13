@@ -1,13 +1,12 @@
 import { BtnBackNextUi } from "@/components/button/btn-back";
-import { TablePegawai } from "@/components/tables/table-pegawai";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
-import { redirect } from "next/navigation";
-import { hasSessionServer, useSessionServer } from "../server-session";
-import { getPegawaiByUnor } from "@/dummy/data-pegawai-by-unor";
 import { BtnProfile } from "@/components/button/btn-profile";
+import { Error500 } from "@/components/errors/500";
+import { TablePegawai } from "@/components/tables/table-pegawai";
+import { getPegawaiByUnor } from "@/dummy/data-pegawai-by-unor";
 import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 import { decrypt } from "@/helpers/encrypt";
-import { Error500 } from "@/components/errors/500";
+import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { useSessionServer } from "../server-session";
 
 async function Page({ searchParams }) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -22,9 +21,9 @@ async function Page({ searchParams }) {
   const getPegawaiByUnorId = await getPegawaiByUnor(getIdUnker);
 
   const renderBody = () => {
-    if (getUnorByRole.status === false || getPegawaiByUnorId.status === false) {
-      return <Error500 />;
-    }
+    // if (getUnorByRole.status === false || getPegawaiByUnorId.status === false) {
+    //   return <Error500 />;
+    // }
     return (
       <>
         <TablePegawai
@@ -40,7 +39,7 @@ async function Page({ searchParams }) {
     <>
       <section className="w-full bg-gray-100 dark:bg-slate-800 h-screen">
         <div className="max-w-6xl mx-auto">
-          <Card shadow="lg" className="max-h-screen overflow-y-auto">
+          <Card shadow="lg" className="max-h-screen overflow-y-auto my-auto">
             <CardHeader className="flex justify-between items-center">
               <div className="inline-flex items-center gap-3">
                 <BtnBackNextUi goTo="/app-integrasi/dashboard" />

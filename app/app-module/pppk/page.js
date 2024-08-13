@@ -7,6 +7,7 @@ import { TablePppk } from "@/components/tables/table-pppk";
 import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 import { getPppkByUnor } from "@/dummy/data-pppk-by-unor";
 import { decrypt } from "@/helpers/encrypt";
+import { Error500 } from "@/components/errors/500";
 
 async function Page({ searchParams }) {
   const session = hasSessionServer("USER_GAPOK");
@@ -24,6 +25,19 @@ async function Page({ searchParams }) {
     ? decrypt(searchParams.unor_id, "bkpsdm@6811")
     : unker_id;
   const pegawais = await getPppkByUnor(getIdUnker);
+
+  const renderTable = () => {
+    // if (getUnorByRole.status === false || pegawais.status === false) {
+    //   return <Error500 />;
+    // }
+    return (
+      <TablePppk
+        silka={silka_session}
+        unorlist={getUnorByRole}
+        pegawais={pegawais}
+      />
+    );
+  };
   return (
     <>
       <section className="w-full bg-gray-100 dark:bg-slate-800 h-screen">
@@ -41,13 +55,7 @@ async function Page({ searchParams }) {
               </div>
               <BtnProfile profile={silka_session} />
             </CardHeader>
-            <CardBody>
-              <TablePppk
-                silka={silka_session}
-                unorlist={getUnorByRole}
-                pegawais={pegawais}
-              />
-            </CardBody>
+            <CardBody>{renderTable()}</CardBody>
           </Card>
         </div>
       </section>

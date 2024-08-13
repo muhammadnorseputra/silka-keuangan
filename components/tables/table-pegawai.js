@@ -21,11 +21,15 @@ import {
   AutocompleteSection,
   AutocompleteItem,
   Spinner,
+  Divider,
+  DropdownSection,
 } from "@nextui-org/react";
 import { capitalize } from "@/helpers/cx";
 import { columns } from "@/dummy/columns-pegawai";
 import { Icon } from "../icons/bootstrap-icon";
 import {
+  CheckCircleIcon,
+  DocumentCheckIcon,
   DocumentCurrencyDollarIcon,
   EllipsisHorizontalCircleIcon,
   UserPlusIcon,
@@ -136,7 +140,7 @@ export const TablePegawai = ({ silka, unors, pegawais }) => {
         case "aksi":
           return (
             <div className="relative flex justify-end items-center gap-2">
-              <Dropdown backdrop="blur">
+              <Dropdown backdrop="opaque">
                 <DropdownTrigger>
                   <Button
                     className="group"
@@ -151,54 +155,78 @@ export const TablePegawai = ({ silka, unors, pegawais }) => {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu color="primary" variant="faded">
-                  <DropdownItem
-                    key="peremajaan"
-                    onPress={() =>
-                      router.push(
-                        `/app-module/pegawai/peremajaan/${encrypt(
-                          datapegawai.nip_baru,
-                          "bkpsdm"
-                        )}`
-                      )
-                    }
-                    description="Peremajaan Data"
-                    startContent={
-                      <UserPlusIcon className="size-6 text-blue-600" />
-                    }>
-                    Peremajaan
-                  </DropdownItem>
-                  <DropdownItem
-                    key="kgb"
-                    onPress={() =>
-                      router.push(
-                        `/app-module/pegawai/kgb/${encrypt(
-                          datapegawai.nip_baru,
-                          "bkpsdm"
-                        )}`
-                      )
-                    }
-                    description="Verifikasi dan Kirim"
-                    startContent={
-                      <DocumentCurrencyDollarIcon className="size-6 text-green-600" />
-                    }>
-                    Proses KGB
-                  </DropdownItem>
-                  <DropdownItem
-                    key="tpp"
-                    onPress={() =>
-                      router.push(
-                        `/app-module/pegawai/tpp/${encrypt(
-                          datapegawai.nip_baru,
-                          "bkpsdm"
-                        )}`
-                      )
-                    }
-                    description="Proses Tambahan Penghasilan Pegawai"
-                    startContent={
-                      <DocumentCurrencyDollarIcon className="size-6 text-amber-600" />
-                    }>
-                    Proses TPP
-                  </DropdownItem>
+                  <DropdownSection title="Peremajaan" showDivider>
+                    <DropdownItem
+                      key="peremajaan"
+                      onPress={() => {
+                        router.push(
+                          `/app-module/pegawai/peremajaan/${encrypt(
+                            datapegawai.nip_baru,
+                            "bkpsdm"
+                          )}`
+                        );
+                        setIsLoadingTable(true);
+                      }}
+                      description="Peremajaan Data"
+                      startContent={
+                        <UserPlusIcon className="size-6 text-blue-600" />
+                      }>
+                      Peremajaan
+                    </DropdownItem>
+                    <DropdownItem
+                      key="verval"
+                      onPress={() => {
+                        router.push(
+                          `/app-module/pegawai/verval/${encrypt(
+                            datapegawai.nip_baru,
+                            "bkpsdm"
+                          )}`
+                        );
+                        setIsLoadingTable(true);
+                      }}
+                      description="Verifikasi dan Validasi"
+                      startContent={
+                        <DocumentCheckIcon className="size-6 text-green-500" />
+                      }>
+                      Verval Data
+                    </DropdownItem>
+                  </DropdownSection>
+                  <DropdownSection title="Layanan Integrasi">
+                    <DropdownItem
+                      key="kgb"
+                      onPress={() => {
+                        router.push(
+                          `/app-module/pegawai/kgb/${encrypt(
+                            datapegawai.nip_baru,
+                            "bkpsdm"
+                          )}`
+                        );
+                        setIsLoadingTable(true);
+                      }}
+                      description="Verifikasi dan Kirim"
+                      startContent={
+                        <DocumentCurrencyDollarIcon className="size-6 text-red-400" />
+                      }>
+                      Proses KGB
+                    </DropdownItem>
+                    <DropdownItem
+                      key="tpp"
+                      onPress={() => {
+                        router.push(
+                          `/app-module/pegawai/tpp/${encrypt(
+                            datapegawai.nip_baru,
+                            "bkpsdm"
+                          )}`
+                        );
+                        setIsLoadingTable(true);
+                      }}
+                      description="Proses Tambahan Penghasilan Pegawai"
+                      startContent={
+                        <DocumentCurrencyDollarIcon className="size-6 text-amber-600" />
+                      }>
+                      Proses TPP
+                    </DropdownItem>
+                  </DropdownSection>
                 </DropdownMenu>
               </Dropdown>
             </div>
@@ -367,7 +395,7 @@ export const TablePegawai = ({ silka, unors, pegawais }) => {
       topContent={topContent}
       topContentPlacement="outside"
       bottomContent={bottomContent}
-      bottomContentPlacement="inside"
+      bottomContentPlacement="outside"
       // @ts-ignore
       sortDescriptor={sortDescriptor}
       // @ts-ignore
@@ -385,7 +413,11 @@ export const TablePegawai = ({ silka, unors, pegawais }) => {
       <TableBody
         isLoading={isLoadingTable}
         emptyContent={"No rows to display."}
-        loadingContent={<Spinner label="Loading..." />}
+        loadingContent={
+          <div className="w-full h-full flex items-center justify-center bg-white/80 z-10">
+            <Spinner label="Loading..." />
+          </div>
+        }
         items={sortedItems}>
         {(item) => (
           <TableRow key={item.nip_baru}>

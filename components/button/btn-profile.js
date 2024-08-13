@@ -24,7 +24,7 @@ export const BtnProfile = ({ profile, size = "md" }) => {
 
   return (
     <>
-      <Dropdown placement="bottom-end">
+      <Dropdown placement="bottom-end" backdrop="blur">
         <DropdownTrigger>
           <Avatar
             isBordered

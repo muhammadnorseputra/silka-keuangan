@@ -24,11 +24,11 @@ export default async function Page({ params }) {
   const resultDataKgb = await getKgbByNip($getNip);
   const tmt_sk = "2024-01-01";
   const resultDataPerubaahan = await getPerubahanData(
-    sigapok.access_token,
-    2,
-    $getNip,
-    tmt_sk,
-    2
+    sigapok.access_token, //token
+    2, // jenis kenaikan
+    $getNip, // nip baru
+    tmt_sk, // tmt sk
+    2 //
   );
 
   const renderSilkaService = () => {

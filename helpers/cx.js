@@ -41,3 +41,7 @@ export function formatTanggalIndonesia(tanggal) {
 
   return `${hari} ${namaBulan} ${tahun}`;
 }
+
+export function isNull(string) {
+  return string !== null ?? "-";
+}

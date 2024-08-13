@@ -4,6 +4,8 @@
       "@/*": ["./*"]
     },
     "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "jsx": "preserve",
     "checkJs": true
   },

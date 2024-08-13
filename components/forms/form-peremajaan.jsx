@@ -2,7 +2,6 @@
 
 import { useModalContext } from "@/lib/context/modal-context";
 import {
-  useBank,
   useJenisPegawai,
   usePangkat,
   useSatkers,
@@ -10,19 +9,22 @@ import {
   useStatusPegawai,
 } from "@/lib/FetchQuery";
 import {
+  CheckIcon,
   CircleStackIcon,
   SparklesIcon,
   UserCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { BriefcaseFill } from "react-bootstrap-icons";
+import { BriefcaseFill, CheckCircleFill } from "react-bootstrap-icons";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AlertWarning } from "../alert";
 import { ModalPeremajaan } from "../modal/modal-peremajaan";
-import { useActionPegawai } from "@/dummy/post-data-pegawai";
+import { PostDataPegawai } from "@/dummy/post-data-pegawai";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next-nprogress-bar";
+import SuccessUpdated from "../alert/SuccessUpdated";
 const {
   Tabs,
   CardBody,
@@ -35,9 +37,12 @@ const {
   AutocompleteItem,
   CardHeader,
   Textarea,
+  Code,
+  Chip,
 } = require("@nextui-org/react");
 
 const FormPeremajaan = ({ sigapok, pegawais }) => {
+  const router = useRouter();
   const [data, setData] = useState([]);
   const { isOpen, setIsOpen } = useModalContext();
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
@@ -57,6 +62,8 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     tgl_lahir,
     jenis_kelamin,
     fid_golru_skr,
+    fid_unit_kerja,
+    fid_status_kawin,
     // makertotal_tahun,
     // makertotal_bulan,
     nama_agama,
@@ -76,6 +83,8 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     kode_jenis_pegawai,
     status_data,
     // gapok,
+    update_at,
+    tmt_capeg,
   } = pegawais;
 
   const {
@@ -131,7 +140,13 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     isPending: isPendingSubmit,
     isError: isErrorSubmit,
     error: errorSubmit,
-  } = useActionPegawai(data);
+  } = useMutation({
+    mutationKey: ["updatePegawai"],
+    mutationFn: async (body) => {
+      const updatePegawai = await PostDataPegawai(body);
+      return updatePegawai;
+    },
+  });
 
   useEffect(() => {
     if (!isValid && isSubmitting) {
@@ -156,20 +171,51 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
       setIsLoadingSubmit(false);
       return;
     }
-
     const dataSubmit = {
-      nip: nip,
-      nama: nama,
+      nip,
+      nama,
+      gelar_depan,
+      gelar_belakang,
+      kode_jenkel: jenis_kelamin == "L" ? 1 : 2, //1 = Laki, 2 = Perempuan
+      tempat_lahir: tmp_lahir,
+      tanggal_lahir: tgl_lahir,
+      agama: nama_agama,
+      pendidikan: nama_tingkat_pendidikan,
+      tmt_capeg,
+      alamat: alamat_ktp,
+      no_telpon: whatsapp,
+      no_ktp,
+      npwp: no_npwp,
+
+      // tmt_skmt: pegawais.tmt_spmt,
+      kode_status_kawin: fid_status_kawin,
+      jumlah_sutri,
+      jumlah_anak,
+      // @ts-ignore
+      // kode_status_pegawai: data.kode_stapeg,
+      kode_satker: data.kodesatker.split("-")[0],
+      // @ts-ignore
+      kode_skpd: data.kodeskpd.split("-")[0],
+      kode_skpd_simpeg: fid_unit_kerja,
+      // @ts-ignore
+      kode_jenis_pegawai: data.kode_jenis.split("-")[0],
+      // @ts-ignore
+      kode_pangkat: data.kode_pangkat.split("-")[0],
+      // @ts-ignore
+      kode_status_pegawai: data.kode_stapeg.split("-")[0],
+      created_by: "INTEGRASI",
     };
+
     // @ts-ignore
     mutate(dataSubmit, {
       onSuccess: (data) => {
         if (data.status === false) {
           return toast.error(`Terjadi Kesalahan ${data.message}`);
         }
-        toast.success(`Data berhasil disimpan (${data.status})`);
+        toast.success(`${data.message}`);
         setIsLoadingSubmit(false);
         setIsOpen(false);
+        router.refresh();
       },
       onError: (err) => {
         // @ts-ignore
@@ -184,16 +230,21 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
       return (
         <Card className="w-full h-screen">
           <CardBody className="flex flex-col items-center justify-center gap-6">
-            <Image
-              src="/assets/svg/undraw_checking_boxes_re_9h8m.svg"
-              width={300}
-              height={300}
-              alt="Uptodate"
-            />
-            <h1 className="font-bold text-lg">
-              Data anda sudah diperbaharui pada tanggal{" "}
-              <span className="text-gray-400">27 Mei 1999</span>
-            </h1>
+            <SuccessUpdated style={{ width: 400 }}>
+              <h1 className="font-bold text-lg inline-flex items-center flex-col gap-y-3 mx-8 sm:mx-0">
+                Data anda sudah diperbaharui pada{" "}
+                <span className="text-gray-400">
+                  {" "}
+                  <Chip
+                    endContent={<CheckCircleFill className="size-6" />}
+                    color="success"
+                    size="lg"
+                    variant="flat">
+                    {update_at}
+                  </Chip>
+                </span>
+              </h1>
+            </SuccessUpdated>
           </CardBody>
         </Card>
       );
@@ -399,6 +450,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                 <CardBody className="grid grid-flow-row-dense grid-cols-4 grid-rows-4 gap-6 py-8 px-6">
                   <Autocomplete
                     isRequired
+                    allowsCustomValue
                     isLoading={isLoadingSatkers || isFetchingSatkers}
                     isReadOnly={isLoadingSatkers || isFetchingSatkers}
                     className="col-span-4 sm:col-span-2"
@@ -409,6 +461,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     label="Satuan Kerja"
                     name="kodesatker"
                     defaultSelectedKey={kode_satker}
+                    defaultInputValue={kode_satker}
                     variant="flat"
                     errorMessage={
                       (errors?.kodesatker?.message &&
@@ -424,7 +477,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     {satkers?.data.map((satker) => (
                       <AutocompleteItem
                         key={satker.kodesatker}
-                        value={satker.kodesatker}>
+                        textValue={`${satker.kodesatker}-${satker.nama_satker}`}>
                         {satker.nama_satker}
                       </AutocompleteItem>
                     ))}
@@ -440,6 +493,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     label="Satuan Kerja Pemerintah Daerah"
                     name="kodeskpd"
                     defaultSelectedKey={kode_skpd}
+                    defaultInputValue={kode_skpd}
                     variant="flat"
                     errorMessage={
                       (errors?.kodeskpd?.message &&
@@ -453,8 +507,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     {skpds?.data.map((skpd) => (
                       <AutocompleteItem
                         key={skpd.kodeskpd}
-                        value={skpd.kodeskpd}
-                        textValue={skpd.nama_skpd}>
+                        textValue={`${skpd.kodeskpd}-${skpd.nama_skpd}`}>
                         {skpd.nama_skpd}
                       </AutocompleteItem>
                     ))}
@@ -470,6 +523,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     label="Jenis Pegawai"
                     name="kode_jenis"
                     defaultSelectedKey="2"
+                    defaultInputValue="2"
                     variant="flat"
                     errorMessage={
                       (errors?.kode_jenis?.message &&
@@ -485,8 +539,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     {jenisPegawais?.data.map((js) => (
                       <AutocompleteItem
                         key={js.kode_jenis}
-                        value={js.kode_jenis}
-                        textValue={js.nama_jenis}>
+                        textValue={`${js.kode_jenis}-${js.nama_jenis}`}>
                         {js.nama_jenis}
                       </AutocompleteItem>
                     ))}
@@ -501,6 +554,8 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     label="Pangkat"
                     name="kode_pangkat"
                     defaultSelectedKey={fid_golru_skr}
+                    defaultInputValue={fid_golru_skr}
+                    selectedKey={fid_golru_skr}
                     variant="flat"
                     errorMessage={
                       (errors?.kode_pangkat?.message &&
@@ -517,7 +572,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                       <AutocompleteItem
                         key={pangkat.kode_golongan}
                         value={pangkat.kode_golongan}
-                        textValue={`${pangkat.nama_golongan} - ${pangkat.ket_pangkat}`}>
+                        textValue={`${pangkat.kode_golongan} - ${pangkat.ket_pangkat} (${pangkat.nama_golongan})`}>
                         {pangkat.nama_golongan} - {pangkat.ket_pangkat}
                       </AutocompleteItem>
                     ))}
@@ -537,6 +592,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     label="Status Pegawai"
                     name="kode_stapeg"
                     defaultSelectedKey={kode_status_pegawai}
+                    defaultInputValue={kode_status_pegawai}
                     variant="flat"
                     errorMessage={
                       (errors?.kode_stapeg?.message &&
@@ -553,7 +609,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                       <AutocompleteItem
                         key={statuspeg.kode_stapeg}
                         value={statuspeg.kode_stapeg}
-                        textValue={statuspeg.stapeg_nama}>
+                        textValue={`${statuspeg.kode_stapeg}-${statuspeg.stapeg_nama}`}>
                         {statuspeg.stapeg_nama}
                       </AutocompleteItem>
                     ))}
