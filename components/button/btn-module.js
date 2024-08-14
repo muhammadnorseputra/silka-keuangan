@@ -24,6 +24,10 @@ const BtnModule = ({ goTo, isDisabled, sigapok }) => {
     toast.promise(sigapok, {
       loading: "Proccesing",
       success: (data) => {
+        // if(data.status === false) {
+        //   setStateLoading(false);
+        //   return `Gagal menghubungi server ${process.env.NEXT_PUBLIC_GAPOK_BASE_URL} (${data.message})`;
+        // }
         // setStateLoading(false); //agar loading terus sebelum halaman dialihkan
         setCookie("USER_GAPOK", data, { maxAge: 3600 });
         // return `Authorize succes (${data?.datauser[0]?.nama_user})`;

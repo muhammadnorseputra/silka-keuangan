@@ -19,11 +19,13 @@ export const loginSigapok = async () => {
     );
     const response = await getUserSigapok.json();
     return response;
-  } catch (err) {
-    return {
-      status: false,
-      message: `Gagal menghubungi server ${process.env.NEXT_PUBLIC_GAPOK_BASE_URL} (${err})`,
-      data: [],
-    };
+  } catch (err) {    
+    throw new Error(`Gagal koneksi ke server (${err})`);
+
+    // return {
+    //   status: false,
+    //   message: `Gagal menghubungkan ke server ${process.env.NEXT_PUBLIC_GAPOK_BASE_URL} (${err})`,
+    //   data: [],
+    // };
   }
 };

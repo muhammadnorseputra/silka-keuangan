@@ -59,7 +59,6 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
 
   const isSubmit = async () => {
     setIsOpen(false);
-    console.log(data);
   };
 
   return (

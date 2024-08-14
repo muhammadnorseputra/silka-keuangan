@@ -12,13 +12,18 @@ import {
 import { useSessionServer } from "../../../server-session";
 import { formatRupiahManual, formatTanggalIndonesia } from "@/helpers/cx";
 import { DocumentTextIcon } from "@heroicons/react/24/solid";
-import { CloudArrowUp, ExclamationCircle } from "react-bootstrap-icons";
+import { ExclamationCircle } from "react-bootstrap-icons";
 import { decrypt } from "@/helpers/encrypt";
 import { getPerubahanData } from "@/dummy/sigapok-get-perubahan";
+
+import BtnKgbConfirm from "@/components/button/btn-kgb-confirm";
 
 export const revalidate = 0;
 
 export default async function Page({ params }) {
+  
+  
+
   const sigapok = useSessionServer("USER_GAPOK");
   const $getNip = decrypt(params.slug[0], "bkpsdm");
   const resultDataKgb = await getKgbByNip($getNip);
@@ -122,7 +127,7 @@ export default async function Page({ params }) {
     );
   };
   const renderGapokServices = () => {
-    if (resultDataPerubaahan.success === false) {
+    if (resultDataPerubaahan.success === false || !resultDataPerubaahan.ok) {
       return (
         <div className="flex flex-col items-center justify-center gap-4 h-screen">
           <ExclamationCircle className="size-8" />
@@ -130,13 +135,15 @@ export default async function Page({ params }) {
         </div>
       );
     }
-    console.log(resultDataPerubaahan);
     return (
       <div className="flex flex-col items-center justify-center h-screen">
         OKE
       </div>
     );
   };
+
+
+
 
   return (
     <>
@@ -174,11 +181,7 @@ export default async function Page({ params }) {
                 <Divider />
                 <CardFooter>
                   <div className="flex items-end justify-end w-full">
-                    <Button color="primary" variant="shadow">
-                      <CloudArrowUp className="size-5 text-white" />
-                      <Divider orientation="vertical" />
-                      Kirim
-                    </Button>
+                    <BtnKgbConfirm dataSilka={resultDataKgb}/>
                   </div>
                 </CardFooter>
               </Card>
@@ -186,7 +189,7 @@ export default async function Page({ params }) {
               <Card fullWidth>
                 <CardHeader className="flex gap-3">
                   <div className="flex flex-col">
-                    <p className="text-md">Gapok Services</p>
+                    <p className="text-md">Sigapok Services</p>
                     <p className="text-small text-default-500">
                       Data Badan Keuangan Daerah
                     </p>

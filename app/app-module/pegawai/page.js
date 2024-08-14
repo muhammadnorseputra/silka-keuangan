@@ -7,6 +7,7 @@ import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 import { decrypt } from "@/helpers/encrypt";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useSessionServer } from "../server-session";
+import NoInternet from "@/components/errors/NoInternet";
 
 async function Page({ searchParams }) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -21,9 +22,9 @@ async function Page({ searchParams }) {
   const getPegawaiByUnorId = await getPegawaiByUnor(getIdUnker);
 
   const renderBody = () => {
-    // if (getUnorByRole.status === false || getPegawaiByUnorId.status === false) {
-    //   return <Error500 />;
-    // }
+    if (getUnorByRole.status === false) {
+      return <NoInternet message={getUnorByRole.message}/>;
+    }
     return (
       <>
         <TablePegawai
