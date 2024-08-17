@@ -1,38 +1,30 @@
 "use client";
 
-import { useCallback, useState, useMemo, useEffect } from "react";
+import { useCallback, useState, useMemo } from "react";
 import {
   Table,
   TableHeader,
   TableColumn,
   TableBody,
   TableRow,
-  TableCell,
-  Chip,
-  User,
-  Pagination,
+  TableCell, Pagination,
   Button,
   Input,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Autocomplete,
-  AutocompleteSection,
-  AutocompleteItem,
-  Spinner,
-  Divider,
-  DropdownSection,
+  Autocomplete, AutocompleteItem,
+  Spinner, DropdownSection
 } from "@nextui-org/react";
 import { capitalize } from "@/helpers/cx";
 import { columns } from "@/dummy/columns-pegawai";
 import { Icon } from "../icons/bootstrap-icon";
 import {
-  CheckCircleIcon,
   DocumentCheckIcon,
   DocumentCurrencyDollarIcon,
   EllipsisHorizontalCircleIcon,
-  UserPlusIcon,
+  UserPlusIcon
 } from "@heroicons/react/24/solid";
 import { useRouter } from "next-nprogress-bar";
 import { encrypt } from "@/helpers/encrypt";
@@ -40,7 +32,7 @@ import { encrypt } from "@/helpers/encrypt";
 
 const INITIAL_VISIBLE_COLUMNS = ["nip", "nama", "jabatan", "aksi"];
 
-export const TablePegawai = ({ silka, unors, pegawais }) => {
+export const TablePegawai = ({ unors, pegawais }) => {
   const router = useRouter();
   const { data: datapegawai } = pegawais;
   const [isLoadingTable, setIsLoadingTable] = useState(false);
