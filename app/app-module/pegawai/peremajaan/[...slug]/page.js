@@ -39,9 +39,9 @@ export default async function Page({ params, searchParams }) {
 
   return (
     <>
-      <div className="w-full bg-gray-100  dark:bg-gray-900 h-screen">
+      <div className="w-full bg-blue-500  dark:bg-gray-900 h-screen">
         <div className="max-w-6xl mx-auto">
-          <Card shadow="none" className="max-h-screen overflow-y-auto">
+          <Card shadow="lg" className="max-h-screen overflow-y-auto">
             <CardHeader className="flex justify-between items-center">
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />

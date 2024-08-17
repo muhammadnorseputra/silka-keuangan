@@ -23,21 +23,18 @@ async function Page({ searchParams }) {
 
   const renderBody = () => {
     if (getUnorByRole.status === false) {
-      return <NoInternet message={getUnorByRole.message}/>;
+      return <NoInternet message={getUnorByRole.message} />;
     }
     return (
       <>
-        <TablePegawai
-          unors={getUnorByRole}
-          pegawais={getPegawaiByUnorId}
-        />
+        <TablePegawai unors={getUnorByRole} pegawais={getPegawaiByUnorId} />
       </>
     );
   };
 
   return (
     <>
-      <section className="w-full bg-gray-100 dark:bg-slate-800 h-screen">
+      <section className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
         <div className="max-w-6xl mx-auto">
           <Card shadow="lg" className="max-h-screen overflow-y-auto my-auto">
             <CardHeader className="flex justify-between items-center">

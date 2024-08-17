@@ -16,6 +16,7 @@ import { decrypt } from "@/helpers/encrypt";
 import { getTppSigapok } from "@/dummy/sigapok-get-tpp";
 import { polaNIP } from "@/helpers/polanip";
 import { BtnKirimTPP } from "@/components/button/btn-tpp-kirim";
+import { terbilangRupiah } from "@/helpers/rupiah";
 
 export const revalidate = 0;
 
@@ -73,8 +74,14 @@ export default async function Page({ params, searchParams }) {
         </div>
         <div>
           <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
-          <div className="font-bold">
+          <div className="font-bold text-green-600 text-2xl">
             {formatRupiahManual(tpp_diterima) ?? "-"}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">TERBILANG</div>
+          <div className="font-bold text-gray-400 italic uppercase">
+            {terbilangRupiah(tpp_diterima) ?? "-"}
           </div>
         </div>
       </>
@@ -107,62 +114,64 @@ export default async function Page({ params, searchParams }) {
   };
   return (
     <>
-      <div className="max-w-6xl mx-auto">
-        <Card shadow="none">
-          <CardHeader className="flex justify-between items-center">
-            <div className="inline-flex items-center gap-4">
-              <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
-              <div className="flex flex-col">
-                <p className="text-xl flex flex-col">
-                  <span className="uppercase">
-                    Tambahan Penghasilan Pegawai
-                  </span>
-                  <span className="text-base">{namalengkap}</span>
-                </p>
+      <div className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
+        <div className="max-w-6xl mx-auto">
+          <Card shadow="lg" className="max-h-screen overflow-y-auto my-auto">
+            <CardHeader className="flex justify-between items-center">
+              <div className="inline-flex items-center gap-4">
+                <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
+                <div className="flex flex-col">
+                  <p className="text-xl flex flex-col">
+                    <span className="uppercase">
+                      Tambahan Penghasilan Pegawai
+                    </span>
+                    <span className="text-base">{namalengkap}</span>
+                  </p>
+                </div>
               </div>
-            </div>
-          </CardHeader>
-          <CardBody>
-            <div className="flex flex-col md:flex-row justify-between items-start gap-x-6 gap-y-3">
-              {/* Get Data Silka */}
-              <Card fullWidth>
-                <CardHeader className="flex gap-3">
-                  <div className="flex flex-col">
-                    <p className="text-md">SILKa Online</p>
-                    <p className="text-small text-default-500">
-                      Data Tambahan Penghasilan Pegawai
-                    </p>
-                  </div>
-                </CardHeader>
-                <Divider />
-                <CardBody className="flex flex-col gap-y-4 px-8 py-8">
-                  {renderSilkaService()}
-                </CardBody>
-                <Divider />
-                <CardFooter>
-                  <div className="flex items-end justify-end w-full">
-                    {renderButtonKirim()}
-                  </div>
-                </CardFooter>
-              </Card>
-              {/* Get Data Gapok */}
-              <Card fullWidth>
-                <CardHeader className="flex gap-3">
-                  <div className="flex flex-col">
-                    <p className="text-md">Gapok Services</p>
-                    <p className="text-small text-default-500">
-                      Data Badan Keuangan Daerah
-                    </p>
-                  </div>
-                </CardHeader>
-                <Divider />
-                <CardBody className="flex flex-col gap-y-4 px-8 py-8">
-                  {renderGapokServices()}
-                </CardBody>
-              </Card>
-            </div>
-          </CardBody>
-        </Card>
+            </CardHeader>
+            <CardBody>
+              <div className="flex flex-col md:flex-row justify-between items-start gap-x-6 gap-y-3">
+                {/* Get Data Silka */}
+                <Card fullWidth>
+                  <CardHeader className="flex gap-3">
+                    <div className="flex flex-col">
+                      <p className="text-md">SILKa Online</p>
+                      <p className="text-small text-default-500">
+                        Data Tambahan Penghasilan Pegawai
+                      </p>
+                    </div>
+                  </CardHeader>
+                  <Divider />
+                  <CardBody className="flex flex-col gap-y-8 px-8 py-8">
+                    {renderSilkaService()}
+                  </CardBody>
+                  <Divider />
+                  <CardFooter>
+                    <div className="flex items-end justify-end w-full">
+                      {renderButtonKirim()}
+                    </div>
+                  </CardFooter>
+                </Card>
+                {/* Get Data Gapok */}
+                <Card fullWidth>
+                  <CardHeader className="flex gap-3">
+                    <div className="flex flex-col">
+                      <p className="text-md">Gapok Services</p>
+                      <p className="text-small text-default-500">
+                        Data Badan Keuangan Daerah
+                      </p>
+                    </div>
+                  </CardHeader>
+                  <Divider />
+                  <CardBody className="flex flex-col gap-y-4 px-8 py-8">
+                    {renderGapokServices()}
+                  </CardBody>
+                </Card>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
       </div>
     </>
   );

@@ -3,7 +3,8 @@
 import { kirimTPP } from "@/dummy/sigapok-post-tpp";
 import { Button, Divider } from "@nextui-org/react";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRouter } from "next-nprogress-bar";
+import { useEffect, useState } from "react";
 import { CloudArrowUp } from "react-bootstrap-icons";
 import toast from "react-hot-toast";
 
@@ -13,9 +14,11 @@ export const BtnKirimTPP = ({
   bulan,
   tahun,
   tpp_diterima,
+  simgaji_id_skpd,
+  simgaji_id_satker,
   silka,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const { mutate, isPending } = useMutation({
     mutationFn: async (body) => {
       const response = await kirimTPP(access_token, body);
@@ -23,33 +26,46 @@ export const BtnKirimTPP = ({
     },
     mutationKey: ["KirimTPP"],
   });
-  function handleKirim() {
-    setIsLoading(true);
+
+  useEffect(() => {
     if (isPending) {
-      toast.loading("Sending ...", {
+      toast.loading(`Sending ...`, {
         id: "Toaster",
       });
-      return;
     }
-    const PERIODETPP = `${bulan}${tahun}`;
-    const TGL_BAYAR = `${bulan}-${bulan}-${tahun}`;
+  }, [isPending]);
+
+  function handleKirim() {
+    const PERIODE_TPP = `${bulan.toString().padStart(2, "0")}${tahun}`;
+    const TGL_BAYAR = `${bulan.toString().padStart(2, "0")}-${bulan
+      .toString()
+      .padStart(2, "0")}-${tahun}`;
     const BODY = {
-      // NIP: nip,
-      // PERIODETPP,
-      // TGL_BAYAR,
-      // KD_SKPD,
-      // KD_SATKER,
-      // JML_TPP: tpp_diterima,
-      // ADDUSER: silka?.data.nip,
-      // STATUS: "0"
+      NIP: nip,
+      PERIODE_TPP,
+      TGL_BAYAR,
+      KD_SKPD: parseInt(simgaji_id_skpd, 10),
+      KD_SATKER: simgaji_id_satker,
+      JML_TPP: tpp_diterima,
+      ADDUSER: silka?.data.nip,
+      STATUS: "0",
     };
     // @ts-ignore
     mutate(BODY, {
       onSuccess: (data) => {
-        setIsLoading(false);
+        if (data.success === false || !data.success) {
+          toast.error(`${data.status} (${JSON.stringify(data.message)})`, {
+            id: "Toaster",
+          });
+          return;
+        }
+
+        toast.success(data.message, {
+          id: "Toaster",
+        });
+        router.refresh();
       },
       onError: (err) => {
-        setIsLoading(false);
         toast.error(err.message, {
           id: "Toaster",
         });
@@ -63,7 +79,8 @@ export const BtnKirimTPP = ({
         color="primary"
         variant="shadow"
         onPress={handleKirim}
-        isDisabled={isLoading}>
+        isLoading={isPending}
+        isDisabled={isPending}>
         <CloudArrowUp className="size-5 text-white" />
         <Divider orientation="vertical" />
         Kirim

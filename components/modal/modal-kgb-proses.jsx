@@ -15,7 +15,6 @@ import dynamic from "next/dynamic";
 import { AlertInfo, AlertWarning } from "../alert";
 import { formatRupiahManual, formatTanggalIndonesia } from "@/helpers/cx";
 import { DocumentCurrencyDollarIcon } from "@heroicons/react/24/solid";
-import { useSpinnerContext } from "@/lib/context/spinner-context";
 
 const MyPDF = dynamic(
   () => import("../pdf/viewer").then((mod) => mod.PDFViewer),
@@ -31,8 +30,8 @@ export const ModalKgbProses = ({
   isOpenModal = false,
   onClose,
   handleSubmit,
+  isPending,
 }) => {
-  const { isSpinner } = useSpinnerContext();
   const {
     gapok_baru,
     golru_nama,
@@ -117,8 +116,8 @@ export const ModalKgbProses = ({
             </Button>
             <Button
               color="primary"
-              isLoading={isSpinner}
-              isDisabled={isSpinner}
+              isLoading={isPending}
+              isDisabled={isPending}
               onPress={handleSubmit}>
               Kirim
             </Button>

@@ -76,8 +76,8 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     // induk_bank,
     jumlah_anak,
     jumlah_sutri,
-    kode_skpd,
-    kode_satker,
+    simgaji_id_skpd,
+    simgaji_id_satker,
     kode_status_pegawai,
     kode_pangkat,
     kode_jenis_pegawai,
@@ -193,9 +193,9 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
       jumlah_anak,
       // @ts-ignore
       // kode_status_pegawai: data.kode_stapeg,
-      kode_satker: data.kodesatker.split("-")[0],
+      kode_satker: simgaji_id_satker,
       // @ts-ignore
-      kode_skpd: data.kodeskpd.split("-")[0],
+      kode_skpd: simgaji_id_skpd,
       kode_skpd_simpeg: fid_unit_kerja,
       // @ts-ignore
       kode_jenis_pegawai: data.kode_jenis.split("-")[0],
@@ -449,10 +449,9 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
               <Card>
                 <CardBody className="grid grid-flow-row-dense grid-cols-4 grid-rows-4 gap-6 py-8 px-6">
                   <Autocomplete
-                    isRequired
                     allowsCustomValue
+                    isReadOnly
                     isLoading={isLoadingSatkers || isFetchingSatkers}
-                    isReadOnly={isLoadingSatkers || isFetchingSatkers}
                     className="col-span-4 sm:col-span-2"
                     aria-label="Satuan Kerja"
                     labelPlacement="outside"
@@ -460,8 +459,8 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     placeholder="Pilih Satuan Kerja"
                     label="Satuan Kerja"
                     name="kodesatker"
-                    defaultSelectedKey={kode_satker}
-                    defaultInputValue={kode_satker}
+                    defaultSelectedKey={simgaji_id_satker}
+                    selectedKey={simgaji_id_satker}
                     variant="flat"
                     errorMessage={
                       (errors?.kodesatker?.message &&
@@ -476,24 +475,23 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     })}>
                     {satkers?.data.map((satker) => (
                       <AutocompleteItem
-                        key={satker.kodesatker}
-                        textValue={`${satker.kodesatker}-${satker.nama_satker}`}>
+                        key={satker.kodesatker.trim()}
+                        textValue={`${satker.nama_satker}`}>
                         {satker.nama_satker}
                       </AutocompleteItem>
                     ))}
                   </Autocomplete>
                   <Autocomplete
-                    isRequired
+                    isReadOnly
                     isLoading={isLoadingSkpd || isFetchingSkpd}
-                    isReadOnly={isLoadingSkpd || isFetchingSkpd}
                     className="col-span-4 sm:col-span-2"
                     labelPlacement="outside"
                     size="lg"
                     placeholder="Pilih Satuan Kerja Pemerintah Daerah"
                     label="Satuan Kerja Pemerintah Daerah"
                     name="kodeskpd"
-                    defaultSelectedKey={kode_skpd}
-                    defaultInputValue={kode_skpd}
+                    defaultSelectedKey={simgaji_id_skpd}
+                    selectedKey={simgaji_id_skpd}
                     variant="flat"
                     errorMessage={
                       (errors?.kodeskpd?.message &&
@@ -507,7 +505,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     {skpds?.data.map((skpd) => (
                       <AutocompleteItem
                         key={skpd.kodeskpd}
-                        textValue={`${skpd.kodeskpd}-${skpd.nama_skpd}`}>
+                        textValue={`${skpd.nama_skpd}`}>
                         {skpd.nama_skpd}
                       </AutocompleteItem>
                     ))}

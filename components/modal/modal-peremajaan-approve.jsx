@@ -9,14 +9,12 @@ import {
   Button,
 } from "@nextui-org/react";
 import { AlertWarning } from "../alert";
-import { useSpinnerContext } from "@/lib/context/spinner-context";
-
 export const ModalPeremajaanApprove = ({
   isOpenModal = false,
   onClose,
   handleApprove,
+  isLoading,
 }) => {
-  const { isSpinner } = useSpinnerContext();
   return (
     <>
       <Modal
@@ -42,8 +40,8 @@ export const ModalPeremajaanApprove = ({
             </Button>
             <Button
               color="primary"
-              isLoading={isSpinner}
-              isDisabled={isSpinner}
+              isLoading={isLoading}
+              isDisabled={isLoading}
               onPress={handleApprove}>
               Yakin
             </Button>

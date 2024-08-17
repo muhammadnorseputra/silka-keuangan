@@ -10,7 +10,7 @@ export const savePerubahanData = async (token, body) => {
       method: "POST",
       cache: "no-store",
       headers,
-      body,
+      body: JSON.stringify(body),
       next: {
         tags: ["savePerubahanData"],
       },
