@@ -270,6 +270,7 @@ export const TablePegawai = ({ unors, pegawais }) => {
           <Autocomplete
             size="md"
             isLoading={isLoadingTable}
+            isDisabled={isLoadingTable}
             placeholder={`Pilih Unit Kerja`}
             selectedKey={`${selectedKeyUnor}`}
             classNames={{
@@ -406,7 +407,7 @@ export const TablePegawai = ({ unors, pegawais }) => {
         isLoading={isLoadingTable}
         emptyContent={"No rows to display."}
         loadingContent={
-          <div className="w-full h-full flex items-center justify-center bg-white/80 z-10">
+          <div className="w-full h-full flex items-center justify-center bg-white/80 dark:bg-black/80 z-10">
             <Spinner label="Loading..." />
           </div>
         }

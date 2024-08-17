@@ -14,12 +14,15 @@ import { formatRupiahManual } from "@/helpers/cx";
 import { CloudArrowUp, ExclamationCircle } from "react-bootstrap-icons";
 import { decrypt } from "@/helpers/encrypt";
 import { getTppSigapok } from "@/dummy/sigapok-get-tpp";
+import { polaNIP } from "@/helpers/polanip";
+import { BtnKirimTPP } from "@/components/button/btn-tpp-kirim";
 
 export const revalidate = 0;
 
 export default async function Page({ params, searchParams }) {
   const session = hasSessionServer("USER_GAPOK");
   const sigapok = useSessionServer("USER_GAPOK");
+  const silka = useSessionServer("USER_SILKA");
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }
@@ -56,11 +59,17 @@ export default async function Page({ params, searchParams }) {
         </div>
         <div>
           <div className="text-gray-400">NIP</div>
-          <div className="font-bold">{nip ?? "-"}</div>
+          <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
         </div>
-        <div>
-          <div className="text-gray-400">TAHUN</div>
-          <div className="font-bold">{tahun ?? "-"}</div>
+        <div className="inline-flex flex-col sm:flex-row justify-start items-center gap-x-8">
+          <div>
+            <div className="text-gray-400">BULAN</div>
+            <div className="font-bold">{bulan ?? "-"}</div>
+          </div>
+          <div>
+            <div className="text-gray-400">TAHUN</div>
+            <div className="font-bold">{tahun ?? "-"}</div>
+          </div>
         </div>
         <div>
           <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
@@ -86,6 +95,15 @@ export default async function Page({ params, searchParams }) {
         OKE
       </div>
     );
+  };
+
+  const renderButtonKirim = () => {
+    // if (resultDataTpp?.data.fid_status !== "CETAK") {
+    //   return (
+    //     <div className="text-red-500">TPP masih dalam proses perhitungan.</div>
+    //   );
+    // }
+    return <BtnKirimTPP {...sigapok} {...resultDataTpp?.data} silka={silka} />;
   };
   return (
     <>
@@ -123,11 +141,7 @@ export default async function Page({ params, searchParams }) {
                 <Divider />
                 <CardFooter>
                   <div className="flex items-end justify-end w-full">
-                    <Button color="primary" variant="shadow">
-                      <CloudArrowUp className="size-5 text-white" />
-                      <Divider orientation="vertical" />
-                      Kirim
-                    </Button>
+                    {renderButtonKirim()}
                   </div>
                 </CardFooter>
               </Card>

@@ -4,6 +4,7 @@ import { Providers } from "@/lib/nextuiproviders";
 import { Toaster } from "react-hot-toast";
 import ProgressProviders from "@/lib/ProgressBarProvider";
 import { FetchQueryProvider } from "@/lib/FetchQueryProvider";
+import SpinnerProvider from "@/lib/context/spinner-context";
 
 export const metadata = {
   title: "Welcome SILKa Keuangan Daerah",
@@ -20,13 +21,16 @@ export default function RootLayout({ children }) {
       />
       <body>
         <Providers
-          disableAnimation
-          skipFramerMotionAnimations
-          validationBehavior="native">
+        // disableAnimation
+        // skipFramerMotionAnimations
+        // validationBehavior="native"
+        >
           <ProgressProviders>
-            <ModalProvider>
-              <FetchQueryProvider>{children}</FetchQueryProvider>
-            </ModalProvider>
+            <SpinnerProvider>
+              <ModalProvider>
+                <FetchQueryProvider>{children}</FetchQueryProvider>
+              </ModalProvider>
+            </SpinnerProvider>
           </ProgressProviders>
         </Providers>
         <Toaster position="top-center" />

@@ -26,7 +26,7 @@ export const AlertDanger = ({ title, message = "", children = "" }) => {
   );
 };
 
-export const AlertWarning = ({ title, message = "", children = "" }) => {
+export const AlertWarning = ({ title, message = null, children = null }) => {
   return (
     <div
       role="alert"

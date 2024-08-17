@@ -15,6 +15,8 @@ import { getTppSigapok } from "@/dummy/sigapok-get-tpp";
 import { getPegawaiByNip } from "@/dummy/data-pegawai-by-nip";
 import { formatTanggalIndonesia } from "@/helpers/cx";
 import { HandThumbUpIcon } from "@heroicons/react/24/solid";
+import { ButtonPeremajaan } from "@/components/button/btn-peremajaan";
+import { BtnApprove } from "@/components/button/btn-approve";
 
 export const revalidate = 0;
 
@@ -35,6 +37,7 @@ export default async function Page({ params }) {
         <div className="flex flex-col items-center justify-center gap-4">
           <ExclamationCircle className="size-8" />
           <p className="text-gray-400">Data Belum Diremajakan</p>
+          <ButtonPeremajaan nip={NIP} />
         </div>
       );
     }
@@ -123,13 +126,7 @@ export default async function Page({ params }) {
       return;
     }
 
-    return (
-      <Button color="primary" variant="shadow">
-        <HandThumbUpIcon className="size-5 text-white" />
-        <Divider orientation="vertical" />
-        Approve
-      </Button>
-    );
+    return <BtnApprove />;
   };
   return (
     <>

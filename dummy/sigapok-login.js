@@ -1,3 +1,7 @@
+"use server";
+import { AES } from "crypto-js";
+import { cookies } from "next/headers";
+
 export const loginSigapok = async () => {
   const account = {
     username: process.env.NEXT_PUBLIC_GAPOK_USERNAME,
@@ -18,14 +22,26 @@ export const loginSigapok = async () => {
       }
     );
     const response = await getUserSigapok.json();
-    return response;
-  } catch (err) {    
-    throw new Error(`Gagal koneksi ke server (${err})`);
+    if (response.success === true) {
+      cookies().set(
+        "USER_GAPOK",
+        AES.encrypt(
+          JSON.stringify(response),
+          process.env.SECRET_KEY
+        ).toString(),
+        {
+          maxAge: 3600,
+        }
+      );
+    }
 
-    // return {
-    //   status: false,
-    //   message: `Gagal menghubungkan ke server ${process.env.NEXT_PUBLIC_GAPOK_BASE_URL} (${err})`,
-    //   data: [],
-    // };
+    return response;
+  } catch (err) {
+    // throw new Error(`Gagal koneksi ke server (${err})`);
+    return {
+      status: false,
+      message: `Gagal menghubungkan ke server ${process.env.NEXT_PUBLIC_GAPOK_BASE_URL} (${err})`,
+      data: [],
+    };
   }
 };
