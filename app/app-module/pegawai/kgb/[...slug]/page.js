@@ -17,14 +17,13 @@ import { decrypt } from "@/helpers/encrypt";
 import { getPerubahanData } from "@/dummy/sigapok-get-perubahan";
 
 import BtnKgbConfirm from "@/components/button/btn-kgb-confirm";
+import { checkURLStatus } from "@/helpers/cekurlstatus";
 
 export const revalidate = 0;
 
 export default async function Page({ params }) {
-  
-  
-
   const sigapok = useSessionServer("USER_GAPOK");
+  const session_silka = useSessionServer("USER_SILKA");
   const $getNip = decrypt(params.slug[0], "bkpsdm");
   const resultDataKgb = await getKgbByNip($getNip);
   const tmt_sk = "2024-01-01";
@@ -115,7 +114,6 @@ export default async function Page({ params }) {
             color="primary"
             // fullWidth
             isExternal
-            showAnchorIcon
             className="justify-start"
             variant="bordered">
             <DocumentTextIcon className="size-4" />
@@ -142,9 +140,36 @@ export default async function Page({ params }) {
     );
   };
 
+  // cek file sk kgb ada atau tidak
+  const isBerkas = await checkURLStatus(resultDataKgb?.data.berkas);
+  const renderButtonVerifikasi = () => {
+    if (isBerkas !== "OK") {
+      return (
+        <p className="text-red-600">
+          File SK / Berkas tidak ditemukan, verifikasi tidak dapat dilakukan !
+          Silahkan Upload pada{" "}
+          <strong>
+            <Link
+              showAnchorIcon
+              color="primary"
+              href={process.env.NEXT_PUBLIC_SILKA_BASE_URL}
+              target="_blank">
+              SIMPEG
+            </Link>
+          </strong>{" "}
+          Riwayat KGB Terkahir ASN
+        </p>
+      );
+    }
 
-
-
+    return (
+      <BtnKgbConfirm
+        dataSilka={resultDataKgb}
+        session_silka={session_silka}
+        {...sigapok}
+      />
+    );
+  };
   return (
     <>
       <div className="max-w-6xl mx-auto">
@@ -181,7 +206,7 @@ export default async function Page({ params }) {
                 <Divider />
                 <CardFooter>
                   <div className="flex items-end justify-end w-full">
-                    <BtnKgbConfirm dataSilka={resultDataKgb}/>
+                    {renderButtonVerifikasi()}
                   </div>
                 </CardFooter>
               </Card>

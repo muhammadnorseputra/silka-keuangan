@@ -9,19 +9,40 @@ import {
   Button,
   useDisclosure,
   Code,
+  Chip,
 } from "@nextui-org/react";
+import dynamic from "next/dynamic";
 import { AlertInfo, AlertWarning } from "../alert";
 import { formatRupiahManual, formatTanggalIndonesia } from "@/helpers/cx";
 import { DocumentCurrencyDollarIcon } from "@heroicons/react/24/solid";
+import { useSpinnerContext } from "@/lib/context/spinner-context";
 
+const MyPDF = dynamic(
+  () => import("../pdf/viewer").then((mod) => mod.PDFViewer),
+  {
+    ssr: true,
+    loading: () => (
+      <p className="text-gray-400">Load file pdf, mohon tunggu ...</p>
+    ),
+  }
+);
 export const ModalKgbProses = ({
   dataSilka,
   isOpenModal = false,
   onClose,
   handleSubmit,
-  isLoading = false,
 }) => {
-  const { gapok_baru, golru_nama, berkas, pangkat_nama, mk_thn, mk_bln, tmt_berikutnya } = dataSilka.data
+  const { isSpinner } = useSpinnerContext();
+  const {
+    gapok_baru,
+    golru_nama,
+    berkas,
+    pangkat_nama,
+    mk_thn,
+    mk_bln,
+    tmt_berikutnya,
+    tmt,
+  } = dataSilka.data;
   return (
     <>
       <Modal
@@ -32,40 +53,63 @@ export const ModalKgbProses = ({
         placement="center"
         isDismissable={false}
         isKeyboardDismissDisabled={true}
-        scrollBehavior="inside"
-      >
+        shadow="lg"
+        scrollBehavior="outside">
         <ModalContent>
           <ModalHeader className="flex flex-col sm:flex-row items-center gap-1 shadow-lg">
-            <DocumentCurrencyDollarIcon className="size-8"/> <span>VERIFIKASI USULAN KGB</span>
+            <DocumentCurrencyDollarIcon className="size-8" />{" "}
+            <div>VERIFIKASI USULAN KGB</div>
           </ModalHeader>
           <ModalBody>
-          <iframe allowFullScreen={true} height={500} src={`${berkas}#zoom=FitH`} />
-          <div className="flex flex-col sm:flex-row justify-around items-start gap-4 border border-red-800 p-6">
-            <div>
-              <div className="text-gray-400">GAJI BARU</div>
-              <div className="font-bold">{formatRupiahManual(gapok_baru) ?? "-"}</div>
+            {/* <MyPDF src={berkas} /> */}
+            <MyPDF src={"https://pdfobject.com/pdf/sample.pdf"} />
+            {/* <iframe
+              allowFullScreen={true}
+              height={600}
+              src={`${berkas}#zoom=FitH`}
+              sandbox="allow-scripts"
+            /> */}
+            <div className="grid grid-flow-row-dense grid-cols-4 gap-4 border-b border-l border-r border-gray-500 -mt-3 p-6">
+              <div className="col-span-4 md:col-span-1">
+                <div className="text-gray-400">GAJI BARU</div>
+                <div className="font-bold">
+                  {formatRupiahManual(gapok_baru) ?? "-"}
+                </div>
+              </div>
+              <div className="col-span-4 md:col-span-1">
+                <div className="text-gray-400">GOLONGAN RUANG</div>
+                <div className="font-bold">
+                  {pangkat_nama ?? "-"} ({golru_nama ?? "-"})
+                </div>
+              </div>
+              <div className="col-span-4 md:col-span-1">
+                <div className="text-gray-400">MASA KERJA BULAN</div>
+                <div className="font-bold">{mk_thn ?? "-"}</div>
+              </div>
+              <div className="col-span-4 md:col-span-1">
+                <div className="text-gray-400">MASA KERJA TAHUN</div>
+                <div className="font-bold">{mk_bln ?? "-"}</div>
+              </div>
+              <div className="col-span-4 md:col-span-1">
+                <div className="text-gray-400">TMT GAJI BARU</div>
+                <div className="font-bold">
+                  {formatTanggalIndonesia(tmt) ?? "-"}
+                </div>
+              </div>
+              <div className="col-span-4 md:col-span-1">
+                <div className="text-gray-400">TMT BERKALA BERIKUTNYA</div>
+                <div className="font-bold">
+                  {formatTanggalIndonesia(tmt_berikutnya) ?? "-"}
+                </div>
+              </div>
             </div>
-            <div>
-              <div className="text-gray-400">GOLONGAN RUANG</div>
-              <div className="font-bold">{pangkat_nama ?? "-"} ({golru_nama ?? "-"})</div>
-            </div>
-            <div>
-              <div className="text-gray-400">MASA KERJA BULAN</div>
-              <div className="font-bold">{mk_thn ?? "-"}</div>
-            </div>
-            <div>
-              <div className="text-gray-400">MASA KERJA TAHUN</div>
-              <div className="font-bold">{mk_bln ?? "-"}</div>
-            </div>
-            <div>
-              <div className="text-gray-400">TMT BERKALA BERIKUTNYA</div>
-              <div className="font-bold">{formatTanggalIndonesia(tmt_berikutnya) ?? "-"}</div>
-            </div>
-          </div>
-            <AlertWarning
-              title="Confirm"
-              message="Apakah anda yakin data tersebut sudah benar ?"
-            />
+            <AlertWarning title="Confirm">
+              Apakah anda yakin data tersebut sudah benar ? <br /> Klik tombol
+              <Chip as="span" color="primary" variant="faded" className="mx-2">
+                Kirim
+              </Chip>{" "}
+              untuk proses selanjutnya ke Badan Keuangan Daerah
+            </AlertWarning>
           </ModalBody>
           <ModalFooter>
             <Button color="danger" variant="light" onPress={onClose}>
@@ -73,10 +117,9 @@ export const ModalKgbProses = ({
             </Button>
             <Button
               color="primary"
-              isLoading={isLoading}
-              isDisabled={isLoading}
-              onPress={handleSubmit}
-            >
+              isLoading={isSpinner}
+              isDisabled={isSpinner}
+              onPress={handleSubmit}>
               Kirim
             </Button>
           </ModalFooter>

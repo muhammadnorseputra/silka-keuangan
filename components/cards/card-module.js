@@ -1,9 +1,7 @@
 "use client";
-
 import { Icon } from "../icons/bootstrap-icon";
 import { BtnModule } from "../button/btn-module";
 import { cx } from "@/helpers/cx";
-import { loginSigapok } from "@/dummy/sigapok-login";
 
 export const CardModule = ({
   title = "Title Here",
@@ -11,7 +9,6 @@ export const CardModule = ({
   path,
   isDisabled = false,
 }) => {
-  const sigapok = loginSigapok();
   return (
     <div
       className={cx(
@@ -24,7 +21,7 @@ export const CardModule = ({
         <Icon iconName={icon} size="50" className="mb-8" />
         {title}
       </h5>
-      <BtnModule sigapok={sigapok} goTo={path} isDisabled={isDisabled} />
+      <BtnModule goTo={path} isDisabled={isDisabled} />
       {/* <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
         Here are the biggest enterprise technology acquisitions of 2021 so far,
         in reverse chronological order.

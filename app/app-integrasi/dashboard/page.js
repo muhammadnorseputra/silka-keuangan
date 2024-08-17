@@ -1,15 +1,25 @@
 import Image from "next/image";
-import { cookies } from "next/headers";
 import { CardModule } from "@/components/cards/card-module";
 import { BtnProfile } from "@/components/button/btn-profile";
 import { encrypt } from "@/helpers/encrypt";
+import { useSessionServer } from "@/app/app-module/server-session";
+import { loginSigapok } from "@/dummy/sigapok-login";
+import { cookies } from "next/headers";
+import { AES } from "crypto-js";
+import { setCookie } from "cookies-next";
 
-export default async function Dashboard() {
-  let getProfile = cookies().get("USER_SILKA");
-  let profile = JSON.parse(getProfile?.value);
-  const { level, nip } = profile?.data;
-  const { unker } = profile?.data?.pegawai;
+export default async function Page() {
+  let getProfile = useSessionServer("USER_SILKA");
+  const { level, nip } = getProfile?.data;
+  const { unker } = getProfile?.data?.pegawai;
+  // const sigapok = await loginSigapok();
 
+  // if (sigapok.success === true) {
+  //   setCookie(
+  //     "USER_GAPOK",
+  //     AES.encrypt(JSON.stringify(sigapok), process.env.SECRET_KEY).toString()
+  //   );
+  // }
   const renderModule = () => {
     if (level === "PNS") {
       return (
@@ -66,7 +76,7 @@ export default async function Dashboard() {
                 </div>
               </div>
               <div className="inline-flex justify-start mt-4 md:mt-0">
-                <BtnProfile size="lg" profile={profile} />
+                <BtnProfile size="lg" profile={getProfile} />
               </div>
             </div>
           </div>
