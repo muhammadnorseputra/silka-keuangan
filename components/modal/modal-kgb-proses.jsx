@@ -20,7 +20,7 @@ import { useSpinnerContext } from "@/lib/context/spinner-context";
 const MyPDF = dynamic(
   () => import("../pdf/viewer").then((mod) => mod.PDFViewer),
   {
-    ssr: true,
+    ssr: false,
     loading: () => (
       <p className="text-gray-400">Load file pdf, mohon tunggu ...</p>
     ),
@@ -62,7 +62,7 @@ export const ModalKgbProses = ({
           </ModalHeader>
           <ModalBody>
             {/* <MyPDF src={berkas} /> */}
-            <MyPDF src={"https://pdfobject.com/pdf/sample.pdf"} />
+            <MyPDF src={berkas} />
             {/* <iframe
               allowFullScreen={true}
               height={600}

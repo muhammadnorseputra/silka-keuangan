@@ -141,7 +141,8 @@ export default async function Page({ params }) {
   };
 
   // cek file sk kgb ada atau tidak
-  const isBerkas = await checkURLStatus(resultDataKgb?.data.berkas);
+  const isBerkas = await checkURLStatus(resultDataKgb?.data?.berkas);
+  
   const renderButtonVerifikasi = () => {
     if (isBerkas !== "OK") {
       return (

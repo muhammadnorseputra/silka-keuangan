@@ -28,7 +28,6 @@ async function Page({ searchParams }) {
     return (
       <>
         <TablePegawai
-          silka={silka_session}
           unors={getUnorByRole}
           pegawais={getPegawaiByUnorId}
         />
