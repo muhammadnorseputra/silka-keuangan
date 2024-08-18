@@ -15,15 +15,24 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { BriefcaseFill } from "react-bootstrap-icons";
+import { BriefcaseFill, Router } from "react-bootstrap-icons";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useModalContext } from "@/lib/context/modal-context";
 import { ModalPeremajaan } from "../modal/modal-peremajaan";
+import { formatDateSlash } from "@/helpers/fn_tanggal";
+import { formatRupiah } from "@/helpers/cx";
+import { useMutation } from "@tanstack/react-query";
+import { TambahPegawaiPppk } from "@/dummy/sigapok-post-pppk";
+import { useRouter } from "next-nprogress-bar";
+import { limitCharacters } from "@/helpers/text";
 
 export const FormPeremajaan = ({ sigapok, silka }) => {
+  const router = useRouter();
   const [data, setData] = useState([]);
+  const [isSending, setIsSending] = useState(false);
   const { isOpen, setIsOpen } = useModalContext();
+
   const {
     data: skpds,
     isLoading: loadingSkpds,
@@ -57,8 +66,82 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
     setData(form);
   };
 
-  const isSubmit = async () => {
-    setIsOpen(false);
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationKey: ["peremajaanPppk"],
+    mutationFn: async (body) => {
+      const res = await TambahPegawaiPppk(sigapok.access_token, body);
+      return res;
+    },
+  });
+
+  useEffect(() => {
+    if (isPending) {
+      toast.loading(`Sending ...`, {
+        id: "Toaster",
+      });
+    }
+  }, [isPending]);
+
+  const BODY = {
+    NIP: silka.nipppk,
+    NAMA: silka.nama,
+    GLRDEPAN: silka.gelar_depan,
+    GLRBELAKANG: silka.gelar_blk,
+    KDJENKEL: silka.jns_kelamin == "PRIA" ? 1 : 2,
+    TEMPATLHR: silka.tmp_lahir,
+    TGLLHR: silka.tgl_lahir,
+    JISTRI: silka.jumlah_sutri,
+    JANAK: silka.jumlah_anak,
+    KDSTAPEG: 1,
+    KDPANGKAT: silka.nama_golru,
+    GAPOK: silka.gaji_pokok,
+    MKGOLT: silka.maker_tahun,
+    KD_SKPD: silka.simgaji_id_skpd,
+    KETERANGAN: "",
+    TMTGAJI: silka.tmt_pppk_awal,
+    INDUK_BANK: "",
+    NOREK: "",
+    NOKTP: silka.nik,
+    NPWP: silka.no_npwp,
+    NOTELP: silka.no_handphone,
+    NOMORSKEP: silka.nomor_sk,
+    PENERBITSKEP: silka.pejabat_sk,
+    TGLSKEP: silka.tgl_sk,
+    ALAMAT: limitCharacters(silka.alamat, 60), //kena limit cuma 60 karakter
+    KDGURU: "",
+    // KATEGORI: silka.jenis_formasi,
+    KATEGORI: 1, //kode berdasarkan jenis kategori
+    FORMASI: silka.tahun_formasi,
+    AKHIRKONTRAK: silka.tmt_pppk_akhir,
+  };
+  const isSubmit = () => {
+    setIsSending(true);
+    // @ts-ignore
+    mutate(BODY, {
+      onSuccess: (response) => {
+        if (response.success === false || !response.success) {
+          setIsSending(false);
+          return toast.error(
+            `Terjadi Kesalahan ${JSON.stringify(response.message)}`,
+            {
+              id: "Toaster",
+            }
+          );
+        }
+        toast.success(response.message, {
+          id: "Toaster",
+        });
+        setIsSending(false);
+        setIsOpen(false);
+        router.refresh();
+      },
+      onError: (err) => {
+        setIsSending(false);
+        toast.error(err.message, {
+          id: "Toaster",
+        });
+      },
+    });
   };
 
   return (
@@ -67,6 +150,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
         isOpenModal={isOpen}
         onClose={() => setIsOpen(false)}
         handlePeremajaan={isSubmit}
+        isPending={isPending || isSending}
       />
       <form
         onSubmit={handleSubmit(isConfirm)}
@@ -93,7 +177,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
               </div>
             }>
             <Card>
-              <CardBody className="grid grid-flow-row-dense grid-cols-3 grid-rows-4 gap-6 pt-8 px-6">
+              <CardBody className="grid grid-flow-row-dense grid-cols-3 grid-rows-4 gap-6 py-8 px-6">
                 <Input
                   isReadOnly
                   variant="flat"
@@ -169,7 +253,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   type="text"
                   label="Tanggal Lahir"
                   name="tanggal_lahir"
-                  defaultValue={silka.tgl_lahir}
+                  defaultValue={formatDateSlash(silka.tgl_lahir)}
                   {...register("tanggal_lahir")}
                 />
                 <Input
@@ -226,39 +310,39 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
               <CardBody className="grid grid-flow-row-dense grid-cols-4 grid-rows-4 gap-6 py-8 px-6">
                 <Autocomplete
                   isRequired
+                  isReadOnly
                   isLoading={loadingSkpds || fetchingSkpds}
                   className="col-span-4 sm:col-span-2"
                   labelPlacement="outside"
                   size="lg"
                   placeholder="Pilih Satuan Kerja Pemerintah Daerah"
                   label="Satuan Kerja Pemerintah Daerah"
-                  name="kodeskpd"
+                  name="id_unit_kerja"
+                  defaultSelectedKey={silka.fid_unit_kerja}
+                  defaultInputValue={silka.fid_unit_kerja}
+                  selectedKey={silka.fid_unit_kerja}
                   variant="flat"
                   errorMessage={
-                    (errors?.kodeskpd?.message &&
-                      `${errors.kodeskpd.message}`) ||
+                    (errors?.id_unit_kerja?.message &&
+                      `${errors.id_unit_kerja.message}`) ||
                     (errorSkpds && errorSkpds.message)
                   }
-                  isInvalid={errors?.kodeskpd || isErrorSkpds ? true : false}
-                  {...register("kodeskpd", {
+                  isInvalid={
+                    errors?.id_unit_kerja || isErrorSkpds ? true : false
+                  }
+                  {...register("id_unit_kerja", {
                     required: "Pilih SKPD",
                   })}>
                   {skpds?.data.map((skpd) => (
                     <AutocompleteItem
-                      // @ts-ignore
-                      key={skpd.kodeskpd}
-                      // @ts-ignore
-                      value={skpd.kodeskpd}
-                      // @ts-ignore
-                      textValue={skpd.nama_skpd}>
-                      {
-                        // @ts-ignore
-                        skpd.nama_skpd
-                      }
+                      key={skpd.id_simpeg}
+                      textValue={skpd.nama_simpeg}>
+                      {skpd.nama_simpeg}
                     </AutocompleteItem>
                   ))}
                 </Autocomplete>
                 <Autocomplete
+                  isRequired
                   isReadOnly
                   isLoading={loadingStatusPegawai || fetchingStatusPegawai}
                   className="col-span-4 sm:col-span-2"
@@ -268,6 +352,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   label="Status Pegawai"
                   name="kode_stapeg"
                   defaultSelectedKey="12"
+                  defaultInputValue="12"
                   selectedKey="12"
                   variant="flat"
                   errorMessage={
@@ -283,20 +368,13 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   })}>
                   {statusPegawai?.data.map((item) => (
                     <AutocompleteItem
-                      // @ts-ignore
                       key={item.kode_stapeg}
-                      // @ts-ignore
-                      value={item.kode_stapeg}
-                      // @ts-ignore
                       textValue={item.stapeg_nama}>
-                      {
-                        // @ts-ignore
-                        item.stapeg_nama
-                      }
+                      {item.stapeg_nama}
                     </AutocompleteItem>
                   ))}
                 </Autocomplete>
-                {/* <Input
+                <Input
                   isReadOnly
                   variant="flat"
                   size="lg"
@@ -306,6 +384,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   type="number"
                   label="Masa Kerja Tahun"
                   name="mk_tahun"
+                  defaultValue={silka.maker_tahun}
                   {...register("mk_tahun")}
                 />
                 <Input
@@ -315,11 +394,12 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   className="col-span-4 sm:col-span-1"
                   placeholder="Gaji Pokok"
                   labelPlacement="outside"
-                  type="number"
+                  type="text"
                   label="Gaji Pokok"
                   name="gapok"
+                  defaultValue={formatRupiah(silka.gaji_pokok)}
                   {...register("gapok")}
-                /> */}
+                />
                 <Input
                   isReadOnly
                   variant="flat"
@@ -330,6 +410,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   type="number"
                   label="Nomor KTP"
                   name="no_ktp"
+                  defaultValue={silka.nik}
                   {...register("no_ktp")}
                 />
                 <Input
@@ -341,6 +422,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   labelPlacement="outside"
                   type="text"
                   label="Nomor NPWP"
+                  defaultValue={silka.no_npwp}
                   name="no_npwp"
                   {...register("no_npwp")}
                 />
@@ -351,8 +433,9 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   className="col-span-4 sm:col-span-1"
                   placeholder="Nomor HP"
                   labelPlacement="outside"
-                  type="number"
+                  type="text"
                   label="Nomor HP"
+                  defaultValue={silka.no_handphone}
                   name="no_hp"
                   {...register("no_hp")}
                 />
@@ -366,6 +449,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   type="text"
                   label="Ketegori"
                   name="kategori"
+                  defaultValue={silka.jenis_formasi}
                   {...register("kategori")}
                 />
                 <Input
@@ -378,6 +462,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   type="text"
                   label="Formasi Tahun"
                   name="tahun_formasi"
+                  defaultValue={silka.tahun_formasi}
                   {...register("tahun_formasi")}
                 />
                 <Input
@@ -390,6 +475,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   type="date"
                   label="Akhir Kontrak Kerja"
                   name="akhir_kontrak"
+                  defaultValue={silka.tmt_pppk_akhir}
                   {...register("akhir_kontrak")}
                 />
                 <Input
@@ -402,6 +488,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   type="text"
                   label="Nomor Surat Keputusan"
                   name="noskep"
+                  defaultValue={silka.nomor_sk}
                   {...register("noskep")}
                 />
                 <Input
@@ -414,6 +501,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   type="date"
                   label="Tanggal Surat Keputusan"
                   name="tgl_skep"
+                  defaultValue={silka.tgl_sk}
                   {...register("tgl_skep")}
                 />
                 <Input
@@ -426,6 +514,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   type="text"
                   label="Penerbit Surat Keputusan"
                   name="penerbit_skep"
+                  defaultValue={silka.pejabat_sk}
                   {...register("penerbit_skep")}
                 />
               </CardBody>
@@ -442,7 +531,7 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
             isDisabled={isLoading || isSubmitting || !isValid}
             isLoading={isLoading || isSubmitting}>
             <CircleStackIcon className="size-5" />
-            <Divider orientation="vertical" /> Perbaharui Data PPPK
+            <Divider orientation="vertical" /> Validasi Data PPPK
           </Button>
         </div>
       </form>

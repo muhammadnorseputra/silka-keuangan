@@ -5,6 +5,8 @@ import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { redirect } from "next/navigation";
 import { hasSessionServer, useSessionServer } from "../../../server-session";
 import { getProfilePppk } from "@/dummy/data-pppk-by-nipppk";
+import { polaNIP } from "@/helpers/polanip";
+import DataNotFound from "@/components/errors/DataNotFound";
 
 export default async function Page({ params }) {
   const session = hasSessionServer("USER_GAPOK");
@@ -14,8 +16,18 @@ export default async function Page({ params }) {
   }
   const nipppk = decrypt(params?.slug[0], "bkpsdm");
   const silka = await getProfilePppk(nipppk);
-
+  const namalengkap = `${silka.gelar_depan} ${silka.nama} ${silka.gelar_blk} - `;
   const renderForm = () => {
+    if (silka.status === false) {
+      return (
+        <Card className="w-full h-screen">
+          <CardBody className="flex flex-col items-center justify-center gap-6">
+            <DataNotFound message={silka.message} />
+          </CardBody>
+        </Card>
+      );
+    }
+
     return <FormPeremajaan sigapok={sigapok} silka={silka} />;
   };
   return (
@@ -31,7 +43,9 @@ export default async function Page({ params }) {
                     <span className="uppercase font-bold">
                       Peremajaan Data PPPK
                     </span>
-                    <span className="text-base">{nipppk}</span>
+                    <span className="text-base">
+                      {namalengkap} {polaNIP(silka.nipppk)}{" "}
+                    </span>
                   </p>
                 </div>
               </div>

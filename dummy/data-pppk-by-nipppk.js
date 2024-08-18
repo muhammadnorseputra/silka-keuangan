@@ -13,7 +13,6 @@ export const getProfilePppk = async (nipppk) => {
         next: { tags: ["dataPppkByNipppk"] },
       }
     );
-
     const result = await req.json();
     return result;
   } catch (err) {

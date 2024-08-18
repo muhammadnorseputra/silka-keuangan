@@ -12,3 +12,15 @@ export function getTanggalHariIni() {
 // Contoh penggunaan
 // let tanggalHariIni = getTanggalHariIni();
 // console.log(tanggalHariIni);  // Output: 2024-01-01 (jika hari ini adalah 1 Januari 2024)
+
+export function formatDateSlash(originalDate) {
+  // Memisahkan tahun, bulan, dan hari
+  let dateParts = originalDate.split("-");
+
+  // Menyusun kembali dalam format DD/MM/YYYY
+  return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+}
+
+// Contoh penggunaan fungsi
+// let formattedDate = formatDate("1999-05-27");
+// console.log(formattedDate); // Output: 27/05/1999

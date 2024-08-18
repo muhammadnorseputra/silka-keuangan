@@ -5,10 +5,14 @@ export function capitalize(str) {
 
 // fungsi to idr
 export function formatRupiah(angka) {
-  return new Intl.NumberFormat("id-ID", {
+  const formatted = Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
+    currencyDisplay: "symbol",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(angka);
+  return formatted.replace(/[Rp\s]/g, "");
 }
 
 // fungsi to idr v2

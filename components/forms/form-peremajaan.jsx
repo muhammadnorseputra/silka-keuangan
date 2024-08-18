@@ -255,7 +255,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
           isOpenModal={isOpen}
           onClose={() => setIsOpen(false)}
           handlePeremajaan={isYakin}
-          isLoading={isPendingSubmit || isLoadingSubmit}
+          isPending={isPendingSubmit || isLoadingSubmit}
         />
         <form
           onSubmit={handleSubmit(isConfirm)}
@@ -460,6 +460,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     label="Satuan Kerja"
                     name="kodesatker"
                     defaultSelectedKey={simgaji_id_satker}
+                    defaultInputValue={simgaji_id_satker}
                     selectedKey={simgaji_id_satker}
                     variant="flat"
                     errorMessage={
@@ -489,24 +490,27 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     size="lg"
                     placeholder="Pilih Satuan Kerja Pemerintah Daerah"
                     label="Satuan Kerja Pemerintah Daerah"
-                    name="kodeskpd"
-                    defaultSelectedKey={simgaji_id_skpd}
-                    selectedKey={simgaji_id_skpd}
+                    name="id_unit_kerja"
+                    defaultSelectedKey={fid_unit_kerja}
+                    defaultInputValue={fid_unit_kerja}
+                    selectedKey={fid_unit_kerja}
                     variant="flat"
                     errorMessage={
-                      (errors?.kodeskpd?.message &&
-                        `${errors.kodeskpd.message}`) ||
+                      (errors?.id_unit_kerja?.message &&
+                        `${errors.id_unit_kerja.message}`) ||
                       (isErrorSkpd && errorSkpd.message)
                     }
-                    isInvalid={errors?.kodeskpd || isErrorSkpd ? true : false}
-                    {...register("kodeskpd", {
+                    isInvalid={
+                      errors?.id_unit_kerja || isErrorSkpd ? true : false
+                    }
+                    {...register("id_unit_kerja", {
                       required: "Pilih SKPD",
                     })}>
                     {skpds?.data.map((skpd) => (
                       <AutocompleteItem
-                        key={skpd.kodeskpd}
-                        textValue={`${skpd.nama_skpd}`}>
-                        {skpd.nama_skpd}
+                        key={skpd.id_simpeg}
+                        textValue={`${skpd.nama_simpeg}`}>
+                        {skpd.nama_simpeg}
                       </AutocompleteItem>
                     ))}
                   </Autocomplete>

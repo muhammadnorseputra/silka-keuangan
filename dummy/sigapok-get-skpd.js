@@ -5,7 +5,7 @@ export const getSkpdSigapok = async (token) => {
   const path = process.env.NEXT_PUBLIC_GAPOK_PATH;
   const headers = sigapok_headers(token);
   try {
-    const req = await fetch(`${url}/${path}/getSKPD`, {
+    const req = await fetch(`${url}/${path}/getUnorAntara`, {
       method: "GET",
       cache: "no-store",
       headers,

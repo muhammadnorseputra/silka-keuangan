@@ -7,15 +7,18 @@ import {
   TableColumn,
   TableBody,
   TableRow,
-  TableCell, Pagination,
+  TableCell,
+  Pagination,
   Button,
   Input,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Autocomplete, AutocompleteItem,
-  Spinner, DropdownSection
+  Autocomplete,
+  AutocompleteItem,
+  Spinner,
+  DropdownSection,
 } from "@nextui-org/react";
 import { capitalize } from "@/helpers/cx";
 import { columns } from "@/dummy/columns-pegawai";
@@ -24,7 +27,7 @@ import {
   DocumentCheckIcon,
   DocumentCurrencyDollarIcon,
   EllipsisHorizontalCircleIcon,
-  UserPlusIcon
+  UserPlusIcon,
 } from "@heroicons/react/24/solid";
 import { useRouter } from "next-nprogress-bar";
 import { encrypt } from "@/helpers/encrypt";
@@ -408,7 +411,7 @@ export const TablePegawai = ({ unors, pegawais }) => {
         emptyContent={"No rows to display."}
         loadingContent={
           <div className="w-full h-full flex items-center justify-center bg-white/80 dark:bg-black/80 z-10">
-            <Spinner label="Loading..." />
+            <Spinner label="Loading..." color="danger" />
           </div>
         }
         items={sortedItems}>

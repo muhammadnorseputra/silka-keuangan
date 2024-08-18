@@ -16,7 +16,7 @@ export const ModalPeremajaan = ({
   isOpenModal = false,
   onClose,
   handlePeremajaan,
-  isLoading = false,
+  isPending,
 }) => {
   return (
     <>
@@ -52,8 +52,8 @@ export const ModalPeremajaan = ({
             </Button>
             <Button
               color="primary"
-              isLoading={isLoading}
-              isDisabled={isLoading}
+              isLoading={isPending}
+              isDisabled={isPending}
               onPress={handlePeremajaan}>
               Yakin
             </Button>

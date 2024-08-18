@@ -40,7 +40,7 @@ async function Page({ searchParams }) {
   };
   return (
     <>
-      <section className="w-full bg-gray-100 dark:bg-slate-800 h-screen">
+      <section className="w-full bg-amber-600 dark:bg-slate-800 h-screen">
         <div className="max-w-6xl mx-auto">
           <Card shadow="lg" className="max-h-screen overflow-y-auto">
             <CardHeader className="flex justify-between items-center">

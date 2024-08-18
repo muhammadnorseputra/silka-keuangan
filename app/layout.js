@@ -14,17 +14,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="light">
       <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
       />
       <body>
         <Providers
-        // disableAnimation
-        // skipFramerMotionAnimations
-        // validationBehavior="native"
-        >
+          // disableAnimation
+          // skipFramerMotionAnimations
+          validationBehavior="native">
           <ProgressProviders>
             <SpinnerProvider>
               <ModalProvider>

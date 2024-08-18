@@ -20,11 +20,13 @@ import {
   AutocompleteSection,
   AutocompleteItem,
   Spinner,
+  DropdownSection,
 } from "@nextui-org/react";
 import { capitalize } from "@/helpers/cx";
 import { columns } from "@/dummy/columns-pppk";
 import { Icon } from "../icons/bootstrap-icon";
 import {
+  DocumentCheckIcon,
   DocumentCurrencyDollarIcon,
   EllipsisHorizontalCircleIcon,
   UserPlusIcon,
@@ -37,7 +39,7 @@ const INITIAL_VISIBLE_COLUMNS = ["nipppk", "nama", "jabatan", "aksi"];
 export const TablePppk = ({ silka, unorlist, pegawais }) => {
   const router = useRouter();
   const { data: datapegawai } = pegawais;
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingTable, setIsLoadingTable] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [visibleColumns, setVisibleColumns] = useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
@@ -137,38 +139,62 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu>
-                  <DropdownItem
-                    key="peremajaan"
-                    onPress={() =>
-                      router.push(
-                        `/app-module/pppk/peremajaan/${encrypt(
-                          datapegawai.nipppk,
-                          "bkpsdm"
-                        )}`
-                      )
-                    }
-                    description="Peremajaan Data"
-                    startContent={
-                      <UserPlusIcon className="size-6 text-blue-600" />
-                    }>
-                    Peremajaan
-                  </DropdownItem>
-                  <DropdownItem
-                    key="kgb"
-                    onPress={() =>
-                      router.push(
-                        `/app-module/pppk/kgb/${encrypt(
-                          datapegawai.nipppk,
-                          "bkpsdm"
-                        )}`
-                      )
-                    }
-                    description="Verifikasi dan Kirim"
-                    startContent={
-                      <DocumentCurrencyDollarIcon className="size-6 text-green-600" />
-                    }>
-                    Proses KGB
-                  </DropdownItem>
+                  <DropdownSection title="Peremajaan" showDivider>
+                    <DropdownItem
+                      key="peremajaan"
+                      onPress={() => {
+                        router.push(
+                          `/app-module/pppk/peremajaan/${encrypt(
+                            datapegawai.nipppk,
+                            "bkpsdm"
+                          )}`
+                        );
+                        setIsLoadingTable(true);
+                      }}
+                      description="Peremajaan Data"
+                      startContent={
+                        <UserPlusIcon className="size-6 text-blue-600" />
+                      }>
+                      Peremajaan
+                    </DropdownItem>
+                    <DropdownItem
+                      key="verval"
+                      onPress={() => {
+                        router.push(
+                          `/app-module/pppk/verval/${encrypt(
+                            datapegawai.nipppk,
+                            "bkpsdm"
+                          )}`
+                        );
+                        setIsLoadingTable(true);
+                      }}
+                      description="Verifikasi dan Validasi"
+                      startContent={
+                        <DocumentCheckIcon className="size-6 text-green-500" />
+                      }>
+                      Verval Data
+                    </DropdownItem>
+                  </DropdownSection>
+                  <DropdownSection title="Layanan Integrasi">
+                    <DropdownItem
+                      key="kgb"
+                      onPress={() => {
+                        router.push(
+                          `/app-module/pppk/kgb/${encrypt(
+                            datapegawai.nipppk,
+                            "bkpsdm"
+                          )}`
+                        );
+
+                        setIsLoadingTable(true);
+                      }}
+                      description="Verifikasi dan Kirim"
+                      startContent={
+                        <DocumentCurrencyDollarIcon className="size-6 text-green-600" />
+                      }>
+                      Proses KGB
+                    </DropdownItem>
+                  </DropdownSection>
                 </DropdownMenu>
               </Dropdown>
             </div>
@@ -351,9 +377,13 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
         )}
       </TableHeader>
       <TableBody
-        isLoading={isLoading}
+        isLoading={isLoadingTable}
         emptyContent={"No rows to display."}
-        loadingContent={<Spinner label="Loading..." />}
+        loadingContent={
+          <div className="w-full h-full flex items-center justify-center bg-white/80 dark:bg-black/80 z-10">
+            <Spinner label="Loading..." color="danger" />
+          </div>
+        }
         items={sortedItems}>
         {(item) => (
           <TableRow key={item.nipppk}>
