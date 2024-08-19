@@ -3,13 +3,13 @@
 import { DeleteP3k } from "@/dummy/sigapok-delete-pppk";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { Button, Divider } from "@nextui-org/react";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next-nprogress-bar";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useIsFetching } from "@tanstack/react-query";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 export const BtnRollBackPPPK = ({ sigapok, pppk }) => {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: async (req) => {
       const response = await DeleteP3k(sigapok.access_token, req);
@@ -25,7 +25,7 @@ export const BtnRollBackPPPK = ({ sigapok, pppk }) => {
   }, [isPending]);
 
   const handleRollback = () => {
-    mutate(pppk.NIP, {
+    mutate(pppk.data.NIP, {
       onSuccess: (res) => {
         if (res.success === false || !res.success) {
           toast.error(res.message, {
@@ -37,7 +37,9 @@ export const BtnRollBackPPPK = ({ sigapok, pppk }) => {
         toast.success(res.message, {
           id: "Toaster",
         });
-        router.refresh();
+        queryClient.invalidateQueries({
+          queryKey: ["getDataPppk"],
+        });
       },
       onError: (err) => {
         toast.error(err.message, {

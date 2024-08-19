@@ -474,7 +474,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     {...register("kodesatker", {
                       required: "Pilih Satker",
                     })}>
-                    {satkers?.data.map((satker) => (
+                    {satkers?.data?.map((satker) => (
                       <AutocompleteItem
                         key={satker.kodesatker.trim()}
                         textValue={`${satker.nama_satker}`}>
@@ -506,7 +506,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     {...register("id_unit_kerja", {
                       required: "Pilih SKPD",
                     })}>
-                    {skpds?.data.map((skpd) => (
+                    {skpds?.data?.map((skpd) => (
                       <AutocompleteItem
                         key={skpd.id_simpeg}
                         textValue={`${skpd.nama_simpeg}`}>
@@ -538,7 +538,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     {...register("kode_jenis", {
                       required: "Pilih Jenis Pegawai",
                     })}>
-                    {jenisPegawais?.data.map((js) => (
+                    {jenisPegawais?.data?.map((js) => (
                       <AutocompleteItem
                         key={js.kode_jenis}
                         textValue={`${js.kode_jenis}-${js.nama_jenis}`}>
@@ -570,7 +570,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     {...register("kode_pangkat", {
                       required: "Pilih Pangkat Pegawai",
                     })}>
-                    {pangkats?.data.map((pangkat) => (
+                    {pangkats?.data?.map((pangkat) => (
                       <AutocompleteItem
                         key={pangkat.kode_golongan}
                         value={pangkat.kode_golongan}
@@ -607,7 +607,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                     {...register("kode_stapeg", {
                       required: "Pilih Status Pegawai",
                     })}>
-                    {statusPegawais?.data.map((statuspeg) => (
+                    {statusPegawais?.data?.map((statuspeg) => (
                       <AutocompleteItem
                         key={statuspeg.kode_stapeg}
                         value={statuspeg.kode_stapeg}

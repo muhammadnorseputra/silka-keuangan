@@ -8,6 +8,7 @@ import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 import { getPppkByUnor } from "@/dummy/data-pppk-by-unor";
 import { decrypt } from "@/helpers/encrypt";
 import { Error500 } from "@/components/errors/500";
+import NoInternet from "@/components/errors/NoInternet";
 
 async function Page({ searchParams }) {
   const session = hasSessionServer("USER_GAPOK");
@@ -27,9 +28,9 @@ async function Page({ searchParams }) {
   const pegawais = await getPppkByUnor(getIdUnker);
 
   const renderTable = () => {
-    // if (getUnorByRole.status === false || pegawais.status === false) {
-    //   return <Error500 />;
-    // }
+    if (getUnorByRole.status === false || pegawais.status === false) {
+      return <NoInternet message={getUnorByRole.message} />;
+    }
     return (
       <TablePppk
         silka={silka_session}

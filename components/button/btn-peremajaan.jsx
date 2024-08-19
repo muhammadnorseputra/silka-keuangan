@@ -19,4 +19,18 @@ const ButtonPeremajaan = ({ nip }) => {
   );
 };
 
-export { ButtonPeremajaan };
+const ButtonPeremajaanP3k = ({ nip }) => {
+  const router = useRouter();
+  return (
+    <Button
+      color="warning"
+      variant="bordered"
+      onPress={() =>
+        router.push(`/app-module/pppk/peremajaan/${encrypt(nip, "bkpsdm")}`)
+      }>
+      Update Data
+    </Button>
+  );
+};
+
+export { ButtonPeremajaan, ButtonPeremajaanP3k };

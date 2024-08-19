@@ -13,6 +13,9 @@ import {
   Autocomplete,
   AutocompleteItem,
   Textarea,
+  Skeleton,
+  Spinner,
+  Progress,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { BriefcaseFill, Router } from "react-bootstrap-icons";
@@ -22,16 +25,31 @@ import { useModalContext } from "@/lib/context/modal-context";
 import { ModalPeremajaan } from "../modal/modal-peremajaan";
 import { formatDateSlash } from "@/helpers/fn_tanggal";
 import { formatRupiah } from "@/helpers/cx";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { TambahPegawaiPppk } from "@/dummy/sigapok-post-pppk";
 import { useRouter } from "next-nprogress-bar";
 import { limitCharacters } from "@/helpers/text";
+import DataNotFound from "../errors/DataNotFound";
+import { getProfilePppk } from "@/dummy/data-pppk-by-nipppk";
 
-export const FormPeremajaan = ({ sigapok, silka }) => {
+export const FormPeremajaan = ({ sigapok, nipppk }) => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [isSending, setIsSending] = useState(false);
   const { isOpen, setIsOpen } = useModalContext();
+
+  const {
+    data: silka,
+    isLoading: isLoadingSilka,
+    isFetching: isFetchingSilka,
+  } = useQuery({
+    queryKey: ["DataSilkaP3k"],
+    queryFn: async () => {
+      const getDataPppkSilka = await getProfilePppk(nipppk);
+      return getDataPppkSilka;
+    },
+    refetchOnWindowFocus: false,
+  });
 
   const {
     data: skpds,
@@ -82,39 +100,40 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
     }
   }, [isPending]);
 
-  const BODY = {
-    NIP: silka.nipppk,
-    NAMA: silka.nama,
-    GLRDEPAN: silka.gelar_depan,
-    GLRBELAKANG: silka.gelar_blk,
-    KDJENKEL: silka.jns_kelamin == "PRIA" ? 1 : 2,
-    TEMPATLHR: silka.tmp_lahir,
-    TGLLHR: silka.tgl_lahir,
-    JISTRI: silka.jumlah_sutri,
-    JANAK: silka.jumlah_anak,
-    KDSTAPEG: 1,
-    KDPANGKAT: silka.nama_golru,
-    GAPOK: silka.gaji_pokok,
-    MKGOLT: silka.maker_tahun,
-    KD_SKPD: silka.simgaji_id_skpd,
-    KETERANGAN: "",
-    TMTGAJI: silka.tmt_pppk_awal,
-    INDUK_BANK: "",
-    NOREK: "",
-    NOKTP: silka.nik,
-    NPWP: silka.no_npwp,
-    NOTELP: silka.no_handphone,
-    NOMORSKEP: silka.nomor_sk,
-    PENERBITSKEP: silka.pejabat_sk,
-    TGLSKEP: silka.tgl_sk,
-    ALAMAT: limitCharacters(silka.alamat, 60), //kena limit cuma 60 karakter
-    KDGURU: "",
-    // KATEGORI: silka.jenis_formasi,
-    KATEGORI: 1, //kode berdasarkan jenis kategori
-    FORMASI: silka.tahun_formasi,
-    AKHIRKONTRAK: silka.tmt_pppk_akhir,
-  };
   const isSubmit = () => {
+    const BODY = {
+      NIP: silka.nipppk,
+      NAMA: silka.nama,
+      GLRDEPAN: silka.gelar_depan,
+      GLRBELAKANG: silka.gelar_blk,
+      KDJENKEL: silka.jns_kelamin == "PRIA" ? 1 : 2,
+      TEMPATLHR: silka.tmp_lahir,
+      TGLLHR: silka.tgl_lahir,
+      JISTRI: silka.jumlah_sutri,
+      JANAK: silka.jumlah_anak,
+      KDSTAPEG: 1,
+      KDPANGKAT: silka.nama_golru,
+      GAPOK: silka.gaji_pokok,
+      MKGOLT: silka.maker_tahun,
+      KD_SKPD: silka.simgaji_id_skpd,
+      KETERANGAN: "",
+      TMTGAJI: silka.tmt_pppk_awal,
+      INDUK_BANK: "",
+      NOREK: "",
+      NOKTP: silka.nik,
+      NPWP: silka.no_npwp,
+      NOTELP: silka.no_handphone,
+      NOMORSKEP: silka.nomor_sk,
+      PENERBITSKEP: silka.pejabat_sk,
+      TGLSKEP: silka.tgl_sk,
+      ALAMAT: limitCharacters(silka.alamat, 60), //kena limit cuma 60 karakter
+      KDGURU: "",
+      // KATEGORI: silka.jenis_formasi,
+      KATEGORI: 1, //kode berdasarkan jenis kategori
+      FORMASI: silka.tahun_formasi,
+      AKHIRKONTRAK: silka.tmt_pppk_akhir,
+    };
+
     setIsSending(true);
     // @ts-ignore
     mutate(BODY, {
@@ -143,6 +162,32 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
       },
     });
   };
+
+  if (isLoadingSilka || isFetchingSilka) {
+    return (
+      <Card className="w-full h-screen">
+        <CardBody className="flex flex-col items-center justify-center gap-6">
+          <Progress
+            size="sm"
+            isIndeterminate
+            aria-label="loading"
+            label="Mohon tunggu processing ..."
+            className="max-w-sm"
+          />
+        </CardBody>
+      </Card>
+    );
+  }
+
+  if (silka.status === false) {
+    return (
+      <Card className="w-full h-screen">
+        <CardBody className="flex flex-col items-center justify-center gap-6">
+          <DataNotFound message={silka.message} />
+        </CardBody>
+      </Card>
+    );
+  }
 
   return (
     <>
@@ -325,15 +370,19 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   errorMessage={
                     (errors?.id_unit_kerja?.message &&
                       `${errors.id_unit_kerja.message}`) ||
-                    (errorSkpds && errorSkpds.message)
+                    (isErrorSkpds && errorSkpds.message)
                   }
                   isInvalid={
-                    errors?.id_unit_kerja || isErrorSkpds ? true : false
+                    errors?.id_unit_kerja ||
+                    isErrorSkpds ||
+                    skpds?.message === ""
+                      ? true
+                      : false
                   }
                   {...register("id_unit_kerja", {
                     required: "Pilih SKPD",
                   })}>
-                  {skpds?.data.map((skpd) => (
+                  {skpds?.data?.map((skpd) => (
                     <AutocompleteItem
                       key={skpd.id_simpeg}
                       textValue={skpd.nama_simpeg}>
@@ -358,15 +407,19 @@ export const FormPeremajaan = ({ sigapok, silka }) => {
                   errorMessage={
                     (errors?.kode_stapeg?.message &&
                       `${errors.kode_stapeg.message}`) ||
-                    (errorStatusPegawai && errorStatusPegawai.message)
+                    (isErrorStatusPegawai && errorStatusPegawai.message)
                   }
                   isInvalid={
-                    errors?.kode_stapeg || isErrorStatusPegawai ? true : false
+                    errors?.kode_stapeg ||
+                    isErrorStatusPegawai ||
+                    statusPegawai?.message === ""
+                      ? true
+                      : false
                   }
                   {...register("kode_stapeg", {
                     required: "Pilih Status Pegawai",
                   })}>
-                  {statusPegawai?.data.map((item) => (
+                  {statusPegawai?.data?.map((item) => (
                     <AutocompleteItem
                       key={item.kode_stapeg}
                       textValue={item.stapeg_nama}>

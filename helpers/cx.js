@@ -23,7 +23,7 @@ export function formatRupiahManual(angka) {
   return "Rp. " + hasil;
 }
 // fungsi tanggal indo dari ex: 2019-01-01 => 01 Januari 2019
-export function formatTanggalIndonesia(tanggal) {
+export function formatTanggalIndonesia(tanggal = "0000-00-00") {
   const bulanIndonesia = [
     "Januari",
     "Februari",
