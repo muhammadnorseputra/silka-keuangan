@@ -111,7 +111,7 @@ export const FormPeremajaan = ({ sigapok, nipppk }) => {
       TGLLHR: silka.tgl_lahir,
       JISTRI: silka.jumlah_sutri,
       JANAK: silka.jumlah_anak,
-      KDSTAPEG: 1,
+      KDSTAPEG: 12, //berdasarkan status pegawai 12 = ppppk
       KDPANGKAT: silka.nama_golru,
       GAPOK: silka.gaji_pokok,
       MKGOLT: silka.maker_tahun,
@@ -126,10 +126,10 @@ export const FormPeremajaan = ({ sigapok, nipppk }) => {
       NOMORSKEP: silka.nomor_sk,
       PENERBITSKEP: silka.pejabat_sk,
       TGLSKEP: silka.tgl_sk,
-      ALAMAT: limitCharacters(silka.alamat, 60), //kena limit cuma 60 karakter
+      ALAMAT: silka.alamat,
       KDGURU: "",
       // KATEGORI: silka.jenis_formasi,
-      KATEGORI: 1, //kode berdasarkan jenis kategori
+      KATEGORI: 4, //kode berdasarkan jenis pegawai 4 = pppk
       FORMASI: silka.tahun_formasi,
       AKHIRKONTRAK: silka.tmt_pppk_akhir,
     };

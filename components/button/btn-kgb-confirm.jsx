@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { savePerubahanData } from "@/dummy/sigapok-post-perubahan";
 import { useRouter } from "next-nprogress-bar";
 import { useEffect } from "react";
+import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
 export default function BtnKgbConfirm({
   dataSilka: kgb,
   session_silka,
@@ -32,10 +33,14 @@ export default function BtnKgbConfirm({
     no_sk,
     tgl_sk,
     nama_unit_kerja,
-    id_eselon,
+    id_eselon_simgaji,
     pangkat_id_simgaji,
     golru_id,
     golru_nama,
+    id_jenis_pegawai_simgaji,
+    jenis_pegawai_simgaji,
+    id_status_pegawai_simgaji,
+    status_pegawai_simgaji,
     pangkat_nama,
     kode_satker,
     kode_skpd,
@@ -64,31 +69,36 @@ export default function BtnKgbConfirm({
     NIP_LAMA: nip_lama,
     NIP_BARU: nip,
     NAMA: nama_lengkap,
-    // STATUS_PEGAWAI_ID,
-    // KATEGORI_PEGAWAI,
-    // TIPE_PEGAWAI_ID,
+    STATUS_PEGAWAI_ID: Number(id_status_pegawai_simgaji),
+    STATUS_PEGAWAI_NAMA: status_pegawai_simgaji,
+    KATEGORI_PEG: 2,
+    TIPE_PEGAWAI_ID: Number(id_jenis_pegawai_simgaji),
+    TIPE_PEGAWAI_NAMA: jenis_pegawai_simgaji,
     PANGKAT_ID: pangkat_id_simgaji,
     PANGKAT_NAMA: pangkat_nama,
-    GAJI_POKOK: gapok_baru,
-    MASA_KERJA_TAHUN: mk_thn,
-    MASA_KERJA_BULAN: mk_bln,
+    GAJI_POKOK: Number(gapok_baru),
+    MASA_KERJA_TAHUN: Number(mk_thn),
+    MASA_KERJA_BULAN: Number(mk_bln),
     NO_SK: no_sk,
     TANGGAL_SK: tgl_sk,
     TMT_SK: tmt,
-    JENIS_KENAIKAN: 2,
-    JENIS_KENAIKAN_NAMA: "KENAIKAN GAJI BERKALA",
+    JENIS_KENAIKAN_ID: 2,
+    JENIS_KENAIKAN_NAMA: "KENAIKAN BERKALA",
     BULAN_DIBAYAR: tmt,
     SATUAN_KERJA_NAMA: nama_unit_kerja,
     SATUAN_KERJA_ID: kode_skpd,
     NPWP: npwp,
     NO_TELP: nohp,
     TANGGAL_UPDATE: tgl_sk,
-    PENJABAT_PENETAP: pejabat_sk,
+    KDFUNGSI: 0,
+    KDJABATAN: "",
+    KDESELON: Number(id_eselon_simgaji),
+    PEJABAT_PENETAP: pejabat_sk,
     NAMA_JABATAN: jabatan,
     KDDATI1: process.env.NEXT_PUBLIC_GAPOK_KDDATI1,
     KDDATI2: process.env.NEXT_PUBLIC_GAPOK_KDDATI2,
-    KETERANGAN: "null",
-    FLAG: "0",
+    KETERANGAN: "",
+    FLAG: 0,
     TMTBERKALAYAD: tmt_berikutnya,
     PDF: berkas,
     UPDATE_AT: created_at,
@@ -119,16 +129,23 @@ export default function BtnKgbConfirm({
   }
 
   const disabled = kgb.status === false ?? true;
-  return (
-    <>
-      <ModalKgbProses
-        dataSilka={kgb}
-        isOpenModal={isOpen}
-        onClose={() => setIsOpen(false)}
-        handleSubmit={handleSubmit}
-        isPending={isPending}
-      />
 
+  const isPeremajaan = () => {
+    if (
+      id_status_pegawai_simgaji === null ||
+      id_jenis_pegawai_simgaji === null
+    ) {
+      return (
+        <div className="text-red-500 flex justify-start items-start gap-3">
+          <ExclamationCircleIcon className="size-8 text-red-400" />
+          <p>
+            Data Pegawai belum diremajakan, silahkan melakukan peremajaan data
+            terlebih dahulu
+          </p>
+        </div>
+      );
+    }
+    return (
       <Button
         onPress={() => {
           setIsOpen(true);
@@ -141,6 +158,19 @@ export default function BtnKgbConfirm({
         <Divider orientation="vertical" />
         Verifikasi
       </Button>
+    );
+  };
+  return (
+    <>
+      <ModalKgbProses
+        dataSilka={kgb}
+        isOpenModal={isOpen}
+        onClose={() => setIsOpen(false)}
+        handleSubmit={handleSubmit}
+        isPending={isPending}
+      />
+
+      {isPeremajaan()}
     </>
   );
 }

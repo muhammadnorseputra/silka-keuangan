@@ -18,6 +18,7 @@ export const ModalPeremajaanApprove = ({
   return (
     <>
       <Modal
+        aria-hidden="true"
         size="lg"
         backdrop="opaque"
         isOpen={isOpenModal}

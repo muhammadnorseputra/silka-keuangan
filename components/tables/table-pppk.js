@@ -194,6 +194,23 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
                       }>
                       Proses KGB
                     </DropdownItem>
+                    <DropdownItem
+                      key="tpp"
+                      onPress={() => {
+                        router.push(
+                          `/app-module/pppk/tpp/${encrypt(
+                            datapegawai.nipppk,
+                            "bkpsdm"
+                          )}`
+                        );
+                        setIsLoadingTable(true);
+                      }}
+                      description="Proses Tambahan Penghasilan Pegawai"
+                      startContent={
+                        <DocumentCurrencyDollarIcon className="size-6 text-amber-600" />
+                      }>
+                      Proses TPP
+                    </DropdownItem>
                   </DropdownSection>
                 </DropdownMenu>
               </Dropdown>

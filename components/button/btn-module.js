@@ -38,8 +38,8 @@ const BtnModule = ({ goTo, isDisabled }) => {
       return;
     }
     mutate(null, {
-      onSettled: (data) => {
-        if (data.status === false) {
+      onSuccess: (data) => {
+        if (data.success === false || !data.success) {
           setStateLoading(false);
           return toast.error(data.message, {
             id: "Toaster",
@@ -47,15 +47,14 @@ const BtnModule = ({ goTo, isDisabled }) => {
         }
 
         if (data.success === true) {
-          toast.success(`Loginded: ${data.datauser[0].last_login}`, {
+          toast.success(`Loginded: ${data.datauser.last_login}`, {
             id: "Toaster",
           });
           setTimeout(() => {
             toast.remove();
             router.push(goTo);
             // setStateLoading(false);
-          }, 1500);
-          return;
+          }, 1000);
         }
       },
       onError: (Error) => {

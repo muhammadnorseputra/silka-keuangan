@@ -18,6 +18,7 @@ import { getPerubahanData } from "@/dummy/sigapok-get-perubahan";
 
 import BtnKgbConfirm from "@/components/button/btn-kgb-confirm";
 import { checkURLStatus } from "@/helpers/cekurlstatus";
+import { polaNIP } from "@/helpers/polanip";
 
 export const revalidate = 0;
 
@@ -26,15 +27,13 @@ export default async function Page({ params }) {
   const session_silka = useSessionServer("USER_SILKA");
   const $getNip = decrypt(params.slug[0], "bkpsdm");
   const resultDataKgb = await getKgbByNip($getNip);
-  const tmt_sk = "2024-01-01";
   const resultDataPerubaahan = await getPerubahanData(
     sigapok.access_token, //token
     2, // jenis kenaikan
     $getNip, // nip baru
-    tmt_sk, // tmt sk
-    2 //
+    resultDataKgb?.data.tmt, // tmt sk
+    resultDataKgb?.data.id_status_pegawai_simgaji //status pegawai
   );
-
   const renderSilkaService = () => {
     if (resultDataKgb.status === false) {
       return (
@@ -118,14 +117,14 @@ export default async function Page({ params }) {
             variant="bordered">
             <DocumentTextIcon className="size-4" />
             <Divider orientation="vertical" />
-            <p className="truncate">{nip}.pdf</p>
+            <p className="truncate">{no_sk}.pdf</p>
           </Button>
         </div>
       </>
     );
   };
   const renderGapokServices = () => {
-    if (resultDataPerubaahan.success === false || !resultDataPerubaahan.ok) {
+    if (resultDataPerubaahan.success === false || resultDataPerubaahan.ok) {
       return (
         <div className="flex flex-col items-center justify-center gap-4 h-screen">
           <ExclamationCircle className="size-8" />
@@ -134,9 +133,96 @@ export default async function Page({ params }) {
       );
     }
     return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        OKE
-      </div>
+      <>
+        <div>
+          <div className="text-gray-400">NAMA</div>
+          <div className="font-bold">
+            {resultDataPerubaahan?.data[0].NAMA ?? "-"}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">NIP</div>
+          <div className="font-bold">
+            {polaNIP(resultDataPerubaahan?.data[0].NIP_BARU) ?? "-"}
+          </div>
+        </div>
+        <div className="inline-flex flex-row justify-between">
+          <div>
+            <div className="text-gray-400">STATUS PEGAWAI</div>
+            <div className="font-bold">
+              {resultDataPerubaahan?.data[0].STATUS_PEGAWAI_NAMA ?? "-"}
+            </div>
+          </div>
+          <div>
+            <div className="text-gray-400">PANGKAT PEGAWAI</div>
+            <div className="font-bold">
+              {resultDataPerubaahan?.data[0].PANGKAT_NAMA ?? "-"}
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">GAJI POKOK BARU</div>
+          <div className="font-bold">
+            {formatRupiahManual(resultDataPerubaahan?.data[0].GAJI_POKOK) ??
+              "-"}
+          </div>
+        </div>
+        <div className="inline-flex flex-row justify-between">
+          <div>
+            <div className="text-gray-400">MASA KERJA TAHUN</div>
+            <div className="font-bold">
+              {resultDataPerubaahan?.data[0].MASA_KERJA_TAHUN ?? "-"} Tahun
+            </div>
+          </div>
+          <div>
+            <div className="text-gray-400">MASA KERJA BULAN</div>
+            <div className="font-bold">
+              {resultDataPerubaahan?.data[0].MASA_KERJA_BULAN ?? "-"} Bulan
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">TERHITUNG MULAI TANGGAL</div>
+          <div className="font-bold">
+            {formatTanggalIndonesia(resultDataPerubaahan?.data[0].TMT_SK) ??
+              "-"}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">NO SK</div>
+          <div className="font-bold">
+            {resultDataPerubaahan?.data[0].NO_SK ?? "-"}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">TANGGAL SK</div>
+          <div className="font-bold">
+            {formatTanggalIndonesia(resultDataPerubaahan?.data[0].TANGGAL_SK) ??
+              "-"}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">PEJABAT SK</div>
+          <div className="font-bold">
+            {resultDataPerubaahan?.data[0].PEJABAT_PENETAP ?? "-"}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">FILE SK</div>
+          <Button
+            href={resultDataPerubaahan?.data[0].PDF}
+            as={Link}
+            color="primary"
+            // fullWidth
+            isExternal
+            className="justify-start"
+            variant="bordered">
+            <DocumentTextIcon className="size-4" />
+            <Divider orientation="vertical" />
+            <p>{resultDataPerubaahan?.data[0].NO_SK}.pdf</p>
+          </Button>
+        </div>
+      </>
     );
   };
 
@@ -223,7 +309,9 @@ export default async function Page({ params }) {
                     </div>
                   </CardHeader>
                   <Divider />
-                  <CardBody>{renderGapokServices()}</CardBody>
+                  <CardBody className="flex flex-col gap-y-4 px-8 py-8 h-screen">
+                    {renderGapokServices()}
+                  </CardBody>
                 </Card>
               </div>
             </CardBody>

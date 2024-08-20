@@ -24,7 +24,11 @@ export const BtnProfile = ({ profile, size = "md" }) => {
 
   return (
     <>
-      <Dropdown placement="bottom-end" backdrop="blur">
+      <Dropdown
+        aria-haspopup="dialog"
+        aria-label="Menu"
+        placement="bottom-end"
+        backdrop="blur">
         <DropdownTrigger>
           <Avatar
             isBordered
@@ -37,7 +41,7 @@ export const BtnProfile = ({ profile, size = "md" }) => {
             src={picture}
           />
         </DropdownTrigger>
-        <DropdownMenu aria-label="Profile Actions" variant="flat">
+        <DropdownMenu aria-label="Profile Actions" variant="solid">
           <DropdownItem key="profile" className="h-14 gap-2">
             <p className="font-semibold">Signed in as ({level})</p>
             <p className="font-semibold">{nama_lengkap}</p>

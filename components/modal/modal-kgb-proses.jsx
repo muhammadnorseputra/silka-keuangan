@@ -10,6 +10,7 @@ import {
   useDisclosure,
   Code,
   Chip,
+  Skeleton,
 } from "@nextui-org/react";
 import dynamic from "next/dynamic";
 import { AlertInfo, AlertWarning } from "../alert";
@@ -21,7 +22,9 @@ const MyPDF = dynamic(
   {
     ssr: false,
     loading: () => (
-      <p className="text-gray-400">Load file pdf, mohon tunggu ...</p>
+      <Skeleton className="rounded-lg">
+        <div className="h-36 w-full rounded-lg bg-default-300"></div>
+      </Skeleton>
     ),
   }
 );
@@ -45,6 +48,7 @@ export const ModalKgbProses = ({
   return (
     <>
       <Modal
+        aria-hidden="true"
         size="5xl"
         backdrop="blur"
         isOpen={isOpenModal}
