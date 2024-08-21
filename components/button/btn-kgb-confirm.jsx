@@ -92,7 +92,7 @@ export default function BtnKgbConfirm({
     TANGGAL_UPDATE: tgl_sk,
     KDFUNGSI: 0,
     KDJABATAN: "",
-    KDESELON: Number(id_eselon_simgaji),
+    KDESELON: id_eselon_simgaji,
     PEJABAT_PENETAP: pejabat_sk,
     NAMA_JABATAN: jabatan,
     KDDATI1: process.env.NEXT_PUBLIC_GAPOK_KDDATI1,
@@ -118,6 +118,7 @@ export default function BtnKgbConfirm({
         toast.success(data.message, {
           id: "Toaster",
         });
+        setIsOpen(false);
         router.refresh();
       },
       onError: (err) => {

@@ -45,11 +45,19 @@ export default async function RenderSilkaService({ slug }) {
 
   return (
     <>
-      <div>
-        <div className="text-gray-400">NIP</div>
-        <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
+      <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
+        <div>
+          <div className="text-gray-400">NIP</div>
+          <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
+        </div>
+        <div>
+          <div className="text-gray-400">NAMA</div>
+          <div className="font-bold">
+            {`${gelar_depan} ${nama} ${gelar_belakang}` ?? "-"}
+          </div>
+        </div>
       </div>
-      <div className="inline-flex flex-col sm:flex-row justify-start items-center gap-x-8">
+      <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
         <div>
           <div className="text-gray-400">BULAN</div>
           <div className="font-bold">{bulan ?? "-"}</div>

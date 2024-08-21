@@ -73,7 +73,7 @@ export default async function Page({ params }) {
         </div>
         <div>
           <div className="text-gray-400">GAJI POKOK TERAKHIR</div>
-          <div className="font-bold">
+          <div className="font-bold text-2xl text-green-700">
             {formatRupiahManual(gapok_baru) ?? "-"}
           </div>
         </div>
@@ -146,7 +146,7 @@ export default async function Page({ params }) {
             {polaNIP(resultDataPerubaahan?.data[0].NIP_BARU) ?? "-"}
           </div>
         </div>
-        <div className="inline-flex flex-row justify-between">
+        <div className="inline-flex flex-row justify-start gap-x-8">
           <div>
             <div className="text-gray-400">STATUS PEGAWAI</div>
             <div className="font-bold">
@@ -162,12 +162,12 @@ export default async function Page({ params }) {
         </div>
         <div>
           <div className="text-gray-400">GAJI POKOK BARU</div>
-          <div className="font-bold">
+          <div className="font-bold text-2xl text-green-700">
             {formatRupiahManual(resultDataPerubaahan?.data[0].GAJI_POKOK) ??
               "-"}
           </div>
         </div>
-        <div className="inline-flex flex-row justify-between">
+        <div className="inline-flex flex-row justify-start gap-x-8">
           <div>
             <div className="text-gray-400">MASA KERJA TAHUN</div>
             <div className="font-bold">
@@ -181,11 +181,21 @@ export default async function Page({ params }) {
             </div>
           </div>
         </div>
-        <div>
-          <div className="text-gray-400">TERHITUNG MULAI TANGGAL</div>
-          <div className="font-bold">
-            {formatTanggalIndonesia(resultDataPerubaahan?.data[0].TMT_SK) ??
-              "-"}
+        <div className="inline-flex flex-row justify-between">
+          <div>
+            <div className="text-gray-400">TERHITUNG MULAI TANGGAL</div>
+            <div className="font-bold">
+              {formatTanggalIndonesia(resultDataPerubaahan?.data[0].TMT_SK) ??
+                "-"}
+            </div>
+          </div>
+          <div>
+            <div className="text-gray-400">TMT KGB BERIKUTNYA</div>
+            <div className="font-bold">
+              {formatTanggalIndonesia(
+                resultDataPerubaahan?.data[0].TMTBERKALAYAD
+              ) ?? "-"}
+            </div>
           </div>
         </div>
         <div>
