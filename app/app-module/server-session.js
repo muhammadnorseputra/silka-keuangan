@@ -13,7 +13,7 @@ const hasSessionServer = (req) => {
 const useSessionServer = (req) => {
   let user = cookies().get(req);
   if (user) {
-    const decode = AES.decrypt(user?.value, process.env.SECRET_KEY);
+    const decode = AES.decrypt(user?.value, process.env.NEXT_PUBLIC_SECRET_KEY);
     return JSON.parse(decode.toString(enc.Utf8));
   }
   return null;

@@ -27,7 +27,7 @@ export const loginSigapok = async () => {
         "USER_GAPOK",
         AES.encrypt(
           JSON.stringify(response),
-          process.env.SECRET_KEY
+          process.env.NEXT_PUBLIC_SECRET_KEY
         ).toString(),
         {
           maxAge: 3600,
