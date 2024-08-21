@@ -72,7 +72,7 @@ export default async function Page() {
           <div className="card-body">
             <div className="w-full">
               <h1 className="text-2xl text-center font-bold ml-8 mt-8">
-                Module Integrasi 🔥
+                Pilih Module 🔥
               </h1>
               <section className="flex flex-wrap justify-center items-center gap-4 p-8">
                 {renderModule()}

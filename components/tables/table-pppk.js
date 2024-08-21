@@ -378,7 +378,7 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
       topContent={topContent}
       topContentPlacement="outside"
       bottomContent={bottomContent}
-      bottomContentPlacement="inside"
+      bottomContentPlacement="outside"
       // @ts-ignore
       sortDescriptor={sortDescriptor}
       // @ts-ignore

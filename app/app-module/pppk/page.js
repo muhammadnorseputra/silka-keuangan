@@ -28,7 +28,7 @@ async function Page({ searchParams }) {
   const pegawais = await getPppkByUnor(getIdUnker);
 
   const renderTable = () => {
-    if (getUnorByRole.status === false || pegawais.status === false) {
+    if (getUnorByRole.status === false) {
       return <NoInternet message={getUnorByRole.message} />;
     }
     return (
@@ -41,9 +41,9 @@ async function Page({ searchParams }) {
   };
   return (
     <>
-      <section className="w-full bg-amber-600 dark:bg-slate-800 h-screen">
+      <section className="w-full bg-blue-600 dark:bg-slate-800 h-screen">
         <div className="max-w-6xl mx-auto">
-          <Card shadow="lg" className="max-h-screen overflow-y-auto">
+          <Card shadow="lg" className="max-h-screen overflow-y-auto h-screen">
             <CardHeader className="flex justify-between items-center">
               <div className="inline-flex items-center gap-3">
                 <BtnBackNextUi goTo="/app-integrasi/dashboard" />
