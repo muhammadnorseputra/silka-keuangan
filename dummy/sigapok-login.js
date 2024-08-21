@@ -25,10 +25,7 @@ export const loginSigapok = async () => {
     if (response.success === true) {
       cookies().set(
         "USER_GAPOK",
-        AES.encrypt(
-          JSON.stringify(response),
-          process.env.NEXT_PUBLIC_SECRET_KEY
-        ).toString(),
+        AES.encrypt(JSON.stringify(response), "Bkpsdm@6811#").toString(),
         {
           maxAge: 3600,
         }
