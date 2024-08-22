@@ -24,21 +24,6 @@ export default async function Page({ params }) {
     return redirect("/app-integrasi/dashboard");
   }
   const NIP = decrypt(params?.slug[0], "bkpsdm");
-  const getPegawais = await getPegawaiByNip(NIP);
-
-  const isVerifikasi = () => {
-    if (getPegawais.status_data !== "VERIFIKASI") {
-      return;
-    }
-
-    return (
-      <BtnApprove
-        {...sigapok}
-        data={getPegawais}
-        session_silkaonline={silkaonline}
-      />
-    );
-  };
 
   return (
     <>
@@ -71,14 +56,8 @@ export default async function Page({ params }) {
                   </CardHeader>
                   <Divider />
                   <CardBody className="flex flex-col gap-y-4 px-8 py-8">
-                    <SilkaDataP3k nip={NIP} />
+                    <SilkaDataP3k {...sigapok} nip={NIP} />
                   </CardBody>
-                  <Divider />
-                  <CardFooter className="sticky bottom-0">
-                    <div className="flex items-end justify-end w-full">
-                      {isVerifikasi()}
-                    </div>
-                  </CardFooter>
                 </Card>
                 {/* Get Data Sigapok PPPK */}
                 <Card fullWidth>

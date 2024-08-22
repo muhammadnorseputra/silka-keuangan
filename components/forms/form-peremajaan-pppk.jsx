@@ -31,12 +31,12 @@ import { TambahPegawaiPppk } from "@/dummy/sigapok-post-pppk";
 import { useRouter } from "next-nprogress-bar";
 import { limitCharacters } from "@/helpers/text";
 import DataNotFound from "../errors/DataNotFound";
-import { getProfilePppk } from "@/dummy/data-pppk-by-nipppk";
+import { getPPPKByNipppk } from "@/dummy/data-pppk-by-nipppk";
 import { PostDataPPPK } from "@/dummy/post-data-pppk";
 import SuccessUpdated from "../alert/SuccessUpdated";
 import { getCurrentDateTime } from "@/helpers/datetime";
 
-export const FormPeremajaan = ({ sigapok, nipppk,session_silka }) => {
+export const FormPeremajaan = ({ sigapok, nipppk, session_silka }) => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [isSending, setIsSending] = useState(false);
@@ -49,7 +49,7 @@ export const FormPeremajaan = ({ sigapok, nipppk,session_silka }) => {
   } = useQuery({
     queryKey: ["DataSilkaP3k"],
     queryFn: async () => {
-      const getDataPppkSilka = await getProfilePppk(nipppk);
+      const getDataPppkSilka = await getPPPKByNipppk(nipppk);
       return getDataPppkSilka;
     },
     refetchOnWindowFocus: false,
@@ -105,86 +105,50 @@ export const FormPeremajaan = ({ sigapok, nipppk,session_silka }) => {
   }, [isPending]);
 
   const isSubmit = () => {
-    // const BODY = {
-    //   NIP: silka.nipppk,
-    //   NAMA: silka.nama,
-    //   GLRDEPAN: silka.gelar_depan,
-    //   GLRBELAKANG: silka.gelar_blk,
-    //   KDJENKEL: silka.jns_kelamin == "PRIA" ? 1 : 2,
-    //   TEMPATLHR: silka.tmp_lahir,
-    //   TGLLHR: silka.tgl_lahir,
-    //   JISTRI: silka.jumlah_sutri,
-    //   JANAK: silka.jumlah_anak,
-    //   KDSTAPEG: 12, //berdasarkan status pegawai 12 = ppppk
-    //   KDPANGKAT: silka.nama_golru,
-    //   GAPOK: silka.gaji_pokok,
-    //   MKGOLT: silka.maker_tahun,
-    //   KD_SKPD: silka.simgaji_id_skpd,
-    //   KETERANGAN: "",
-    //   TMTGAJI: silka.tmt_pppk_awal,
-    //   INDUK_BANK: "",
-    //   NOREK: "",
-    //   NOKTP: silka.nik,
-    //   NPWP: silka.no_npwp,
-    //   NOTELP: silka.no_handphone,
-    //   NOMORSKEP: silka.nomor_sk,
-    //   PENERBITSKEP: silka.pejabat_sk,
-    //   TGLSKEP: silka.tgl_sk,
-    //   ALAMAT: silka.alamat,
-    //   KDGURU: "",
-    //   // KATEGORI: silka.jenis_formasi,
-    //   KATEGORI: 4, //kode berdasarkan jenis pegawai 4 = pppk
-    //   FORMASI: silka.tahun_formasi,
-    //   AKHIRKONTRAK: silka.tmt_pppk_akhir,
-    // };
-
     const BODY = {
-        nipppk: silka.nipppk,
-        nama: silka.nama,
-        gelar_depan: silka.gelar_depan,
-        gelar_belakang: silka.gelar_blk,
-        kode_jenkel: silka.jns_kelamin == "PRIA" ? 1 : 2,
-        tempat_lahir: silka.tmp_lahir,
-        tanggal_lahir: silka.tgl_lahir,
-        jumlah_sutri: silka.jumlah_sutri,
-        jumlah_anak: silka.jumlah_anak,
-        // @ts-ignore
-        kode_statuspeg: data.kode_stapeg.split("-")[0],
-        kode_pangkat: silka.nama_golru,
-        gapok: silka.gaji_pokok,
-        masakerja_tahun: silka.maker_tahun,
-        kode_skpd: silka.simgaji_id_skpd,
-        kode_skpd_simpeg: silka.unker_id,
-        kode_satker: silka.simgaji_id_satker,
-        keterangan: "",
-        tmt_gaji: silka.tmt_pppk_awal,
-        induk_bank: "",
-        norek: "",
-        noktp: silka.nik,
-        nonpwp: silka.no_npwp,
-        notelpon: silka.no_handphone,
-        nosk: silka.nomor_sk,
-        penerbit_sk: silka.pejabat_sk,
-        tgl_sk: silka.tgl_sk,
-        kode_guru: "",
-        kategori: 4,
-        formasi: silka.tahun_formasi,
-        akhir_kontrak: silka.tmt_pppk_akhir,
-        created_by: silka.created_by,
-        update_by: session_silka?.data.nama_lengkap
-    }
+      nipppk: silka.nipppk,
+      nama: silka.nama,
+      gelar_depan: silka.gelar_depan,
+      gelar_belakang: silka.gelar_blk,
+      kode_jenkel: silka.jns_kelamin == "PRIA" ? 1 : 2,
+      tempat_lahir: silka.tmp_lahir,
+      tanggal_lahir: silka.tgl_lahir,
+      jumlah_sutri: silka.jumlah_sutri,
+      jumlah_anak: silka.jumlah_anak,
+      // @ts-ignore
+      kode_statuspeg: data.kode_stapeg.split("-")[0],
+      kode_pangkat: silka.nama_golru,
+      gapok: silka.gaji_pokok,
+      masakerja_tahun: silka.maker_tahun,
+      kode_skpd: silka.simgaji_id_skpd,
+      kode_skpd_simpeg: silka.unker_id,
+      kode_satker: silka.simgaji_id_satker,
+      keterangan: "",
+      tmt_gaji: silka.tmt_pppk_awal,
+      induk_bank: "",
+      norek: "",
+      noktp: silka.nik,
+      nonpwp: silka.no_npwp,
+      notelpon: silka.no_handphone,
+      nosk: silka.nomor_sk,
+      penerbit_sk: silka.pejabat_sk,
+      tgl_sk: silka.tgl_sk,
+      kode_guru: "",
+      kategori: 4,
+      formasi: silka.tahun_formasi,
+      akhir_kontrak: silka.tmt_pppk_akhir,
+      created_by: silka.created_by,
+      update_by: session_silka?.data.nama_lengkap,
+    };
     setIsSending(true);
     // @ts-ignore
     mutate(BODY, {
       onSuccess: (response) => {
         if (response.status === false || !response.status) {
           setIsSending(false);
-          return toast.error(
-            `Terjadi Kesalahan ${response.message}`,
-            {
-              id: "Toaster",
-            }
-          );
+          return toast.error(`Terjadi Kesalahan ${response.message}`, {
+            id: "Toaster",
+          });
         }
         toast.success(response.message, {
           id: "Toaster",
@@ -229,7 +193,10 @@ export const FormPeremajaan = ({ sigapok, nipppk,session_silka }) => {
   }
 
   if (silka.status_data !== "ENTRI" && silka.status_data !== null) {
-    const updateAt = silka.status_data_update_by !== null ? silka.status_data_update : silka.status_data_add
+    const updateAt =
+      silka.status_data_update_by !== null
+        ? silka.status_data_update
+        : silka.status_data_add;
     return (
       <Card className="w-full h-screen">
         <CardBody className="flex flex-col items-center justify-center gap-6">

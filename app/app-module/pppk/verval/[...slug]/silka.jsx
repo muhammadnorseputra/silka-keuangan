@@ -1,12 +1,21 @@
 "use client";
 import { ButtonPeremajaanP3k } from "@/components/button/btn-peremajaan";
-import { getPegawaiByNip } from "@/dummy/data-pegawai-by-nip";
-import { formatTanggalIndonesia } from "@/helpers/cx";
-import { Divider, Skeleton } from "@nextui-org/react";
-import { useQuery } from "@tanstack/react-query";
+import { ModalPeremajaanApprove } from "@/components/modal/modal-peremajaan-approve";
+import { getPPPKByNipppk } from "@/dummy/data-pppk-by-nipppk";
+import { TambahPegawaiPppk } from "@/dummy/sigapok-post-pppk";
+import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
+import { useModalContext } from "@/lib/context/modal-context";
+import { HandThumbUpIcon } from "@heroicons/react/24/solid";
+import { Button, Divider, Skeleton } from "@nextui-org/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next-nprogress-bar";
+import { useEffect } from "react";
 import { ExclamationCircle } from "react-bootstrap-icons";
+import toast from "react-hot-toast";
 
-export default function SilkaDataP3k({ nip }) {
+export default function SilkaDataP3k({ access_token, nip }) {
+  const { isOpen, setIsOpen } = useModalContext();
+  const queryClient = useQueryClient();
   const {
     data: row,
     isLoading,
@@ -14,11 +23,27 @@ export default function SilkaDataP3k({ nip }) {
   } = useQuery({
     queryKey: ["getDataPppkBySilka"],
     queryFn: async () => {
-      const getPppk = await await getPegawaiByNip(nip);
+      const getPppk = await await getPPPKByNipppk(nip);
       return getPppk;
     },
     refetchOnWindowFocus: false,
   });
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationKey: ["peremajaanPppk"],
+    mutationFn: async (body) => {
+      const res = await TambahPegawaiPppk(access_token, body);
+      return res;
+    },
+  });
+
+  useEffect(() => {
+    if (isPending) {
+      toast.loading(`Sending ...`, {
+        id: "Toaster",
+      });
+    }
+  }, [isPending]);
 
   if (isLoading || isFetching) {
     return (
@@ -51,29 +76,99 @@ export default function SilkaDataP3k({ nip }) {
     );
   }
 
-  const namalengkap = `${row?.gelar_depan} ${row?.nama} ${row?.gelar_belakang}`;
+  function handleSubmit() {
+    const RAWJSON = {
+      NIP: row.nipppk,
+      NAMA: row.nama,
+      GLRDEPAN: row.gelar_depan,
+      GLRBELAKANG: row.gelar_blk,
+      KDJENKEL: row.jns_kelamin == "PRIA" ? 1 : 2,
+      TEMPATLHR: row.tmp_lahir,
+      TGLLHR: row.tgl_lahir,
+      JISTRI: row.jumlah_sutri,
+      JANAK: row.jumlah_anak,
+      KDSTAPEG: Number(row.kode_statuspeg), //berdasarkan status pegawai 12 = ppppk
+      KDPANGKAT: row.nama_golru,
+      GAPOK: row.gaji_pokok,
+      MKGOLT: row.maker_tahun,
+      KD_SKPD: row.simgaji_id_skpd,
+      KETERANGAN: "",
+      TMTGAJI: row.tmt_pppk_awal,
+      INDUK_BANK: "",
+      NOREK: "",
+      NOKTP: row.nik,
+      NPWP: row.no_npwp,
+      NOTELP: row.no_handphone,
+      NOMORSKEP: row.nomor_sk,
+      PENERBITSKEP: row.pejabat_sk,
+      TGLSKEP: row.tgl_sk,
+      ALAMAT: row.alamat,
+      KDGURU: "",
+      // KATEGORI: row.jenis_formasi,
+      KATEGORI: 4, //kode berdasarkan jenis pegawai 4 = pppk
+      FORMASI: row.tahun_formasi,
+      AKHIRKONTRAK: row.tmt_pppk_akhir,
+    };
+    // @ts-ignore
+    mutate(RAWJSON, {
+      onSuccess: (response) => {
+        if (response.success === false || !response.success) {
+          return toast.error(
+            `Terjadi Kesalahan ${JSON.stringify(response.message)}`,
+            {
+              id: "Toaster",
+            }
+          );
+        }
+        toast.success(response.message, {
+          id: "Toaster",
+        });
+        setIsOpen(false);
+        queryClient.invalidateQueries({
+          queryKey: ["getDataPppk"],
+        });
+      },
+      onError: (err) => {
+        toast.error(err.message, {
+          id: "Toaster",
+        });
+      },
+    });
+  }
+
+  const namalengkap = `${row?.gelar_depan} ${row?.nama} ${row?.gelar_blk}`;
   return (
     <>
+      <ModalPeremajaanApprove
+        isOpenModal={isOpen}
+        onClose={() => setIsOpen(false)}
+        handleApprove={handleSubmit}
+        isLoading={isPending}
+      />
       <div>
         <div className="text-gray-400">NAMA</div>
         <div className="font-bold">{namalengkap}</div>
       </div>
       <div>
         <div className="text-gray-400">NIP</div>
-        <div className="font-bold">{row.nip}</div>
+        <div className="font-bold">{row.nipppk}</div>
       </div>
       <div>
         <div className="text-gray-400">GELAR DEPAN</div>
-        <div className="font-bold">{row.gelar_depan}</div>
+        <div className="font-bold">
+          {row.gelar_depan === null || row.gelar_depan === ""
+            ? "-"
+            : row.gelar_depan}
+        </div>
       </div>
       <div>
         <div className="text-gray-400">GELAR BELAKNG</div>
-        <div className="font-bold">{row.gelar_belakang}</div>
+        <div className="font-bold">{row.gelar_blk}</div>
       </div>
-      <div>
+      {/* <div>
         <div className="text-gray-400">TINGKAT PENDIDIKAN</div>
         <div className="font-bold">{row.nama_tingkat_pendidikan}</div>
-      </div>
+      </div> */}
       <div>
         <div className="text-gray-400">TEMPAT LAHIR</div>
         <div className="font-bold">{row.tmp_lahir}</div>
@@ -84,15 +179,11 @@ export default function SilkaDataP3k({ nip }) {
       </div>
       <div>
         <div className="text-gray-400">ALAMAT SESUAI KTP</div>
-        <div className="font-bold">{row.alamat_ktp}</div>
+        <div className="font-bold">{row.alamat}</div>
       </div>
       <div>
         <div className="text-gray-400">JENIS KELAMIN</div>
-        <div className="font-bold">{row.jenis_kelamin}</div>
-      </div>
-      <div>
-        <div className="text-gray-400">AGAMA</div>
-        <div className="font-bold">{row.nama_agama}</div>
+        <div className="font-bold">{row.jns_kelamin}</div>
       </div>
       <Divider />
       <div>
@@ -101,12 +192,16 @@ export default function SilkaDataP3k({ nip }) {
       </div>
       <div className="flex flex-col sm:flex-row justify-start gap-x-16">
         <div>
-          <div className="text-gray-400">JENIS PEGAWAI</div>
-          <div className="font-bold">{row.kode_jenis_pegawai}</div>
+          <div className="text-gray-400">GAJI POKOK</div>
+          <div className="font-bold">{formatRupiah(row.gaji_pokok)}</div>
+        </div>
+        <div>
+          <div className="text-gray-400">JENIS FORMASI</div>
+          <div className="font-bold">{row.jenis_formasi}</div>
         </div>
         <div>
           <div className="text-gray-400">STATUS PEGAWAI</div>
-          <div className="font-bold">{row.kode_status_pegawai}</div>
+          <div className="font-bold">{row.kode_statuspeg ?? "-"}</div>
         </div>
       </div>
       <div className="flex flex-col sm:flex-row justify-start gap-x-16">
@@ -121,6 +216,27 @@ export default function SilkaDataP3k({ nip }) {
           <div className="font-bold">{row.jumlah_anak}</div>
         </div>
       </div>
+      <Divider />
+      <div>
+        <div className="text-gray-400">NOMOR SK</div>
+        <div className="font-bold">{row.nomor_sk ?? "-"}</div>
+      </div>
+      <div>
+        <div className="text-gray-400">TANGGAL SK</div>
+        <div className="font-bold">
+          {formatTanggalIndonesia(row.tgl_sk) ?? "-"}
+        </div>
+      </div>
+      <div>
+        <div className="text-gray-400">PENERBIT SK</div>
+        <div className="font-bold">{row.pejabat_sk ?? "-"}</div>
+      </div>
+      <Divider />
+      <Button color="primary" variant="shadow" onPress={() => setIsOpen(true)}>
+        <HandThumbUpIcon className="size-5 text-white" />
+        <Divider orientation="vertical" />
+        Approve
+      </Button>
     </>
   );
 }

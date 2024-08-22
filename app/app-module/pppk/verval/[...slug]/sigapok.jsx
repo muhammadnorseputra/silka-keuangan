@@ -106,10 +106,10 @@ export default function SigapokDataP3k({ sigapok, nip }) {
           <div className="text-gray-400">MK GOL TAHUN</div>
           <div className="font-bold">{row.data.MKGOLT ?? "-"}</div>
         </div>
-        <div>
+        {/* <div>
           <div className="text-gray-400">MG GOL BULAN</div>
           <div className="font-bold">{row.data.BLGOLT ?? "-"}</div>
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col sm:flex-row justify-start gap-x-16">
         <div>
