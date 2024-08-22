@@ -91,7 +91,7 @@ export default function SigapokDataP3k({ sigapok, nip }) {
       <Divider />
       <div>
         <div className="text-gray-400">UNIT KERJA</div>
-        <div className="font-bold">{row.data.KD_SKPD ?? "-"}</div>
+        <div className="font-bold">{row.data.NAMA_SKPD ?? "-"}</div>
       </div>
       <div className="flex flex-col flex-wrap sm:flex-row justify-start gap-x-16 gap-y-6">
         <div>
@@ -112,10 +112,6 @@ export default function SigapokDataP3k({ sigapok, nip }) {
         </div>
       </div>
       <div className="flex flex-col sm:flex-row justify-start gap-x-16">
-        <div>
-          <div className="text-gray-400">KATEGORI</div>
-          <div className="font-bold">{row.data.KATEGORI ?? "-"}</div>
-        </div>
         <div>
           <div className="text-gray-400">FORMASI</div>
           <div className="font-bold">{row.data.FORMASI ?? "-"}</div>

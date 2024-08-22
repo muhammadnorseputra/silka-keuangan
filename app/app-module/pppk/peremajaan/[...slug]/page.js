@@ -9,6 +9,7 @@ import { polaNIP } from "@/helpers/polanip";
 export default async function Page({ params }) {
   const session = hasSessionServer("USER_GAPOK");
   const sigapok = useSessionServer("USER_GAPOK");
+  const session_silka = useSessionServer("USER_SILKA");
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }
@@ -33,7 +34,7 @@ export default async function Page({ params }) {
               </div>
             </CardHeader>
             <CardBody>
-              <FormPeremajaan sigapok={sigapok} nipppk={nipppk} />
+              <FormPeremajaan sigapok={sigapok} nipppk={nipppk} session_silka={session_silka}/>
             </CardBody>
           </Card>
         </div>

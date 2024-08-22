@@ -16,9 +16,10 @@ import {
   Skeleton,
   Spinner,
   Progress,
+  Chip,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { BriefcaseFill, Router } from "react-bootstrap-icons";
+import { BriefcaseFill, CheckCircleFill, Router } from "react-bootstrap-icons";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useModalContext } from "@/lib/context/modal-context";
@@ -31,8 +32,11 @@ import { useRouter } from "next-nprogress-bar";
 import { limitCharacters } from "@/helpers/text";
 import DataNotFound from "../errors/DataNotFound";
 import { getProfilePppk } from "@/dummy/data-pppk-by-nipppk";
+import { PostDataPPPK } from "@/dummy/post-data-pppk";
+import SuccessUpdated from "../alert/SuccessUpdated";
+import { getCurrentDateTime } from "@/helpers/datetime";
 
-export const FormPeremajaan = ({ sigapok, nipppk }) => {
+export const FormPeremajaan = ({ sigapok, nipppk,session_silka }) => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [isSending, setIsSending] = useState(false);
@@ -87,7 +91,7 @@ export const FormPeremajaan = ({ sigapok, nipppk }) => {
   const { mutate, isPending, isError, error } = useMutation({
     mutationKey: ["peremajaanPppk"],
     mutationFn: async (body) => {
-      const res = await TambahPegawaiPppk(sigapok.access_token, body);
+      const res = await PostDataPPPK(body);
       return res;
     },
   });
@@ -101,47 +105,82 @@ export const FormPeremajaan = ({ sigapok, nipppk }) => {
   }, [isPending]);
 
   const isSubmit = () => {
-    const BODY = {
-      NIP: silka.nipppk,
-      NAMA: silka.nama,
-      GLRDEPAN: silka.gelar_depan,
-      GLRBELAKANG: silka.gelar_blk,
-      KDJENKEL: silka.jns_kelamin == "PRIA" ? 1 : 2,
-      TEMPATLHR: silka.tmp_lahir,
-      TGLLHR: silka.tgl_lahir,
-      JISTRI: silka.jumlah_sutri,
-      JANAK: silka.jumlah_anak,
-      KDSTAPEG: 12, //berdasarkan status pegawai 12 = ppppk
-      KDPANGKAT: silka.nama_golru,
-      GAPOK: silka.gaji_pokok,
-      MKGOLT: silka.maker_tahun,
-      KD_SKPD: silka.simgaji_id_skpd,
-      KETERANGAN: "",
-      TMTGAJI: silka.tmt_pppk_awal,
-      INDUK_BANK: "",
-      NOREK: "",
-      NOKTP: silka.nik,
-      NPWP: silka.no_npwp,
-      NOTELP: silka.no_handphone,
-      NOMORSKEP: silka.nomor_sk,
-      PENERBITSKEP: silka.pejabat_sk,
-      TGLSKEP: silka.tgl_sk,
-      ALAMAT: silka.alamat,
-      KDGURU: "",
-      // KATEGORI: silka.jenis_formasi,
-      KATEGORI: 4, //kode berdasarkan jenis pegawai 4 = pppk
-      FORMASI: silka.tahun_formasi,
-      AKHIRKONTRAK: silka.tmt_pppk_akhir,
-    };
+    // const BODY = {
+    //   NIP: silka.nipppk,
+    //   NAMA: silka.nama,
+    //   GLRDEPAN: silka.gelar_depan,
+    //   GLRBELAKANG: silka.gelar_blk,
+    //   KDJENKEL: silka.jns_kelamin == "PRIA" ? 1 : 2,
+    //   TEMPATLHR: silka.tmp_lahir,
+    //   TGLLHR: silka.tgl_lahir,
+    //   JISTRI: silka.jumlah_sutri,
+    //   JANAK: silka.jumlah_anak,
+    //   KDSTAPEG: 12, //berdasarkan status pegawai 12 = ppppk
+    //   KDPANGKAT: silka.nama_golru,
+    //   GAPOK: silka.gaji_pokok,
+    //   MKGOLT: silka.maker_tahun,
+    //   KD_SKPD: silka.simgaji_id_skpd,
+    //   KETERANGAN: "",
+    //   TMTGAJI: silka.tmt_pppk_awal,
+    //   INDUK_BANK: "",
+    //   NOREK: "",
+    //   NOKTP: silka.nik,
+    //   NPWP: silka.no_npwp,
+    //   NOTELP: silka.no_handphone,
+    //   NOMORSKEP: silka.nomor_sk,
+    //   PENERBITSKEP: silka.pejabat_sk,
+    //   TGLSKEP: silka.tgl_sk,
+    //   ALAMAT: silka.alamat,
+    //   KDGURU: "",
+    //   // KATEGORI: silka.jenis_formasi,
+    //   KATEGORI: 4, //kode berdasarkan jenis pegawai 4 = pppk
+    //   FORMASI: silka.tahun_formasi,
+    //   AKHIRKONTRAK: silka.tmt_pppk_akhir,
+    // };
 
+    const BODY = {
+        nipppk: silka.nipppk,
+        nama: silka.nama,
+        gelar_depan: silka.gelar_depan,
+        gelar_belakang: silka.gelar_blk,
+        kode_jenkel: silka.jns_kelamin == "PRIA" ? 1 : 2,
+        tempat_lahir: silka.tmp_lahir,
+        tanggal_lahir: silka.tgl_lahir,
+        jumlah_sutri: silka.jumlah_sutri,
+        jumlah_anak: silka.jumlah_anak,
+        // @ts-ignore
+        kode_statuspeg: data.kode_stapeg.split("-")[0],
+        kode_pangkat: silka.nama_golru,
+        gapok: silka.gaji_pokok,
+        masakerja_tahun: silka.maker_tahun,
+        kode_skpd: silka.simgaji_id_skpd,
+        kode_skpd_simpeg: silka.unker_id,
+        kode_satker: silka.simgaji_id_satker,
+        keterangan: "",
+        tmt_gaji: silka.tmt_pppk_awal,
+        induk_bank: "",
+        norek: "",
+        noktp: silka.nik,
+        nonpwp: silka.no_npwp,
+        notelpon: silka.no_handphone,
+        nosk: silka.nomor_sk,
+        penerbit_sk: silka.pejabat_sk,
+        tgl_sk: silka.tgl_sk,
+        kode_guru: "",
+        kategori: 4,
+        formasi: silka.tahun_formasi,
+        akhir_kontrak: silka.tmt_pppk_akhir,
+        created_by: silka.created_by,
+        update_by: session_silka?.data.nama_lengkap
+    }
     setIsSending(true);
     // @ts-ignore
     mutate(BODY, {
       onSuccess: (response) => {
-        if (response.success === false || !response.success) {
+        if (response.status === false || !response.status) {
           setIsSending(false);
           return toast.error(
-            `Terjadi Kesalahan ${JSON.stringify(response.message)}`,
+            `Terjadi Kesalahan ${response.message}`,
             {
               id: "Toaster",
             }
@@ -184,6 +223,31 @@ export const FormPeremajaan = ({ sigapok, nipppk }) => {
       <Card className="w-full h-screen">
         <CardBody className="flex flex-col items-center justify-center gap-6">
           <DataNotFound message={silka.message} />
+        </CardBody>
+      </Card>
+    );
+  }
+
+  if (silka.status_data !== "ENTRI" && silka.status_data !== null) {
+    const updateAt = silka.status_data_update_by !== null ? silka.status_data_update : silka.status_data_add
+    return (
+      <Card className="w-full h-screen">
+        <CardBody className="flex flex-col items-center justify-center gap-6">
+          <SuccessUpdated style={{ width: 400 }}>
+            <h1 className="font-bold text-lg inline-flex items-center flex-col gap-y-3 mx-8 sm:mx-0">
+              Data anda sudah diperbaharui pada{" "}
+              <span className="text-gray-400">
+                {" "}
+                <Chip
+                  endContent={<CheckCircleFill className="size-6" />}
+                  color="success"
+                  size="lg"
+                  variant="flat">
+                  {updateAt}
+                </Chip>
+              </span>
+            </h1>
+          </SuccessUpdated>
         </CardBody>
       </Card>
     );
@@ -392,7 +456,6 @@ export const FormPeremajaan = ({ sigapok, nipppk }) => {
                 </Autocomplete>
                 <Autocomplete
                   isRequired
-                  isReadOnly
                   isLoading={loadingStatusPegawai || fetchingStatusPegawai}
                   className="col-span-4 sm:col-span-2"
                   labelPlacement="outside"
@@ -400,9 +463,8 @@ export const FormPeremajaan = ({ sigapok, nipppk }) => {
                   placeholder="Pilih status pegawai"
                   label="Status Pegawai"
                   name="kode_stapeg"
-                  defaultSelectedKey="12"
-                  defaultInputValue="12"
-                  selectedKey="12"
+                  defaultSelectedKey={silka.kode_statuspeg}
+                  defaultInputValue={silka.kode_statuspeg}
                   variant="flat"
                   errorMessage={
                     (errors?.kode_stapeg?.message &&
@@ -422,7 +484,7 @@ export const FormPeremajaan = ({ sigapok, nipppk }) => {
                   {statusPegawai?.data?.map((item) => (
                     <AutocompleteItem
                       key={item.kode_stapeg}
-                      textValue={item.stapeg_nama}>
+                      textValue={`${item.kode_stapeg}-${item.stapeg_nama}`}>
                       {item.stapeg_nama}
                     </AutocompleteItem>
                   ))}
