@@ -60,14 +60,14 @@ export default function SigapokDataP3k({ sigapok, nip }) {
         <div className="text-gray-400">NIP</div>
         <div className="font-bold">{row.data.NIP ?? "-"}</div>
       </div>
-      <div>
+      {/* <div>
         <div className="text-gray-400">GELAR DEPAN</div>
         <div className="font-bold">{row.data.GLRDEPAN ?? "-"}</div>
       </div>
       <div>
         <div className="text-gray-400">GELAR BELAKNG</div>
         <div className="font-bold">{row.data.GLRBELAKANG ?? "-"}</div>
-      </div>
+      </div> */}
       <div>
         <div className="text-gray-400">TEMPAT LAHIR</div>
         <div className="font-bold">{row.data.TEMPATLHR ?? "-"}</div>

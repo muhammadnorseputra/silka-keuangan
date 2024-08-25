@@ -2,10 +2,11 @@
 import { ButtonPeremajaanP3k } from "@/components/button/btn-peremajaan";
 import { ModalPeremajaanApprove } from "@/components/modal/modal-peremajaan-approve";
 import { getPPPKByNipppk } from "@/dummy/data-pppk-by-nipppk";
+import { RollbackPPPK } from "@/dummy/post-data-pppk";
 import { TambahPegawaiPppk } from "@/dummy/sigapok-post-pppk";
 import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
 import { useModalContext } from "@/lib/context/modal-context";
-import { HandThumbUpIcon } from "@heroicons/react/24/solid";
+import { HandThumbUpIcon, UserMinusIcon } from "@heroicons/react/24/solid";
 import { Button, Divider, Skeleton } from "@nextui-org/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next-nprogress-bar";
@@ -37,13 +38,21 @@ export default function SilkaDataP3k({ access_token, nip }) {
     },
   });
 
+  const { mutate: rollbackFn, isPending: rollbackIsPending } = useMutation({
+    mutationKey: ["rollbackP3K"],
+    mutationFn: async (body) => {
+      const res = await RollbackPPPK(body);
+      return res;
+    },
+  });
+
   useEffect(() => {
-    if (isPending) {
+    if (isPending || rollbackIsPending) {
       toast.loading(`Sending ...`, {
         id: "Toaster",
       });
     }
-  }, [isPending]);
+  }, [isPending, rollbackIsPending]);
 
   if (isLoading || isFetching) {
     return (
@@ -74,6 +83,34 @@ export default function SilkaDataP3k({ access_token, nip }) {
         <ButtonPeremajaanP3k nip={nip} />
       </div>
     );
+  }
+
+  function handleRollback() {
+    const RAWJSON = {
+      nipppk: row.nipppk,
+      status: "ENTRI",
+    };
+    // @ts-ignore
+    rollbackFn(RAWJSON, {
+      onSuccess: (response) => {
+        if (response.status === false || !response.status) {
+          return toast.error(`Terjadi Kesalahan ${response.message}`, {
+            id: "Toaster",
+          });
+        }
+        toast.success(response.message, {
+          id: "Toaster",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["getDataPppkBySilka"],
+        });
+      },
+      onError: (err) => {
+        toast.error(err.message, {
+          id: "Toaster",
+        });
+      },
+    });
   }
 
   function handleSubmit() {
@@ -153,18 +190,6 @@ export default function SilkaDataP3k({ access_token, nip }) {
         <div className="text-gray-400">NIP</div>
         <div className="font-bold">{row.nipppk}</div>
       </div>
-      <div>
-        <div className="text-gray-400">GELAR DEPAN</div>
-        <div className="font-bold">
-          {row.gelar_depan === null || row.gelar_depan === ""
-            ? "-"
-            : row.gelar_depan}
-        </div>
-      </div>
-      <div>
-        <div className="text-gray-400">GELAR BELAKNG</div>
-        <div className="font-bold">{row.gelar_blk}</div>
-      </div>
       {/* <div>
         <div className="text-gray-400">TINGKAT PENDIDIKAN</div>
         <div className="font-bold">{row.nama_tingkat_pendidikan}</div>
@@ -232,11 +257,27 @@ export default function SilkaDataP3k({ access_token, nip }) {
         <div className="font-bold">{row.pejabat_sk ?? "-"}</div>
       </div>
       <Divider />
-      <Button color="primary" variant="shadow" onPress={() => setIsOpen(true)}>
-        <HandThumbUpIcon className="size-5 text-white" />
-        <Divider orientation="vertical" />
-        Approve
-      </Button>
+      <div className="flex flex-col sm:flex-row w-full gap-x-3 justify-between">
+        <Button
+          isLoading={rollbackIsPending}
+          isDisabled={rollbackIsPending}
+          className="w-1/2"
+          color="danger"
+          variant="shadow"
+          onPress={() => handleRollback()}>
+          <UserMinusIcon className="size-5 text-white" />
+          Rollback
+        </Button>
+        <Button
+          className="w-full"
+          color="primary"
+          variant="shadow"
+          onPress={() => setIsOpen(true)}>
+          <HandThumbUpIcon className="size-5 text-white" />
+          <Divider orientation="vertical" />
+          Approve
+        </Button>
+      </div>
     </>
   );
 }

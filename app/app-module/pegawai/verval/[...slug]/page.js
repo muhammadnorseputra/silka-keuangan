@@ -17,6 +17,7 @@ import { formatTanggalIndonesia } from "@/helpers/cx";
 import { HandThumbUpIcon } from "@heroicons/react/24/solid";
 import { ButtonPeremajaan } from "@/components/button/btn-peremajaan";
 import { BtnApprove } from "@/components/button/btn-approve";
+import { BtnRollBackPNS } from "@/components/button/btn-rollback-pns";
 
 export const revalidate = 0;
 
@@ -138,11 +139,14 @@ export default async function Page({ params }) {
     }
 
     return (
-      <BtnApprove
-        {...sigapok}
-        data={getPegawais}
-        session_silkaonline={silkaonline}
-      />
+      <>
+        <BtnRollBackPNS data={getPegawais} />
+        <BtnApprove
+          {...sigapok}
+          data={getPegawais}
+          session_silkaonline={silkaonline}
+        />
+      </>
     );
   };
   return (
@@ -181,7 +185,7 @@ export default async function Page({ params }) {
                   </CardBody>
                   <Divider />
                   <CardFooter className="sticky bottom-0">
-                    <div className="flex items-end justify-end w-full">
+                    <div className="flex items-center justify-between w-full">
                       {isVerifikasi()}
                     </div>
                   </CardFooter>

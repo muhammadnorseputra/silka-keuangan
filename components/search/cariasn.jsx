@@ -1,82 +1,117 @@
 "use client";
-import {
-  Autocomplete,
-  AutocompleteItem,
-  Avatar,
-  Button,
-} from "@nextui-org/react";
-import { Search } from "react-bootstrap-icons";
 
-export default function CariASN({ users }) {
+import { SearchPegawai } from "@/dummy/search-pegawai";
+import {
+  ChevronUpDownIcon,
+  MagnifyingGlassCircleIcon,
+  MagnifyingGlassPlusIcon,
+  UserCircleIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/solid";
+import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
+export default function CariASN() {
+  const [data, setData] = useState(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isLoading, isSubmitting, isValid },
+  } = useForm();
+
+  const { mutate, isPending: isPendingFn } = useMutation({
+    mutationKey: ["List.Pegawai"],
+    mutationFn: async (body) => {
+      // @ts-ignore
+      const response = await SearchPegawai(body);
+      return response;
+    },
+  });
+
+  const isSubmit = async ({ type, filter }) => {
+    const RAWJSON = {
+      nipnama: filter,
+      jenis: type,
+    };
+    // @ts-ignore
+    mutate(RAWJSON, {
+      onSuccess: (data) => {
+        setData(data);
+      },
+      onError: (err) => {
+        toast.error(`Terjadi Kesalahan (${err})`);
+      },
+    });
+  };
+  console.log(data);
   return (
-    <Autocomplete
-      classNames={{
-        base: "max-w-lg bg-white rounded-full shadow-lg",
-        listboxWrapper: "max-h-[320px]",
-        selectorButton: "text-default-500",
-      }}
-      defaultItems={users}
-      inputProps={{
-        classNames: {
-          input: "ml-1",
-          inputWrapper: "h-[48px]",
-        },
-      }}
-      listboxProps={{
-        hideSelectedIcon: true,
-        itemClasses: {
-          base: [
-            "rounded-medium",
-            "text-default-500",
-            "transition-opacity",
-            "data-[hover=true]:text-foreground",
-            "dark:data-[hover=true]:bg-default-50",
-            "data-[pressed=true]:opacity-70",
-            "data-[hover=true]:bg-default-200",
-            "data-[selectable=true]:focus:bg-default-100",
-            "data-[focus-visible=true]:ring-default-500",
-          ],
-        },
-      }}
-      aria-label="Select an employee"
-      placeholder="Masukan Nama atau NIP"
-      popoverProps={{
-        offset: 10,
-        classNames: {
-          base: "rounded-large",
-          content: "p-1 border-small border-default-100 bg-background",
-        },
-      }}
-      startContent={
-        <Search className="text-default-400" strokeWidth={2.5} size={20} />
-      }
-      radius="full"
-      variant="bordered">
-      {(item) => (
-        <AutocompleteItem key={item.id} textValue={item.name}>
-          <div className="flex justify-between items-center">
-            <div className="flex gap-2 items-center">
-              <Avatar
-                alt={item.name}
-                className="flex-shrink-0"
-                size="sm"
-                src={item.avatar}
-              />
-              <div className="flex flex-col">
-                <span className="text-small">{item.name}</span>
-                <span className="text-tiny text-default-400">{item.team}</span>
-              </div>
+    <>
+      <form
+        onSubmit={handleSubmit(isSubmit)}
+        method="POST"
+        autoComplete="off"
+        noValidate
+        className="flex items-start w-10/12 bg-white rounded p-6 flex-wrap md:flex-nowrap">
+        <Input
+          type="search"
+          placeholder="Masukan NIP atau NAMA"
+          radius="none"
+          size="lg"
+          name="filter"
+          variant="flat"
+          startContent={<MagnifyingGlassCircleIcon className="size-6" />}
+          isInvalid={errors?.filter ? true : false}
+          errorMessage={errors?.filter?.message && `${errors.filter.message}`}
+          {...register("filter", {
+            required: "Ketikan NIP atau NAMA",
+            minLength: {
+              value: 3,
+              message: "Masukan minimal 3 karakter",
+            },
+          })}
+        />
+        <Select
+          isRequired
+          selectorIcon={<ChevronUpDownIcon className="size-8" />}
+          label="Jenis Pegawai"
+          placeholder="Pilih jenis pegawai"
+          size="sm"
+          radius="none"
+          variant="flat"
+          labelPlacement="inside"
+          name="type"
+          isInvalid={errors?.type ? true : false}
+          errorMessage={errors?.type?.message && `${errors.type.message}`}
+          {...register("type", {
+            required: "Pilih jenis pegawai",
+          })}>
+          <SelectItem key="PNS" value="PNS" textValue="PNS">
+            <div className="flex flex-row items-center justify-start gap-x-2 p-4">
+              <UserCircleIcon className="size-6" />
+              <span className="font-bold">PNS</span>
             </div>
-            <Button
-              className="border-small mr-0.5 font-medium shadow-small"
-              radius="full"
-              size="sm"
-              variant="bordered">
-              Pilih
-            </Button>
-          </div>
-        </AutocompleteItem>
-      )}
-    </Autocomplete>
+          </SelectItem>
+          <SelectItem key="PPPK" value="PPPK" textValue="PPPK">
+            <div className="flex flex-row items-center justify-start gap-x-2 p-4">
+              <UserGroupIcon className="size-6" />
+              <span className="font-bold">PPPK</span>
+            </div>
+          </SelectItem>
+        </Select>
+        <Button
+          isDisabled={isPendingFn || !isValid}
+          isLoading={isPendingFn}
+          variant="flat"
+          color="primary"
+          size="lg"
+          radius="none"
+          type="submit">
+          Cari
+        </Button>
+      </form>
+    </>
   );
 }

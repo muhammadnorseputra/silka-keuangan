@@ -26,19 +26,19 @@ import { useModalContext } from "@/lib/context/modal-context";
 import { ModalPeremajaan } from "../modal/modal-peremajaan";
 import { formatDateSlash } from "@/helpers/fn_tanggal";
 import { formatRupiah } from "@/helpers/cx";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TambahPegawaiPppk } from "@/dummy/sigapok-post-pppk";
-import { useRouter } from "next-nprogress-bar";
 import { limitCharacters } from "@/helpers/text";
 import DataNotFound from "../errors/DataNotFound";
 import { getPPPKByNipppk } from "@/dummy/data-pppk-by-nipppk";
 import { PostDataPPPK } from "@/dummy/post-data-pppk";
 import SuccessUpdated from "../alert/SuccessUpdated";
 import { getCurrentDateTime } from "@/helpers/datetime";
+import { useRouter } from "next/navigation";
 
 export const FormPeremajaan = ({ sigapok, nipppk, session_silka }) => {
-  const router = useRouter();
-  const [data, setData] = useState([]);
+  const queryClient = useQueryClient();
+  const [data, setData] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const { isOpen, setIsOpen } = useModalContext();
 
@@ -155,7 +155,9 @@ export const FormPeremajaan = ({ sigapok, nipppk, session_silka }) => {
         });
         setIsSending(false);
         setIsOpen(false);
-        router.refresh();
+        queryClient.invalidateQueries({
+          queryKey: ["DataSilkaP3k"],
+        });
       },
       onError: (err) => {
         setIsSending(false);

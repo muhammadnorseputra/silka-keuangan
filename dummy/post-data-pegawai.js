@@ -1,4 +1,5 @@
 "use server";
+import { headers } from "@/lib/req-headers";
 export const PostDataPegawai = async (body) => {
   const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
   try {
@@ -25,4 +26,20 @@ export const PostDataPegawai = async (body) => {
       data: [],
     };
   }
+};
+
+export const RollbackPegawai = async (body) => {
+  const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
+  const req = await fetch(
+    `${url}/services/PegawaiWithBasicAuth/updateStatusValidasiPegawai`,
+    {
+      method: "POST",
+      cache: "no-store",
+      headers,
+      body: JSON.stringify(body),
+    }
+  );
+
+  const result = await req.json();
+  return result;
 };
