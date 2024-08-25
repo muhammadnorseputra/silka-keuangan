@@ -8,7 +8,14 @@ import {
   UserCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import {
+  Button,
+  Code,
+  Divider,
+  Input,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -46,7 +53,6 @@ export default function CariASN() {
       },
     });
   };
-  console.log(data);
   return (
     <>
       <form
@@ -112,6 +118,8 @@ export default function CariASN() {
           Cari
         </Button>
       </form>
+      <Divider orientation="horizontal" />
+      <Code>{JSON.stringify(data)}</Code>
     </>
   );
 }

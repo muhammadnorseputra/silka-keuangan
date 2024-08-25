@@ -9,7 +9,7 @@ export default function Page() {
           Cari ASN <Stars className="text-yellow-400" />
         </h3>
       </div>
-      <div className="flex justify-center w-full mt-5">
+      <div className="flex flex-col items-center justify-center w-full mt-5">
         <CariASN />
       </div>
     </>
