@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 
-const SpinnerContext = createContext();
+const SpinnerContext = createContext(null);
 
 const SpinnerProvider = ({ children }) => {
   const [isSpinner, setIsSpinner] = useState(false);

@@ -3,13 +3,18 @@
 import { deleteCookie, hasCookie } from "cookies-next";
 import {
   Avatar,
+  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@nextui-org/react";
-import ModalLogout from "../modal/modal-logout";
 import { useModalContext } from "@/lib/context/modal-context";
+import ModalContainer from "../modal/modal-container";
 export const BtnProfile = ({ profile, size = "md" }) => {
   const { isOpen, setIsOpen } = useModalContext();
   const { picture, nama_lengkap, level } = profile?.data;
@@ -55,11 +60,29 @@ export const BtnProfile = ({ profile, size = "md" }) => {
         </DropdownMenu>
       </Dropdown>
 
-      <ModalLogout
+      <ModalContainer
+        backdrop="blur"
+        placement="center"
         isOpenModal={isOpen}
         onClose={() => setIsOpen(false)}
-        handleLogout={handleLogout}
-      />
+      >
+         <ModalContent>
+          <ModalHeader className="flex flex-col gap-1">
+            System says !
+          </ModalHeader>
+          <ModalBody>
+            <p>Apakah anda yakin akan keluar dari system ?</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" variant="light" onPress={() => setIsOpen(false)}>
+              Tidak
+            </Button>
+            <Button color="primary" onPress={handleLogout}>
+              Yakin
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </ModalContainer>
     </>
   );
 };

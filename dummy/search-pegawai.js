@@ -1,15 +1,26 @@
-"use client";
+"use server";
 
-export const SearchPegawai = async ({ jenis, nipnama }) => {
+import { useSessionServer } from "@/app/app-module/server-session";
+
+export const SearchPegawai = async ({jenis, nipnama}) => {
+  const account = useSessionServer("USER_SILKA");
+  const { nip } = account?.data
   const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
   try {
     let res = await fetch(
-      `${url}/services/PegawaiWithBasicAuth/searchPegawai?jenis=${jenis}&nipnama=${nipnama}&apiKey=bkpsdm6811`,
+      `${url}/services/PegawaiWithBasicAuth/searchPegawai`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "apiKey": "bkpsdm6811",
+          Authorization: 'Basic QmFsYW5nYW5rYWI6Ymtwc2RtQDIwMjI='
         },
+        body: JSON.stringify({
+          jenis,
+          nipnama,
+          account_login: nip
+        })
       }
     );
     let json = await res.json();
