@@ -9,6 +9,8 @@ import { getPppkByUnor } from "@/dummy/data-pppk-by-unor";
 import { decrypt } from "@/helpers/encrypt";
 import { Error500 } from "@/components/errors/500";
 import NoInternet from "@/components/errors/NoInternet";
+import { useModalDaftarLayananContext } from "@/lib/context/modal-daftar-layanan-context";
+import ModalLayanan from "@/components/modal/modal-daftar-layanan";
 
 async function Page({ searchParams }) {
   const session = hasSessionServer("USER_GAPOK");
@@ -43,7 +45,10 @@ async function Page({ searchParams }) {
     <>
       <section className="w-full bg-blue-600 dark:bg-slate-800 h-screen">
         <div className="max-w-6xl mx-auto">
-          <Card shadow="lg" className="max-h-screen overflow-y-auto h-screen">
+          <Card
+            radius="none"
+            shadow="lg"
+            className="max-h-screen overflow-y-auto h-screen">
             <CardHeader className="flex justify-between items-center">
               <div className="inline-flex items-center gap-3">
                 <BtnBackNextUi goTo="/app-integrasi/dashboard" />

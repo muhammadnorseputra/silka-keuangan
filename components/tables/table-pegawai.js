@@ -31,12 +31,16 @@ import {
 } from "@heroicons/react/24/solid";
 import { useRouter } from "next-nprogress-bar";
 import { encrypt } from "@/helpers/encrypt";
+import ModalLayanan from "../modal/modal-daftar-layanan";
+import { useModalDaftarLayananContext } from "@/lib/context/modal-daftar-layanan-context";
 // import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 
 const INITIAL_VISIBLE_COLUMNS = ["nip", "nama", "jabatan", "aksi"];
 
 export const TablePegawai = ({ unors, pegawais }) => {
   const router = useRouter();
+  const { isOpen, setIsOpen, setData, setJenis } =
+    useModalDaftarLayananContext();
   const { data: datapegawai } = pegawais;
   const [isLoadingTable, setIsLoadingTable] = useState(false);
   const [filterValue, setFilterValue] = useState("");
@@ -135,102 +139,29 @@ export const TablePegawai = ({ unors, pegawais }) => {
         case "aksi":
           return (
             <div className="relative flex justify-end items-center gap-2">
-              <Dropdown backdrop="opaque">
-                <DropdownTrigger>
-                  <Button
-                    className="group"
-                    size="md"
-                    radius="full"
-                    color="primary"
-                    variant="flat"
-                    endContent={
-                      <EllipsisHorizontalCircleIcon className="size-6 text-blue-400 transition-all duration-100 ease-in group-hover:translate-x-3" />
-                    }>
-                    Layanan
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu color="primary" variant="faded">
-                  <DropdownSection title="Peremajaan" showDivider>
-                    <DropdownItem
-                      key="peremajaan"
-                      onPress={() => {
-                        router.push(
-                          `/app-module/pegawai/peremajaan/${encrypt(
-                            datapegawai.nip_baru,
-                            "bkpsdm"
-                          )}`
-                        );
-                        setIsLoadingTable(true);
-                      }}
-                      description="Peremajaan Data"
-                      startContent={
-                        <UserPlusIcon className="size-6 text-blue-600" />
-                      }>
-                      Peremajaan
-                    </DropdownItem>
-                    <DropdownItem
-                      key="verval"
-                      onPress={() => {
-                        router.push(
-                          `/app-module/pegawai/verval/${encrypt(
-                            datapegawai.nip_baru,
-                            "bkpsdm"
-                          )}`
-                        );
-                        setIsLoadingTable(true);
-                      }}
-                      description="Verifikasi dan Validasi"
-                      startContent={
-                        <DocumentCheckIcon className="size-6 text-green-500" />
-                      }>
-                      Verval Data
-                    </DropdownItem>
-                  </DropdownSection>
-                  <DropdownSection title="Layanan Integrasi">
-                    <DropdownItem
-                      key="kgb"
-                      onPress={() => {
-                        router.push(
-                          `/app-module/pegawai/kgb/${encrypt(
-                            datapegawai.nip_baru,
-                            "bkpsdm"
-                          )}`
-                        );
-                        setIsLoadingTable(true);
-                      }}
-                      description="Verifikasi dan Kirim"
-                      startContent={
-                        <DocumentCurrencyDollarIcon className="size-6 text-red-400" />
-                      }>
-                      Proses KGB
-                    </DropdownItem>
-                    <DropdownItem
-                      key="tpp"
-                      onPress={() => {
-                        router.push(
-                          `/app-module/pegawai/tpp/${encrypt(
-                            datapegawai.nip_baru,
-                            "bkpsdm"
-                          )}`
-                        );
-                        setIsLoadingTable(true);
-                      }}
-                      description="Proses Tambahan Penghasilan Pegawai"
-                      startContent={
-                        <DocumentCurrencyDollarIcon className="size-6 text-amber-600" />
-                      }>
-                      Proses TPP
-                    </DropdownItem>
-                  </DropdownSection>
-                </DropdownMenu>
-              </Dropdown>
+              <Button
+                onPress={() => {
+                  setIsOpen(true);
+                  setData({ nip: datapegawai.nip_baru });
+                  setJenis("PNS");
+                }}
+                className="group"
+                size="md"
+                radius="full"
+                color="primary"
+                variant="flat"
+                endContent={
+                  <EllipsisHorizontalCircleIcon className="size-6 text-blue-400 transition-all duration-100 ease-in group-hover:translate-x-3" />
+                }>
+                Layanan
+              </Button>
             </div>
           );
         default:
           return cellValue;
       }
     },
-    [router]
+    [setData, setIsOpen, setJenis]
   );
 
   const onRowsPerPageChange = useCallback((e) => {
@@ -383,44 +314,47 @@ export const TablePegawai = ({ unors, pegawais }) => {
     );
   }, [datapegawai.length, onRowsPerPageChange, page, pages]);
   return (
-    <Table
-      isStriped
-      isHeaderSticky
-      className="relative"
-      aria-label="Example static collection table"
-      topContent={topContent}
-      topContentPlacement="outside"
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      // @ts-ignore
-      sortDescriptor={sortDescriptor}
-      // @ts-ignore
-      onSortChange={setSortDescriptor}>
-      <TableHeader columns={headerColumns} className="sticky top-20">
-        {(column) => (
-          <TableColumn
-            allowsSorting={column.sortable}
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}>
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody
-        isLoading={isLoadingTable}
-        emptyContent={"No rows to display."}
-        loadingContent={
-          <div className="w-full h-full flex items-center justify-center bg-white/80 dark:bg-black/80 z-10">
-            <Spinner label="Loading..." color="danger" />
-          </div>
-        }
-        items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.nip_baru}>
-            {(colKey) => <TableCell>{renderCell(item, colKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <ModalLayanan isOpenModal={isOpen} onClose={() => setIsOpen(false)} />
+      <Table
+        isStriped
+        isHeaderSticky
+        className="relative"
+        aria-label="Example static collection table"
+        topContent={topContent}
+        topContentPlacement="outside"
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        // @ts-ignore
+        sortDescriptor={sortDescriptor}
+        // @ts-ignore
+        onSortChange={setSortDescriptor}>
+        <TableHeader columns={headerColumns} className="sticky top-20">
+          {(column) => (
+            <TableColumn
+              allowsSorting={column.sortable}
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}>
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          isLoading={isLoadingTable}
+          emptyContent={"No rows to display."}
+          loadingContent={
+            <div className="w-full h-full flex items-center justify-center bg-white/80 dark:bg-black/80 z-10">
+              <Spinner label="Loading..." color="danger" />
+            </div>
+          }
+          items={sortedItems}>
+          {(item) => (
+            <TableRow key={item.nip_baru}>
+              {(colKey) => <TableCell>{renderCell(item, colKey)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </>
   );
 };

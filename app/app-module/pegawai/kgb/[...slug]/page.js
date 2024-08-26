@@ -271,7 +271,10 @@ export default async function Page({ params }) {
     <>
       <div className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
         <div className="max-w-6xl mx-auto">
-          <Card shadow="lg" className="max-h-screen overflow-y-auto my-auto">
+          <Card
+            radius="none"
+            shadow="lg"
+            className="max-h-screen overflow-y-auto my-auto">
             <CardHeader className="flex justify-between items-center">
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />

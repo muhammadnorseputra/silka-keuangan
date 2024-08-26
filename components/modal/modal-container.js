@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  Modal
-} from "@nextui-org/react";
+import { Modal } from "@nextui-org/react";
 
 export default function ModalContainer({
   isOpenModal = false,
@@ -19,28 +17,7 @@ export default function ModalContainer({
         onClose={onClose}
         isDismissable={false}
         isKeyboardDismissDisabled={true}>
-       {children}
-      </Modal>
-    </>
-  );
-}
-
-export const ModalLayanan = ({
-  isOpenModal = false,
-  onClose,
-  children,
-  ...args
-}) => {
-  return (
-    <>
-      <Modal
-        {...args}
-        aria-hidden="true"
-        isOpen={isOpenModal}
-        onClose={onClose}
-        isDismissable={false}
-        isKeyboardDismissDisabled={true}>
-       {children}
+        {children}
       </Modal>
     </>
   );

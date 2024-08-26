@@ -20,6 +20,15 @@ export default async function RenderGapokServices({ slug }) {
   const NIP = decrypt(slug[0], "bkpsdm");
 
   const getTppSilka = await getTppByNipppk(NIP);
+  if (getTppSilka.status === false) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4">
+        <ExclamationCircle className="size-8" />
+        <p className="text-gray-400">{getTppSilka.message}</p>
+      </div>
+    );
+  }
+
   const { bulan, tahun } = getTppSilka?.data;
   const PERIODE_TPP = `${bulan.toString().padStart(2, "0")}${tahun}`;
 

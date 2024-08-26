@@ -23,6 +23,7 @@ export default async function Page({ params }) {
         <div className="max-w-6xl mx-auto">
           <Card
             shadow="lg"
+            radius="none"
             className="max-h-screen overflow-y-auto my-auto h-screen">
             <CardHeader className="flex justify-between items-center">
               <div className="inline-flex items-center gap-4">

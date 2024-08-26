@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import ProgressProviders from "@/lib/ProgressBarProvider";
 import { FetchQueryProvider } from "@/lib/FetchQueryProvider";
 import SpinnerProvider from "@/lib/context/spinner-context";
+import ModalDaftarLayananProvider from "@/lib/context/modal-daftar-layanan-context";
 
 export const metadata = {
   title: "Welcome SILKa Keuangan Daerah",
@@ -26,9 +27,11 @@ export default function RootLayout({ children }) {
           validationBehavior="native">
           <ProgressProviders>
             <SpinnerProvider>
-              <ModalProvider>
-                <FetchQueryProvider>{children}</FetchQueryProvider>
-              </ModalProvider>
+              <ModalDaftarLayananProvider>
+                <ModalProvider>
+                  <FetchQueryProvider>{children}</FetchQueryProvider>
+                </ModalProvider>
+              </ModalDaftarLayananProvider>
             </SpinnerProvider>
           </ProgressProviders>
         </Providers>
