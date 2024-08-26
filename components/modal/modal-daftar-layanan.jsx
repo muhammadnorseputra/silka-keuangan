@@ -42,7 +42,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
         isDismissable={false}
         isKeyboardDismissDisabled={true}>
         <ModalContent className="max-w-2xl">
-          <ModalHeader className="flex flex-col bg-gray-50">
+          <ModalHeader className="flex flex-col bg-gray-50 dark:bg-gray-800">
             <div>Pilih Layanan Integrasi</div>
             <div className="text-sm text-gray-300 font-normal">
               Silahkan pilih menu layanan yang tersedia.

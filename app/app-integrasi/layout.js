@@ -15,7 +15,7 @@ export default function Layout({ children }) {
   const { unker } = getProfile?.data?.pegawai;
   return (
     <div className="flex justify-center bg-white dark:bg-slate-900">
-      <div className="card bg-gray-100  w-full md:w-8/12 mx-auto min-h-screen overflow-y-auto">
+      <div className="card bg-gray-100  dark:bg-slate-800 w-full md:w-8/12 mx-auto min-h-screen overflow-y-auto">
         <div className="card-header bg-blue-700 border-0 py-4">
           <div className="flex flex-row justify-start md:justify-between md:items-center mx-8 pb-4">
             <div className="inline-flex flex-col sm:flex-row justify-start items-start gap-3 pt-3">

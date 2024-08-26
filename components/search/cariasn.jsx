@@ -241,7 +241,7 @@ export const ListPegawai = ({ props }) => {
     <>
       {data?.map((row) => (
         <div key={row.nip}>
-          <div className="group w-full flex flex-col sm:flex-row justify-center items-start gap-x-6 mx-auto hover:bg-gray-100 hover:shadow-sm transition-all duration-100 rounded-lg p-3">
+          <div className="group w-full flex flex-col sm:flex-row justify-center items-start gap-x-6 mx-auto hover:bg-gray-100 dark:hover:bg-slate-700 hover:shadow-sm transition-all duration-100 rounded-lg p-3">
             <div>
               {row.photo ? (
                 <Avatar
