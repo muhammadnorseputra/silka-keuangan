@@ -5,7 +5,10 @@ export default function Loading() {
     <>
       <section className="w-full bg-blue-600 dark:bg-slate-800 h-screen">
         <div className="max-w-6xl mx-auto">
-          <Card shadow="lg" className="max-h-screen overflow-y-auto h-screen">
+          <Card
+            radius="none"
+            shadow="lg"
+            className="max-h-screen overflow-y-auto h-screen">
             <div className="flex gap-5 p-3">
               <div>
                 <Skeleton className="flex rounded-full w-12 h-12" />

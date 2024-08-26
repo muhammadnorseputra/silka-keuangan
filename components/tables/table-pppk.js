@@ -48,7 +48,9 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
   const [visibleColumns, setVisibleColumns] = useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-  const [selectedKeyUnor, setSelectedKeyUnor] = useState(1120);
+  const [selectedKeyUnor, setSelectedKeyUnor] = useState(
+    silka?.data?.pegawai?.unker_id
+  );
   const [statusFilter, setStatusFilter] = useState("all");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sortDescriptor, setSortDescriptor] = useState({

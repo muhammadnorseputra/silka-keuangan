@@ -317,8 +317,11 @@ export const TablePegawai = ({ unors, pegawais }) => {
     <>
       <ModalLayanan isOpenModal={isOpen} onClose={() => setIsOpen(false)} />
       <Table
-        isStriped
+        // isStriped
+        // isCompact
         isHeaderSticky
+        removeWrapper
+        selectionMode="single"
         className="relative"
         aria-label="Example static collection table"
         topContent={topContent}

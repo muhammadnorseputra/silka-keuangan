@@ -37,7 +37,7 @@ export default function Layout({ children }) {
               </div>
             </div>
             <div className="inline-flex justify-start mt-4 md:mt-0">
-              <BtnProfile size="lg" profile={getProfile} />
+              <BtnProfile size="md" profile={getProfile} />
             </div>
           </div>
         </div>

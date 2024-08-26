@@ -20,19 +20,19 @@ export default async function Page() {
     return (
       <>
         <CardModule
-          title="Daftar PNS"
+          title="Cari ASN"
+          icon="Search"
+          path="/app-integrasi/cariasn"
+        />
+        <CardModule
+          title="Nominatif PNS"
           icon="PersonVcard"
           path="/app-module/pegawai"
         />
         <CardModule
-          title="Daftar PPPK"
+          title="Nominatif PPPK"
           icon="Postcard"
           path="/app-module/pppk"
-        />
-        <CardModule
-          title="Cari ASN"
-          icon="Search"
-          path="/app-integrasi/cariasn"
         />
       </>
     );
@@ -43,7 +43,7 @@ export default async function Page() {
         <h1 className="text-2xl text-center font-bold ml-8 mt-8">
           Pilih Module 🔥
         </h1>
-        <section className="flex flex-wrap justify-center items-center gap-4 p-8">
+        <section className="grid grid-flow-row grid-cols-1 md:grid-cols-3 gap-4 p-8">
           {renderModule()}
         </section>
       </div>

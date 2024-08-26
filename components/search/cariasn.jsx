@@ -10,6 +10,7 @@ import {
   DocumentCurrencyDollarIcon,
   MagnifyingGlassCircleIcon,
   MagnifyingGlassPlusIcon,
+  PhotoIcon,
   UserCircleIcon,
   UserGroupIcon,
   UserPlusIcon,
@@ -93,14 +94,14 @@ export default function CariASN() {
         method="POST"
         autoComplete="off"
         noValidate
-        className="flex items-start w-10/12 bg-white rounded-lg shadow-lg border-gray-300 p-6 flex-wrap md:flex-nowrap">
+        className="flex items-start w-10/12 flex-wrap md:flex-nowrap">
         <Input
           type="search"
           placeholder="Masukan NIP atau NAMA"
           radius="none"
           size="lg"
           name="filter"
-          variant="flat"
+          variant="underlined"
           startContent={<MagnifyingGlassCircleIcon className="size-6" />}
           isInvalid={errors?.filter ? true : false}
           errorMessage={errors?.filter?.message && `${errors.filter.message}`}
@@ -119,7 +120,7 @@ export default function CariASN() {
           placeholder="Pilih jenis pegawai"
           size="sm"
           radius="none"
-          variant="flat"
+          variant="underlined"
           labelPlacement="inside"
           name="type"
           isInvalid={errors?.type ? true : false}
@@ -145,7 +146,7 @@ export default function CariASN() {
           isLoading={isPendingFn || isLoading || isSubmitting}
           spinner={
             <svg
-              className="animate-spin h-12 w-12 text-current"
+              className="animate-spin h-6 w-6 text-current"
               fill="none"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg">
@@ -174,12 +175,13 @@ export default function CariASN() {
           {isPendingFn || isLoading || isSubmitting ? "" : "Cari"}
         </Button>
       </form>
-      <Card className="mt-8 w-10/12 max-h-[500px] overflow-y-auto">
+      <Card className="my-8 w-10/12 max-h-[500px] overflow-y-auto">
         <ScrollShadow size={100} className="h-[500px]">
           <CardHeader className="sticky top-0">
             {
               //@ts-ignore
-              data?.status !== false && data?.status ? (<p className="font-bold">{data?.message}</p>
+              data?.status !== false && data?.status ? (
+                <p className="font-bold">{data?.message}</p>
               ) : (
                 ""
               )
@@ -239,10 +241,17 @@ export const ListPegawai = ({ props }) => {
     <>
       {data?.map((row) => (
         <div key={row.nip}>
-          <div className="w-full flex justify-center items-start gap-x-6 mx-auto hover:bg-gray-100 transition-all duration-100 rounded-lg p-3">
+          <div className="group w-full flex flex-col sm:flex-row justify-center items-start gap-x-6 mx-auto hover:bg-gray-100 hover:shadow-sm transition-all duration-100 rounded-lg p-3">
             <div>
               {row.photo ? (
                 <Avatar
+                  showFallback
+                  fallback={
+                    <PhotoIcon
+                      className="animate-pulse size-8 text-default-500"
+                      fill="currentColor"
+                    />
+                  }
                   size="lg"
                   src={`${process.env.NEXT_PUBLIC_SILKA_BASE_URL}/photo/${row.photo}`}
                 />
@@ -253,9 +262,10 @@ export const ListPegawai = ({ props }) => {
             <div className="w-full flex flex-col gap-1">
               <div className="font-bold">{row.nama_asn}</div>
               <h4>{polaNIP(row.nip)}</h4>
-              <div>{row.nama_unit_kerja}</div>
+              <div className="text-ellipsis">{row.nama_jabatan}</div>
+              <div className="text-ellipsis">{row.nama_unit_kerja}</div>
             </div>
-            <div className="items-center h-full">
+            <div className="hidden group-hover:block">
               <Button
                 onPress={() => {
                   setIsOpen(true);

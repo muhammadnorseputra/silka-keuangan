@@ -15,6 +15,7 @@ import {
 } from "@nextui-org/react";
 import { useModalContext } from "@/lib/context/modal-context";
 import ModalContainer from "../modal/modal-container";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 export const BtnProfile = ({ profile, size = "md" }) => {
   const { isOpen, setIsOpen } = useModalContext();
   const { picture, nama_lengkap, level } = profile?.data;
@@ -36,6 +37,13 @@ export const BtnProfile = ({ profile, size = "md" }) => {
         backdrop="blur">
         <DropdownTrigger>
           <Avatar
+            showFallback
+            fallback={
+              <PhotoIcon
+                className="animate-pulse size-8 text-default-500"
+                fill="currentColor"
+              />
+            }
             isBordered
             as="button"
             className="transition-transform"
@@ -64,9 +72,8 @@ export const BtnProfile = ({ profile, size = "md" }) => {
         backdrop="blur"
         placement="center"
         isOpenModal={isOpen}
-        onClose={() => setIsOpen(false)}
-      >
-         <ModalContent>
+        onClose={() => setIsOpen(false)}>
+        <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
             System says !
           </ModalHeader>
@@ -74,7 +81,10 @@ export const BtnProfile = ({ profile, size = "md" }) => {
             <p>Apakah anda yakin akan keluar dari system ?</p>
           </ModalBody>
           <ModalFooter>
-            <Button color="danger" variant="light" onPress={() => setIsOpen(false)}>
+            <Button
+              color="danger"
+              variant="light"
+              onPress={() => setIsOpen(false)}>
               Tidak
             </Button>
             <Button color="primary" onPress={handleLogout}>

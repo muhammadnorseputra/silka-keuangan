@@ -36,9 +36,12 @@ async function Page({ searchParams }) {
     <>
       <section className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
         <div className="max-w-6xl mx-auto">
-          <Card shadow="lg" className="max-h-screen overflow-y-auto h-screen">
-            <CardHeader className="flex justify-between items-center">
-              <div className="inline-flex items-center gap-3">
+          <Card
+            radius="none"
+            shadow="lg"
+            className="max-h-screen overflow-y-auto h-screen">
+            <CardHeader className="flex justify-between items-start sm:items-center">
+              <div className="inline-flex items-start sm:items-center gap-3">
                 <BtnBackNextUi goTo="/app-integrasi/dashboard" />
                 <div className="flex flex-col">
                   <div className="text-xl uppercase">DATA Pegawai</div>

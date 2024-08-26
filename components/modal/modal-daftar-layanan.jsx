@@ -33,18 +33,27 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
     <>
       <Modal
         aria-hidden="true"
-        backdrop="opaque"
+        backdrop="blur"
         isOpen={isOpenModal}
         onClose={onClose}
         size="full"
+        radius="none"
+        shadow="lg"
         isDismissable={false}
         isKeyboardDismissDisabled={true}>
-        <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">
-            Pilih Layanan Integrasi
+        <ModalContent className="max-w-2xl">
+          <ModalHeader className="flex flex-col bg-gray-50">
+            <div>Pilih Layanan Integrasi</div>
+            <div className="text-sm text-gray-300 font-normal">
+              Silahkan pilih menu layanan yang tersedia.
+            </div>
           </ModalHeader>
           <ModalBody>
-            <Listbox aria-label="Actions">
+            <Listbox
+              aria-label="Actions"
+              variant="bordered"
+              color="primary"
+              selectionMode="single">
               <ListboxSection title="Peremajaan" showDivider>
                 <ListboxItem
                   key="peremajaan"
@@ -63,7 +72,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }}
                   description="Peremajaan Data"
                   startContent={
-                    <UserPlusIcon className="size-6 text-blue-600" />
+                    <UserPlusIcon className="size-8 text-blue-600" />
                   }>
                   Peremajaan
                 </ListboxItem>
@@ -81,7 +90,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }}
                   description="Verifikasi dan Validasi"
                   startContent={
-                    <DocumentCheckIcon className="size-6 text-green-500" />
+                    <DocumentCheckIcon className="size-8 text-green-500" />
                   }>
                   Verval Data
                 </ListboxItem>
@@ -102,7 +111,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }}
                   description="Verifikasi dan Kirim"
                   startContent={
-                    <DocumentCurrencyDollarIcon className="size-6 text-red-400" />
+                    <DocumentCurrencyDollarIcon className="size-8 text-red-400" />
                   }>
                   Proses KGB
                 </ListboxItem>
@@ -120,7 +129,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }}
                   description="Proses Tambahan Penghasilan Pegawai"
                   startContent={
-                    <DocumentCurrencyDollarIcon className="size-6 text-amber-600" />
+                    <DocumentCurrencyDollarIcon className="size-8 text-amber-600" />
                   }>
                   Proses TPP
                 </ListboxItem>
