@@ -7,18 +7,32 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
+  DropdownSection,
   DropdownTrigger,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Switch,
+  useSwitch,
 } from "@nextui-org/react";
 import { useModalContext } from "@/lib/context/modal-context";
 import ModalContainer from "../modal/modal-container";
-import { PhotoIcon } from "@heroicons/react/24/solid";
+import { MoonIcon, PhotoIcon, SunIcon } from "@heroicons/react/24/solid";
+import { useTheme } from "next-themes";
 export const BtnProfile = ({ profile, size = "md" }) => {
   const { isOpen, setIsOpen } = useModalContext();
+  const { theme, setTheme } = useTheme();
   const { picture, nama_lengkap, level } = profile?.data;
+
+  const handleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  };
+
   const handleLogout = async () => {
     deleteCookie("USER_SILKA");
     let isCookie = hasCookie("USER_SILKA");
@@ -34,7 +48,8 @@ export const BtnProfile = ({ profile, size = "md" }) => {
         aria-haspopup="dialog"
         aria-label="Menu"
         placement="bottom-end"
-        backdrop="blur">
+        // backdrop="blur"
+        closeOnSelect={true}>
         <DropdownTrigger>
           <Avatar
             showFallback
@@ -54,14 +69,48 @@ export const BtnProfile = ({ profile, size = "md" }) => {
             src={picture}
           />
         </DropdownTrigger>
-        <DropdownMenu aria-label="Profile Actions" variant="solid">
-          <DropdownItem key="profile" className="h-14 gap-2">
+        <DropdownMenu
+          aria-label="Profile Actions"
+          aria-hidden="true"
+          variant="solid"
+          closeOnSelect={false}>
+          <DropdownItem
+            key="profile"
+            className="h-14 gap-2"
+            textValue="profile">
             <p className="font-semibold">Signed in as ({level})</p>
             <p className="font-semibold">{nama_lengkap}</p>
           </DropdownItem>
+          <DropdownSection
+            title="Preferences"
+            aria-label="preferences"
+            showDivider>
+            <DropdownItem
+              key="mode"
+              color="default"
+              closeOnSelect={false}
+              textValue="mode">
+              <Switch
+                isSelected={theme === "dark" ? true : false}
+                size="sm"
+                color="warning"
+                name="mode"
+                onChange={handleTheme}
+                thumbIcon={({ isSelected }) =>
+                  isSelected ? (
+                    <SunIcon className="size-6 text-amber-400" />
+                  ) : (
+                    <MoonIcon className="size-6" />
+                  )
+                }>
+                Ubah Tampilan UI
+              </Switch>
+            </DropdownItem>
+          </DropdownSection>
           <DropdownItem
             key="logout"
             color="danger"
+            textValue="logout"
             onPress={() => setIsOpen(true)}>
             Log Out
           </DropdownItem>
