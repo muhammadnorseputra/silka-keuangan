@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { hasSessionServer } from "../server-session";
 
-export default function Layout({ children }) {
+export default function Layout({ children, modal }) {
   // cek session silka dan sigapok
   const isLoginGapok = hasSessionServer("USER_GAPOK");
   const isLoginSilka = hasSessionServer("USER_SILKA");
@@ -15,7 +15,9 @@ export default function Layout({ children }) {
   return (
     <>
       <section>
-        <div className="mx-auto w-full h-screen">{children}</div>
+        <div className="mx-auto w-full h-screen">
+          {children} {modal}
+        </div>
       </section>
     </>
   );

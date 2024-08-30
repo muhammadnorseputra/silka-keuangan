@@ -17,6 +17,7 @@ import DataNotFound from "@/components/errors/DataNotFound";
 
 export default async function Page({ params, searchParams }) {
   const sigapok = useSessionServer("USER_GAPOK");
+  const session_silka = useSessionServer("USER_PEGAWAI");
 
   const getNip = decrypt(params?.slug[0], "bkpsdm");
 
@@ -34,7 +35,13 @@ export default async function Page({ params, searchParams }) {
       );
     }
 
-    return <FormPeremajaan sigapok={sigapok} pegawais={getPegawais} />;
+    return (
+      <FormPeremajaan
+        sigapok={sigapok}
+        pegawais={getPegawais}
+        session_silka={session_silka}
+      />
+    );
   };
 
   return (

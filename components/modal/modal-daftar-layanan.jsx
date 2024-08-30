@@ -36,15 +36,15 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
         backdrop="blur"
         isOpen={isOpenModal}
         onClose={onClose}
-        size="full"
-        radius="none"
+        size="lg"
+        // radius="none"
         shadow="lg"
-        isDismissable={false}
+        isDismissable={true}
         isKeyboardDismissDisabled={true}>
-        <ModalContent className="max-w-2xl">
+        <ModalContent>
           <ModalHeader className="flex flex-col bg-gray-50 dark:bg-gray-800">
             <div>Pilih Layanan Integrasi</div>
-            <div className="text-sm text-gray-300 font-normal">
+            <div className="text-sm text-gray-400 font-normal">
               Silahkan pilih menu layanan yang tersedia.
             </div>
           </ModalHeader>

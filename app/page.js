@@ -12,6 +12,7 @@ export default function Home() {
             </span>
             <Link
               href="/auth"
+              as="/?m=auth"
               className="w-8 h-8 rounded-full flex justify-center items-center bg-indigo-600">
               <svg
                 width="17"

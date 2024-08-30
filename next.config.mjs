@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: "silka.balangankab.go.id",
+        hostname: "36.91.72.99",
         pathname: "**",
       },
       {

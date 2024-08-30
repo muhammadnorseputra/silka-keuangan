@@ -41,7 +41,7 @@ const {
   Chip,
 } = require("@nextui-org/react");
 
-const FormPeremajaan = ({ sigapok, pegawais }) => {
+const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const { isOpen, setIsOpen } = useModalContext();
@@ -64,8 +64,8 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     fid_golru_skr,
     fid_unit_kerja,
     fid_status_kawin,
-    // makertotal_tahun,
-    // makertotal_bulan,
+    makertotal_tahun,
+    makertotal_bulan,
     nama_agama,
     nama_tingkat_pendidikan,
     alamat_ktp,
@@ -85,6 +85,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
     // gapok,
     update_at,
     tmt_capeg,
+    tgl_spmt,
   } = pegawais;
 
   const {
@@ -186,8 +187,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
       no_telpon: whatsapp,
       no_ktp,
       npwp: no_npwp,
-
-      // tmt_skmt: pegawais.tmt_spmt,
+      tmt_skmt: tgl_spmt,
       kode_status_kawin: fid_status_kawin,
       jumlah_sutri,
       jumlah_anak,
@@ -203,7 +203,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
       kode_pangkat: data.kode_pangkat.split("-")[0],
       // @ts-ignore
       kode_status_pegawai: data.kode_stapeg.split("-")[0],
-      created_by: "INTEGRASI",
+      created_by: session_silka?.data.nama_lengkap,
     };
 
     // @ts-ignore
@@ -616,7 +616,7 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                       </AutocompleteItem>
                     ))}
                   </Autocomplete>
-                  {/* <Input
+                  <Input
                     isReadOnly
                     size="lg"
                     className="col-span-4 sm:col-span-1"
@@ -659,29 +659,24 @@ const FormPeremajaan = ({ sigapok, pegawais }) => {
                         message: "Tidak valid, hanya boleh angka",
                       },
                     })}
-                  /> */}
-                  {/* <Input
+                  />
+                  <Input
                     isReadOnly
                     size="lg"
                     className="col-span-4 sm:col-span-1"
-                    placeholder="Gaji Pokok"
+                    placeholder="TMT SPMT"
                     labelPlacement="outside"
                     type="text"
-                    label="Gaji Pokok"
-                    name="gapok"
+                    label="TMT SPMT"
+                    name="tgl_spmt"
                     variant="flat"
-                    defaultValue={gapok}
+                    defaultValue={tgl_spmt}
                     errorMessage={
-                      errors?.gapok?.message && `${errors.gapok.message}`
+                      errors?.tgl_spmt?.message && `${errors.tgl_spmt.message}`
                     }
-                    isInvalid={errors?.gapok ? true : false}
-                    {...register("gapok", {
-                      pattern: {
-                        value: /^\d+$/,
-                        message: "Tidak valid, hanya boleh angka",
-                      },
-                    })}
-                  /> */}
+                    isInvalid={errors?.tgl_spmt ? true : false}
+                    {...register("tgl_spmt")}
+                  />
                 </CardBody>
               </Card>
             </Tab>
