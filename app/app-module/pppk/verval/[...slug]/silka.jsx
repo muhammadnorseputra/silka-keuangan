@@ -34,11 +34,13 @@ export default function SilkaDataP3k({ access_token, nip }) {
   const { mutate, isPending, isError, error } = useMutation({
     mutationKey: ["peremajaanPppk"],
     mutationFn: async (body) => {
-      await UpdateSyncPPPK({
-        nipppk: nip,
-        status: 'APPROVE'
-      })
       const res = await TambahPegawaiPppk(access_token, body);
+      if (res.success === true) {
+        await UpdateSyncPPPK({
+          nipppk: nip,
+          status: "APPROVE",
+        });
+      }
       return res;
     },
   });
@@ -106,7 +108,8 @@ export default function SilkaDataP3k({ access_token, nip }) {
         toast.success(response.message, {
           id: "Toaster",
         });
-        revalidateTag("datap3k")
+
+        revalidateTag("datap3k");
         queryClient.invalidateQueries({
           queryKey: ["getDataPppkBySilka"],
         });

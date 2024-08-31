@@ -25,7 +25,7 @@ import { PostDataPegawai } from "@/dummy/post-data-pegawai";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next-nprogress-bar";
 import SuccessUpdated from "../alert/SuccessUpdated";
-const {
+import {
   Tabs,
   CardBody,
   Card,
@@ -39,7 +39,9 @@ const {
   Textarea,
   Code,
   Chip,
-} = require("@nextui-org/react");
+  DatePicker,
+  DateInput,
+} from "@nextui-org/react";
 
 const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
   const router = useRouter();
@@ -187,12 +189,11 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
       no_telpon: whatsapp,
       no_ktp,
       npwp: no_npwp,
-      tmt_skmt: tgl_spmt,
+      // @ts-ignore
+      tmt_skmt: data.tgl_spmt,
       kode_status_kawin: fid_status_kawin,
       jumlah_sutri,
       jumlah_anak,
-      // @ts-ignore
-      // kode_status_pegawai: data.kode_stapeg,
       kode_satker: simgaji_id_satker,
       // @ts-ignore
       kode_skpd: simgaji_id_skpd,
@@ -616,7 +617,7 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
                       </AutocompleteItem>
                     ))}
                   </Autocomplete>
-                  <Input
+                  {/* <Input
                     isReadOnly
                     size="lg"
                     className="col-span-4 sm:col-span-1"
@@ -659,14 +660,12 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
                         message: "Tidak valid, hanya boleh angka",
                       },
                     })}
-                  />
+                  /> */}
                   <Input
-                    isReadOnly
+                    isRequired
                     size="lg"
                     className="col-span-4 sm:col-span-1"
-                    placeholder="TMT SPMT"
                     labelPlacement="outside"
-                    type="text"
                     label="TMT SPMT"
                     name="tgl_spmt"
                     variant="flat"
@@ -675,7 +674,12 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
                       errors?.tgl_spmt?.message && `${errors.tgl_spmt.message}`
                     }
                     isInvalid={errors?.tgl_spmt ? true : false}
-                    {...register("tgl_spmt")}
+                    {...register("tgl_spmt", {
+                      pattern: {
+                        value: /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/,
+                        message: "Date input tidak valid",
+                      },
+                    })}
                   />
                 </CardBody>
               </Card>

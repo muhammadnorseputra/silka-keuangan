@@ -4,7 +4,7 @@ import { UpdateSync } from "@/dummy/post-data-tpp";
 import { kirimTPP } from "@/dummy/sigapok-post-tpp";
 import revalidateTag from "@/lib/revalidateTags";
 import { Button, Divider } from "@nextui-org/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { CloudArrowUp } from "react-bootstrap-icons";
 import toast from "react-hot-toast";
@@ -20,15 +20,18 @@ export const BtnKirimTPP = ({
   simgaji_id_satker,
   silka,
 }) => {
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: async (body) => {
-      // Update status is_sync pada table tppng (silka)
-      await UpdateSync({
-        id,
-        is_sync: '1'
-      })
       // Kirim TPP ke sigapok
       const response = await kirimTPP(access_token, body);
+      if (response.success === true) {
+        // Update status is_sync pada table tppng (silka)
+        await UpdateSync({
+          id,
+          is_sync: "1",
+        });
+      }
       return response;
     },
     mutationKey: ["KirimTPP"],
@@ -71,10 +74,14 @@ export const BtnKirimTPP = ({
         toast.success(data.message, {
           id: "Toaster",
         });
+        queryClient.invalidateQueries({
+          queryKey: ["queryTPP"],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["queryTPPPK"],
+        });
         revalidateTag("datapegawai");
         revalidateTag("datap3k");
-        revalidateTag("getTppByNip");
-        revalidateTag("getTppSigapok");
       },
       onError: (err) => {
         toast.error(err.message, {

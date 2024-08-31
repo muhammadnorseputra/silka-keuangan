@@ -55,14 +55,16 @@ export default function BtnKgbConfirm({
   const { mutate, isPending } = useMutation({
     mutationKey: ["updatePerubahanData"],
     mutationFn: async (body) => {
-      // update status is_sync pada riwayat_kgb
-      await UpdateSyncKGB({
-        id,
-        is_sync: '1',
-        type: 'PNS'
-      })
       // kirim perubahan data ke sigapok
       const response = await savePerubahanData(access_token, body);
+      if (response.success === true) {
+        // update status is_sync pada riwayat_kgb
+        await UpdateSyncKGB({
+          id,
+          is_sync: "1",
+          type: "PNS",
+        });
+      }
       return response;
     },
   });
