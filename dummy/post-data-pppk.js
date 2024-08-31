@@ -44,3 +44,19 @@ export const RollbackPPPK = async (body) => {
   const result = await req.json();
   return result;
 };
+
+export const UpdateSyncPPPK = async (body) => {
+  const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
+  const req = await fetch(
+    `${url}/services/PegawaiWithBasicAuth/updateStatusValidasiPppk`,
+    {
+      method: "POST",
+      cache: "no-store",
+      headers,
+      body: JSON.stringify(body),
+    }
+  );
+
+  const result = await req.json();
+  return result;
+};

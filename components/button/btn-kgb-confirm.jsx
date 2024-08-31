@@ -9,6 +9,8 @@ import { savePerubahanData } from "@/dummy/sigapok-post-perubahan";
 import { useRouter } from "next-nprogress-bar";
 import { useEffect } from "react";
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
+import { UpdateSyncKGB } from "@/dummy/post-data-tpp";
+import revalidateTag from "@/lib/revalidateTags";
 export default function BtnKgbConfirm({
   dataSilka: kgb,
   session_silka,
@@ -17,6 +19,7 @@ export default function BtnKgbConfirm({
   const router = useRouter();
   const { isOpen, setIsOpen } = useModalContext();
   const {
+    id,
     nip_lama,
     nip,
     nama,
@@ -52,6 +55,13 @@ export default function BtnKgbConfirm({
   const { mutate, isPending } = useMutation({
     mutationKey: ["updatePerubahanData"],
     mutationFn: async (body) => {
+      // update status is_sync pada riwayat_kgb
+      await UpdateSyncKGB({
+        id,
+        is_sync: '1',
+        type: 'PNS'
+      })
+      // kirim perubahan data ke sigapok
       const response = await savePerubahanData(access_token, body);
       return response;
     },
@@ -114,10 +124,10 @@ export default function BtnKgbConfirm({
           });
           return;
         }
-
         toast.success(data.message, {
           id: "Toaster",
         });
+        revalidateTag("datapegawai");
         setIsOpen(false);
         router.refresh();
       },

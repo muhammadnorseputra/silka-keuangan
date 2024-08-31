@@ -2,10 +2,11 @@
 import { ButtonPeremajaanP3k } from "@/components/button/btn-peremajaan";
 import { ModalPeremajaanApprove } from "@/components/modal/modal-peremajaan-approve";
 import { getPPPKByNipppk } from "@/dummy/data-pppk-by-nipppk";
-import { RollbackPPPK } from "@/dummy/post-data-pppk";
+import { RollbackPPPK, UpdateSyncPPPK } from "@/dummy/post-data-pppk";
 import { TambahPegawaiPppk } from "@/dummy/sigapok-post-pppk";
 import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
 import { useModalContext } from "@/lib/context/modal-context";
+import revalidateTag from "@/lib/revalidateTags";
 import { HandThumbUpIcon, UserMinusIcon } from "@heroicons/react/24/solid";
 import { Button, Divider, Skeleton } from "@nextui-org/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -33,6 +34,10 @@ export default function SilkaDataP3k({ access_token, nip }) {
   const { mutate, isPending, isError, error } = useMutation({
     mutationKey: ["peremajaanPppk"],
     mutationFn: async (body) => {
+      await UpdateSyncPPPK({
+        nipppk: nip,
+        status: 'APPROVE'
+      })
       const res = await TambahPegawaiPppk(access_token, body);
       return res;
     },
@@ -75,7 +80,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
     );
   }
 
-  if (row.status_data !== "VERIFIKASI") {
+  if (row.status_data === "ENTRI") {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
         <ExclamationCircle className="size-8" />
@@ -101,6 +106,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
         toast.success(response.message, {
           id: "Toaster",
         });
+        revalidateTag("datap3k")
         queryClient.invalidateQueries({
           queryKey: ["getDataPppkBySilka"],
         });
@@ -161,6 +167,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
           id: "Toaster",
         });
         setIsOpen(false);
+        revalidateTag("datap3k");
         queryClient.invalidateQueries({
           queryKey: ["getDataPppk"],
         });

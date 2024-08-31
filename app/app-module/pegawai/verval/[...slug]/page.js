@@ -34,7 +34,7 @@ export default async function Page({ params }) {
 
   const namalengkap = `${getPegawais?.gelar_depan} ${getPegawais?.nama} ${getPegawais?.gelar_belakang}`;
   const renderSilkaService = () => {
-    if (getPegawais.status_data !== "VERIFIKASI") {
+    if (getPegawais.status_data === "ENTRI") {
       return (
         <div className="flex flex-col items-center justify-center gap-4">
           <ExclamationCircle className="size-8" />
@@ -134,7 +134,7 @@ export default async function Page({ params }) {
   // };
 
   const isVerifikasi = () => {
-    if (getPegawais.status_data !== "VERIFIKASI") {
+    if (getPegawais.status_data === "ENTRI") {
       return;
     }
 

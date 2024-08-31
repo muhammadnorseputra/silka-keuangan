@@ -10,6 +10,9 @@ export const getTppByNip = async (nip_pegawai) => {
       method: "GET",
       cache: "no-store",
       headers,
+      next: {
+        tags: ["getTppByNip"]
+      }
     }
   );
 
@@ -24,6 +27,9 @@ export const getTppByNipppk = async (nip_pppk) => {
     method: "GET",
     cache: "no-store",
     headers,
+    next: {
+      tags: ["getTPPByNipppk"]
+    }
   });
 
   const result = await req.json();

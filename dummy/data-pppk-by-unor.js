@@ -5,7 +5,7 @@ export const getPppkByUnor = async (unor_id) => {
   try {
     const req = await fetch(`${url}/services/pppk`, {
       method: "POST",
-      cache: "force-cache",
+      cache: "no-store",
       headers,
       body: JSON.stringify({
         unor_id,

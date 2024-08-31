@@ -20,7 +20,6 @@ async function Page({ searchParams }) {
     : unker_id;
   const getUnorByRole = await dataUnorByRole(nip, level);
   const getPegawaiByUnorId = await getPegawaiByUnor(getIdUnker);
-
   const renderBody = () => {
     if (getUnorByRole.status === false) {
       return <NoInternet message={getUnorByRole.message} />;

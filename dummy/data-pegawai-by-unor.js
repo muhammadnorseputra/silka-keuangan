@@ -7,7 +7,7 @@ export const getPegawaiByUnor = async (unorid) => {
       `${url}/services/PegawaiWithBasicAuth/getPegawaiByUnor`,
       {
         method: "POST",
-        cache: "force-cache",
+        cache: "no-store",
         headers,
         body: JSON.stringify({
           unor_id: unorid,
