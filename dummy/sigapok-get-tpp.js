@@ -27,3 +27,30 @@ export const getTppSigapok = async (token, nip, periode) => {
     };
   }
 };
+
+export const getTppSigapokBySkpd = async (token, kode_skpd, periode) => {
+  const url = process.env.NEXT_PUBLIC_GAPOK_BASE_URL;
+  const path = process.env.NEXT_PUBLIC_GAPOK_PATH;
+  const headers = sigapok_headers(token);
+  try {
+    const req = await fetch(
+      `${url}/${path}/get-kolaborasi-tpp?KD_SKPD=${kode_skpd}&PERIODE_TPP=${periode}`,
+      {
+        method: "GET",
+        cache: "no-store",
+        headers,
+        next: {
+          tags: ["getTppSigapokBySkpd"],
+        },
+      }
+    );
+
+    const result = await req.json();
+    return result;
+  } catch (err) {
+    return {
+      status: false,
+      message: `Gagal koneksi ke server ${url} (${err})`,
+    };
+  }
+};

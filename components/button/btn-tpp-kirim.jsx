@@ -80,6 +80,9 @@ export const BtnKirimTPP = ({
         queryClient.invalidateQueries({
           queryKey: ["queryTPPPK"],
         });
+        queryClient.invalidateQueries({
+          queryKey: ["count.sigapok.tpp"],
+        });
         revalidateTag("datapegawai");
         revalidateTag("datap3k");
       },

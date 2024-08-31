@@ -1,3 +1,4 @@
+"use server";
 import { headers } from "@/lib/req-headers";
 
 export const getPegawaiByUnor = async (unorid) => {

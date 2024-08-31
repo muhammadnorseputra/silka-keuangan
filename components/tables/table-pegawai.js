@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useMemo } from "react";
+import { useCallback, useState, useMemo, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -38,12 +38,14 @@ import { encrypt } from "@/helpers/encrypt";
 import ModalLayanan from "../modal/modal-daftar-layanan";
 import { useModalDaftarLayananContext } from "@/lib/context/modal-daftar-layanan-context";
 import { polaNIP } from "@/helpers/polanip";
+import { useQueryClient } from "@tanstack/react-query";
 // import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 
 const INITIAL_VISIBLE_COLUMNS = ["nip", "nama", "jabatan", "aksi"];
 
 export const TablePegawai = ({ unors, pegawais }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { isOpen, setIsOpen, setData, setJenis } =
     useModalDaftarLayananContext();
   const { data: datapegawai } = pegawais;
@@ -251,6 +253,15 @@ export const TablePegawai = ({ unors, pegawais }) => {
     },
     [router]
   );
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["count.sigapok.tpp"],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["count.silka.tpp"],
+    });
+  });
 
   const onClear = useCallback(() => {
     setFilterValue("");

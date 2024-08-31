@@ -8,6 +8,7 @@ import { decrypt } from "@/helpers/encrypt";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useSessionServer } from "../server-session";
 import NoInternet from "@/components/errors/NoInternet";
+import ProgresTpp from "@/components/proggres/tpp";
 
 async function Page({ searchParams }) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -30,7 +31,6 @@ async function Page({ searchParams }) {
       </>
     );
   };
-
   return (
     <>
       <section className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
@@ -51,7 +51,10 @@ async function Page({ searchParams }) {
               </div>
               <BtnProfile profile={silka_session} />
             </CardHeader>
-            <CardBody>{renderBody()}</CardBody>
+            <CardBody>
+              {/* <ProgresTpp KODE_SKPD_SIMPEG={unker_id} /> */}
+              {renderBody()}
+            </CardBody>
           </Card>
         </div>
       </section>

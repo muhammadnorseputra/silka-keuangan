@@ -19,6 +19,7 @@ import { useRouter } from "next-nprogress-bar";
 import { useCallback } from "react";
 import { PlaceholderBar } from "../skeleton/placeholder-bar";
 import { BtnKirimTPP } from "../button/btn-tpp-kirim";
+import { getTppSigapokBySkpd } from "@/dummy/sigapok-get-tpp";
 
 export default function ModalInterceptTppPegawai({ params }) {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function ModalInterceptTppPegawai({ params }) {
   const [slug] = params.slug;
 
   const NIP = decrypt(slug, "bkpsdm");
+
   const {
     data: queryTPP,
     isLoading,
@@ -55,7 +57,7 @@ export default function ModalInterceptTppPegawai({ params }) {
     } = queryTPP?.data;
     return (
       <>
-        <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-12">
+        <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-6">
           <div>
             <div className="text-gray-400">NIP</div>
             <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
@@ -67,7 +69,7 @@ export default function ModalInterceptTppPegawai({ params }) {
             </div>
           </div>
         </div>
-        <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-12">
+        <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-6">
           <div>
             <div className="text-gray-400">BULAN</div>
             <div className="font-bold">{bulan ?? "-"}</div>

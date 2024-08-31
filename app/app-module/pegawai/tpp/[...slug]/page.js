@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { PlaceholderBar } from "@/components/skeleton/placeholder-bar";
 import RenderSilkaService from "./silka";
 import RenderGapokServices from "./sigapok";
+import ProgresTpp from "@/components/proggres/tpp";
 
 export const revalidate = 0;
 
@@ -15,7 +16,6 @@ export default async function Page({ params }) {
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }
-  // const namalengkap = `${resultDataTpp?.data?.gelar_depan} ${resultDataTpp?.data?.nama} ${resultDataTpp?.data?.gelar_belakang}`;
 
   return (
     <>
