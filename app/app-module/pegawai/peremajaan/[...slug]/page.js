@@ -13,6 +13,7 @@ import { decrypt } from "@/helpers/encrypt";
 import { FormPeremajaan } from "@/components/forms/form-peremajaan";
 import { getPegawaiByNip } from "@/dummy/data-pegawai-by-nip";
 import DataNotFound from "@/components/errors/DataNotFound";
+import { AlertWarning } from "@/components/alert";
 // import { Error500 } from "@/components/errors/500";
 
 export default async function Page({ params, searchParams }) {
@@ -52,8 +53,8 @@ export default async function Page({ params, searchParams }) {
             radius="none"
             shadow="lg"
             className="max-h-screen overflow-y-auto">
-            <CardHeader className="flex justify-between items-center">
-              <div className="inline-flex items-center gap-4">
+            <CardHeader className="flex flex-col justify-between items-start gap-y-3">
+              <div className="inline-flex items-start gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
                   <p className="text-xl flex flex-col">
@@ -66,6 +67,10 @@ export default async function Page({ params, searchParams }) {
                   </p>
                 </div>
               </div>
+              <AlertWarning
+                title="Perhatian"
+                message="Jika terdapat kesalahan data  pada section ini, silahkan hubungi BKPSDM untuk melakukan update data tersebut"
+              />
             </CardHeader>
             <CardBody>{renderForm()}</CardBody>
           </Card>

@@ -88,6 +88,7 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
     update_at,
     tmt_capeg,
     tgl_spmt,
+    tmt_skmt,
   } = pegawais;
 
   const {
@@ -96,7 +97,7 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
     isLoading: isLoadingSkpd,
     isFetching: isFetchingSkpd,
     isError: isErrorSkpd,
-  } = useSkpds(sigapok);
+  } = useSkpds(sigapok, nip);
 
   const {
     data: statusPegawais,
@@ -104,7 +105,7 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
     isLoading: isLoadingStatusPegawai,
     isFetching: isFetchingStatusPegawai,
     isError: isErrorStatusPegawai,
-  } = useStatusPegawai(sigapok);
+  } = useStatusPegawai(sigapok, nip);
 
   const {
     data: satkers,
@@ -112,7 +113,7 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
     isLoading: isLoadingSatkers,
     isFetching: isFetchingSatkers,
     isError: isErrorSatkers,
-  } = useSatkers(sigapok);
+  } = useSatkers(sigapok, nip);
 
   const {
     data: jenisPegawais,
@@ -120,7 +121,7 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
     isLoading: isLoadingJenisPegawai,
     isFetching: isFetchingJenisPegawai,
     isError: isErrorJenisPegawai,
-  } = useJenisPegawai(sigapok);
+  } = useJenisPegawai(sigapok, nip);
 
   const {
     data: pangkats,
@@ -128,7 +129,7 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
     isLoading: isLoadingPangkat,
     isFetching: isFetchingPangkat,
     isError: isErrorPangkat,
-  } = usePangkat(sigapok);
+  } = usePangkat(sigapok, nip);
 
   // const {
   //   data: banks,
@@ -285,12 +286,6 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
                 </div>
               }>
               <Card>
-                <CardHeader>
-                  <AlertWarning
-                    title="Perhatian"
-                    message="Jika terdapat kesalahan data pribadi pada section ini, silahkan hubungi BKPSDM untuk melakukan update data tersebut"
-                  />
-                </CardHeader>
                 <CardBody className="grid grid-flow-row md:grid-cols-3 gap-6 pt-8 px-6">
                   <Input
                     isReadOnly
@@ -663,13 +658,14 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
                   /> */}
                   <Input
                     isRequired
+                    isReadOnly
                     size="lg"
                     className="col-span-4 sm:col-span-1"
                     labelPlacement="outside"
                     label="TMT SPMT"
                     name="tgl_spmt"
                     variant="flat"
-                    defaultValue={tgl_spmt}
+                    defaultValue={tmt_skmt ?? tgl_spmt}
                     errorMessage={
                       errors?.tgl_spmt?.message && `${errors.tgl_spmt.message}`
                     }
@@ -678,6 +674,10 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
                       pattern: {
                         value: /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/,
                         message: "Date input tidak valid",
+                      },
+                      required: {
+                        value: true,
+                        message: "TMT SPMT Wajib ditambahkan.",
                       },
                     })}
                   />

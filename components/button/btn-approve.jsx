@@ -47,7 +47,7 @@ export const BtnApprove = ({
     zakat_dg: 0,
     PENDIDIKAN: row.nama_tingkat_pendidikan,
     TMTCAPEG: row.tmt_capeg,
-    TMTSKMT: row.tgl_spmt,
+    TMTSKMT: row.tmt_skmt,
     KDSTAWIN: "1",
     JISTRI: Number(row.jumlah_sutri), //jika laki = jumlah_istri, jika perempuan = jumlah suami
     JANAK: Number(row.jumlah_anak),
