@@ -1,6 +1,8 @@
 "use client";
 
+import { UpdateSyncPPPK } from "@/dummy/post-data-pppk";
 import { DeleteP3k } from "@/dummy/sigapok-delete-pppk";
+import revalidateTag from "@/lib/revalidateTags";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { Button, Divider } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -13,6 +15,12 @@ export const BtnRollBackPPPK = ({ sigapok, pppk }) => {
   const { mutate, isPending } = useMutation({
     mutationFn: async (req) => {
       const response = await DeleteP3k(sigapok.access_token, req);
+      if (response.success === true) {
+        await UpdateSyncPPPK({
+          nipppk: pppk.data.NIP,
+          status: "VERIFIKASI",
+        });
+      }
       return response;
     },
   });
@@ -37,6 +45,7 @@ export const BtnRollBackPPPK = ({ sigapok, pppk }) => {
         toast.success(res.message, {
           id: "Toaster",
         });
+        revalidateTag("datap3k");
         queryClient.invalidateQueries({
           queryKey: ["getDataPppk"],
         });
