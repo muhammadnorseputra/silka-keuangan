@@ -2,11 +2,10 @@
 import { getTppSigapokBySkpd } from "@/dummy/sigapok-get-tpp";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "@/lib/session";
-import { Progress, Skeleton } from "@nextui-org/react";
-import { getPegawaiByUnor } from "@/dummy/data-pegawai-by-unor";
-import { useEffect, useState } from "react";
+import { Progress } from "@nextui-org/react";
 import { getSkpdSigapokByKodeSimpeg } from "@/dummy/sigapok-get-skpd";
 import { getPeriodeTPP } from "@/dummy/data-tpp-periode";
+import { getPppkByUnor } from "@/dummy/data-pppk-by-unor";
 
 export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
   const sigapok = useSession("USER_GAPOK");
@@ -62,13 +61,14 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
   } = useQuery({
     queryKey: ["count.silka.tpp", queryGetKodeSkpd?.data[0]],
     queryFn: async () => {
-      const getPegawaiByUnorId = await getPegawaiByUnor(
+      const getPegawaiByUnorId = await getPppkByUnor(
         queryGetKodeSkpd?.data[0].id_simpeg
       );
       return getPegawaiByUnorId;
     },
     enabled: !!queryGetKodeSkpd?.data[0],
   });
+  console.log(querySilkaCountPns);
 
   if (periode?.status !== "OPEN") {
     return null;

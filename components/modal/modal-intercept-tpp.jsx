@@ -20,6 +20,7 @@ import { useCallback } from "react";
 import { PlaceholderBar } from "../skeleton/placeholder-bar";
 import { BtnKirimTPP } from "../button/btn-tpp-kirim";
 import { getTppSigapokBySkpd } from "@/dummy/sigapok-get-tpp";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 export default function ModalInterceptTppPegawai({ params }) {
   const router = useRouter();
@@ -113,14 +114,21 @@ export default function ModalInterceptTppPegawai({ params }) {
               </ModalHeader>
               <ModalBody>{renderTPP()}</ModalBody>
               <ModalFooter className="justify-between items-start">
-                <Button
-                  className="disabled:cursor-not-allowed"
-                  isDisabled={queryTPP?.data.is_sync_simgaji !== "1"}
-                  color="success"
-                  variant="bordered"
-                  onPress={() => window.location.reload()}>
-                  Hasil Sinkronisasi
-                </Button>
+                {queryTPP?.data.is_sync_simgaji !== "1" ? (
+                  <p className="text-red-300 border-b-1 border-red-500 pb-1 hover:cursor-not-allowed inline-flex items-center justify-start gap-x-2">
+                    <InformationCircleIcon className="size-5 text-red-300" />
+                    <span>Belum Sinkron</span>
+                  </p>
+                ) : (
+                  <Button
+                    className="disabled:cursor-not-allowed"
+                    isDisabled={queryTPP?.data.is_sync_simgaji !== "1"}
+                    color="success"
+                    variant="bordered"
+                    onPress={() => window.location.reload()}>
+                    Hasil Sinkronisasi
+                  </Button>
+                )}
                 <div className="inline-flex items-center gap-x-3">
                   <Button color="danger" variant="light" onPress={onClose}>
                     Batal
@@ -228,14 +236,22 @@ export const ModalInterceptTppPppk = ({ params }) => {
               </ModalHeader>
               <ModalBody>{renderTPP()}</ModalBody>
               <ModalFooter className="justify-between items-start">
-                <Button
-                  className="disabled:cursor-not-allowed"
-                  isDisabled={queryTPP?.data.is_sync_simgaji !== "1"}
-                  color="success"
-                  variant="bordered"
-                  onPress={() => window.location.reload()}>
-                  Hasil Sinkronisasi
-                </Button>
+                {queryTPP?.data.is_sync_simgaji !== "1" ? (
+                  <p className="text-red-300 border-b-1 border-red-500 pb-1 hover:cursor-not-allowed inline-flex items-center justify-start gap-x-2">
+                    <InformationCircleIcon className="size-5 text-red-300" />
+                    <span>Belum Sinkron</span>
+                  </p>
+                ) : (
+                  <Button
+                    className="disabled:cursor-not-allowed"
+                    isDisabled={queryTPP?.data.is_sync_simgaji !== "1"}
+                    color="success"
+                    variant="bordered"
+                    onPress={() => window.location.reload()}>
+                    Hasil Sinkronisasi
+                  </Button>
+                )}
+
                 <div className="inline-flex items-center gap-x-3">
                   <Button color="danger" variant="light" onPress={onClose}>
                     Batal

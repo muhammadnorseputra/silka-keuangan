@@ -254,15 +254,6 @@ export const TablePegawai = ({ unors, pegawais }) => {
     [router]
   );
 
-  useEffect(() => {
-    queryClient.invalidateQueries({
-      queryKey: ["count.sigapok.tpp"],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["count.silka.tpp"],
-    });
-  });
-
   const onClear = useCallback(() => {
     setFilterValue("");
     setPage(1);

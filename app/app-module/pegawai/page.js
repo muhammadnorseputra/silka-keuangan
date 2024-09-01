@@ -52,7 +52,7 @@ async function Page({ searchParams }) {
               <BtnProfile profile={silka_session} />
             </CardHeader>
             <CardBody>
-              {/* <ProgresTpp KODE_SKPD_SIMPEG={unker_id} /> */}
+              <ProgresTpp KODE_SKPD_SIMPEG={getIdUnker} />
               {renderBody()}
             </CardBody>
           </Card>

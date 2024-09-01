@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState, useMemo } from "react";
+import { useCallback, useState, useMemo, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -215,7 +215,6 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
 
   const onSelectionChange = useCallback(
     (id) => {
-      setIsLoadingTable(true);
       setSelectedKeyUnor(id);
       if (id === null) {
         return false;
@@ -226,6 +225,10 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
     },
     [router]
   );
+
+  useEffect(() => {
+    setIsLoadingTable(false);
+  }, []);
 
   const onClear = useCallback(() => {
     setFilterValue("");

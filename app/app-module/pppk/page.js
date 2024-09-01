@@ -7,10 +7,7 @@ import { TablePppk } from "@/components/tables/table-pppk";
 import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 import { getPppkByUnor } from "@/dummy/data-pppk-by-unor";
 import { decrypt } from "@/helpers/encrypt";
-import { Error500 } from "@/components/errors/500";
 import NoInternet from "@/components/errors/NoInternet";
-import { useModalDaftarLayananContext } from "@/lib/context/modal-daftar-layanan-context";
-import ModalLayanan from "@/components/modal/modal-daftar-layanan";
 
 async function Page({ searchParams }) {
   const session = hasSessionServer("USER_GAPOK");
@@ -61,7 +58,10 @@ async function Page({ searchParams }) {
               </div>
               <BtnProfile profile={silka_session} />
             </CardHeader>
-            <CardBody>{renderTable()}</CardBody>
+            <CardBody>
+              {/* <ProgresTpp KODE_SKPD_SIMPEG={getIdUnker} /> */}
+              {renderTable()}
+            </CardBody>
           </Card>
         </div>
       </section>
