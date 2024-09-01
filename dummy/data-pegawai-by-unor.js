@@ -40,7 +40,7 @@ export const getASNByUnor = async (unorid) => {
       `${url}/services/tpp/index/jumlahasn?id=${unorid}`,
       {
         method: "GET",
-        cache: "force-cache",
+        cache: "no-store",
         headers,
         next: { tags: ["get.asn.by.unor"] },
       }

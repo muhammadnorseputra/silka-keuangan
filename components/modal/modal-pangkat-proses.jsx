@@ -28,23 +28,14 @@ const MyPDF = dynamic(
     ),
   }
 );
-export const ModalKgbProses = ({
-  dataSilka,
+
+export const ModalPangkatProses = ({
+  PANGKAT,
   isOpenModal = false,
   onClose,
   handleSubmit,
   isPending,
 }) => {
-  const {
-    gapok_baru,
-    golru_nama,
-    berkas,
-    pangkat_nama,
-    mk_thn,
-    mk_bln,
-    tmt_berikutnya,
-    tmt,
-  } = dataSilka.data;
   return (
     <>
       <Modal
@@ -61,11 +52,11 @@ export const ModalKgbProses = ({
         <ModalContent>
           <ModalHeader className="flex flex-col sm:flex-row items-center gap-1 shadow-lg">
             <DocumentCurrencyDollarIcon className="size-8" />{" "}
-            <div>VERIFIKASI USULAN KGB</div>
+            <div>VERIFIKASI USULAN KENAIKAN PANGKAT</div>
           </ModalHeader>
           <ModalBody>
             {/* <MyPDF src={berkas} /> */}
-            <MyPDF src={berkas} />
+            <MyPDF src={PANGKAT.data.row.berkas} />
             {/* <iframe
               allowFullScreen={true}
               height={600}
@@ -76,33 +67,38 @@ export const ModalKgbProses = ({
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">GAJI BARU</div>
                 <div className="font-bold">
-                  {formatRupiah(gapok_baru) ?? "-"}
+                  {formatRupiah(PANGKAT.data.row.gapok) ?? "-"}
                 </div>
               </div>
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">GOLONGAN RUANG</div>
                 <div className="font-bold">
-                  {pangkat_nama ?? "-"} ({golru_nama ?? "-"})
+                  {PANGKAT.data.row.nama_pangkat ?? "-"} (
+                  {PANGKAT.data.row.nama_golru ?? "-"})
                 </div>
               </div>
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">MASA KERJA BULAN</div>
-                <div className="font-bold">{mk_thn ?? "-"}</div>
+                <div className="font-bold">
+                  {PANGKAT.data.row.mkgol_thn ?? "-"}
+                </div>
               </div>
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">MASA KERJA TAHUN</div>
-                <div className="font-bold">{mk_bln ?? "-"}</div>
+                <div className="font-bold">
+                  {PANGKAT.data.row.mkgol_bln ?? "-"}
+                </div>
               </div>
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">TMT GAJI BARU</div>
                 <div className="font-bold">
-                  {formatTanggalIndonesia(tmt) ?? "-"}
+                  {formatTanggalIndonesia(PANGKAT.data.row.tmt) ?? "-"}
                 </div>
               </div>
               <div className="col-span-4 md:col-span-1">
-                <div className="text-gray-400">TMT BERKALA BERIKUTNYA</div>
+                <div className="text-gray-400">TGL SK</div>
                 <div className="font-bold">
-                  {formatTanggalIndonesia(tmt_berikutnya) ?? "-"}
+                  {formatTanggalIndonesia(PANGKAT.data.row.tgl_sk) ?? "-"}
                 </div>
               </div>
             </div>

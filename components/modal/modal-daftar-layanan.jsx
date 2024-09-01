@@ -6,6 +6,8 @@ import {
   UserPlusIcon,
   DocumentCheckIcon,
   DocumentCurrencyDollarIcon,
+  SparklesIcon,
+  CurrencyDollarIcon,
 } from "@heroicons/react/24/solid";
 import {
   Modal,
@@ -113,7 +115,26 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   startContent={
                     <DocumentCurrencyDollarIcon className="size-8 text-red-400" />
                   }>
-                  Proses KGB
+                  Proses Kenaikan Gaji Berkala
+                </ListboxItem>
+                <ListboxItem
+                  key="kp"
+                  onPress={() => {
+                    if (jenis === "PNS") {
+                      return router.push(
+                        `/app-module/pegawai/pangkat/${encrypt(nip, "bkpsdm")}`
+                      );
+                    }
+
+                    router.push(
+                      `/app-module/pppk/kgb/${encrypt(nip, "bkpsdm")}`
+                    );
+                  }}
+                  description="Verifikasi dan Kirim"
+                  startContent={
+                    <SparklesIcon className="size-8 text-amber-400" />
+                  }>
+                  Proses Kenaikan Pangkat
                 </ListboxItem>
                 <ListboxItem
                   key="tpp"
@@ -129,7 +150,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }}
                   description="Proses Tambahan Penghasilan Pegawai"
                   startContent={
-                    <DocumentCurrencyDollarIcon className="size-8 text-amber-600" />
+                    <CurrencyDollarIcon className="size-8 text-green-400" />
                   }>
                   Proses TPP
                 </ListboxItem>

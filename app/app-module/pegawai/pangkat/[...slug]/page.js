@@ -1,5 +1,4 @@
 import { BtnBackNextUi } from "@/components/button/btn-back";
-import { getKgbByNip } from "@/dummy/data-kgb-by-nip";
 import {
   Button,
   Card,
@@ -19,96 +18,99 @@ import { getPerubahanData } from "@/dummy/sigapok-get-perubahan";
 import BtnKgbConfirm from "@/components/button/btn-kgb-confirm";
 import { checkURLStatus } from "@/helpers/cekurlstatus";
 import { polaNIP } from "@/helpers/polanip";
-
-export const revalidate = 0;
+import { getPangkatByNip } from "@/dummy/data-pangkat-by-nip";
+import BtnPangkatConfirm from "@/components/button/btn-pangkat-confirm";
 
 export default async function Page({ params }) {
   const sigapok = useSessionServer("USER_GAPOK");
   const session_silka = useSessionServer("USER_SILKA");
   const $getNip = decrypt(params.slug[0], "bkpsdm");
-  const resultDataKgb = await getKgbByNip($getNip);
+  const riwayat_pangkat = await getPangkatByNip($getNip);
   const resultDataPerubaahan = await getPerubahanData(
     sigapok.access_token, //token
-    2, // jenis kenaikan
+    1, // jenis kenaikan pangkat
     $getNip, // nip baru
-    resultDataKgb?.data.tmt, // tmt sk
-    resultDataKgb?.data.id_status_pegawai_simgaji //status pegawai
+    riwayat_pangkat?.data.row.tmt, // tmt sk
+    riwayat_pangkat?.data.row.id_status_pegawai_simgaji //status pegawai
   );
+  console.log(resultDataPerubaahan);
   const renderSilkaService = () => {
-    if (resultDataKgb.status === false) {
+    if (riwayat_pangkat.status === false) {
       return (
         <div className="flex flex-col items-center justify-center gap-4 h-screen">
           <ExclamationCircle className="size-8" />
-          <p className="text-gray-400">{resultDataKgb.message}</p>
+          <p className="text-gray-400">{riwayat_pangkat.message}</p>
         </div>
       );
     }
-    const {
-      nip,
-      nip_convert,
-      nama_lengkap,
-      gapok_baru,
-      golru_nama,
-      mk_thn,
-      mk_bln,
-      tmt,
-      tgl_sk,
-      no_sk,
-      pejabat_sk,
-      berkas,
-    } = resultDataKgb?.data;
     return (
       <>
         <div>
           <div className="text-gray-400">NAMA</div>
-          <div className="font-bold">{nama_lengkap ?? "-"}</div>
+          <div className="font-bold">
+            {riwayat_pangkat?.data.nama_lengkap ?? "-"}
+          </div>
         </div>
         <div>
           <div className="text-gray-400">NIP</div>
-          <div className="font-bold">{nip_convert ?? "-"}</div>
+          <div className="font-bold">
+            {riwayat_pangkat?.data.nip_convert ?? "-"}
+          </div>
         </div>
         <div>
           <div className="text-gray-400">GOLONGAN RUANG</div>
-          <div className="font-bold">{golru_nama ?? "-"}</div>
+          <div className="font-bold">
+            {riwayat_pangkat?.data.row.nama_golru ?? "-"}
+          </div>
         </div>
         <div>
-          <div className="text-gray-400">GAJI POKOK TERAKHIR</div>
+          <div className="text-gray-400">GAJI POKOK</div>
           <div className="font-bold text-2xl text-green-700">
-            {formatRupiah(gapok_baru) ?? "-"}
+            {`Rp. ${formatRupiah(riwayat_pangkat?.data?.row?.gapok)}` ?? "-"}
           </div>
         </div>
         <div className="inline-flex flex-row justify-between">
           <div>
             <div className="text-gray-400">MASA KERJA TAHUN</div>
-            <div className="font-bold">{mk_thn ?? "-"} Tahun</div>
+            <div className="font-bold">
+              {riwayat_pangkat?.data.row.mkgol_thn ?? "-"} Tahun
+            </div>
           </div>
           <div>
             <div className="text-gray-400">MASA KERJA BULAN</div>
-            <div className="font-bold">{mk_bln ?? "-"} Bulan</div>
+            <div className="font-bold">
+              {riwayat_pangkat?.data.row.mkgol_bln ?? "-"} Bulan
+            </div>
           </div>
         </div>
         <div>
           <div className="text-gray-400">TERHITUNG MULAI TANGGAL</div>
-          <div className="font-bold">{formatTanggalIndonesia(tmt) ?? "-"}</div>
+          <div className="font-bold">
+            {formatTanggalIndonesia(riwayat_pangkat?.data.row.tmt) ?? "-"}
+          </div>
         </div>
         <div>
           <div className="text-gray-400">NO SK</div>
-          <div className="font-bold">{no_sk ?? "-"}</div>
+          <div className="font-bold">
+            {riwayat_pangkat?.data.row.no_sk ?? "-"}
+          </div>
         </div>
         <div>
           <div className="text-gray-400">TANGGAL SK</div>
           <div className="font-bold">
-            {formatTanggalIndonesia(tgl_sk) ?? "-"}
+            {formatTanggalIndonesia(riwayat_pangkat?.data.row.tgl_sk) ?? "-"}
           </div>
         </div>
         <div>
           <div className="text-gray-400">PEJABAT SK</div>
-          <div className="font-bold">{pejabat_sk ?? "-"}</div>
+          <div className="font-bold">
+            {riwayat_pangkat?.data.row.pejabat_sk ?? "-"}
+          </div>
         </div>
         <div>
           <div className="text-gray-400">FILE SK</div>
           <Button
-            href={berkas}
+            href={riwayat_pangkat?.data.row.berkas}
             as={Link}
             color="primary"
             // fullWidth
@@ -117,7 +119,7 @@ export default async function Page({ params }) {
             variant="bordered">
             <DocumentTextIcon className="size-4" />
             <Divider orientation="vertical" />
-            <p className="truncate">{no_sk}.pdf</p>
+            <p className="truncate">{riwayat_pangkat?.data.row.no_sk}.pdf</p>
           </Button>
         </div>
       </>
@@ -163,7 +165,8 @@ export default async function Page({ params }) {
         <div>
           <div className="text-gray-400">GAJI POKOK BARU</div>
           <div className="font-bold text-2xl text-green-700">
-            {formatRupiah(resultDataPerubaahan?.data[0].GAJI_POKOK) ?? "-"}
+            {`Rp. ${formatRupiah(resultDataPerubaahan?.data[0]?.GAJI_POKOK)}` ??
+              "-"}
           </div>
         </div>
         <div className="inline-flex flex-row justify-start gap-x-8">
@@ -186,14 +189,6 @@ export default async function Page({ params }) {
             <div className="font-bold">
               {formatTanggalIndonesia(resultDataPerubaahan?.data[0].TMT_SK) ??
                 "-"}
-            </div>
-          </div>
-          <div>
-            <div className="text-gray-400">TMT KGB BERIKUTNYA</div>
-            <div className="font-bold">
-              {formatTanggalIndonesia(
-                resultDataPerubaahan?.data[0].TMTBERKALAYAD
-              ) ?? "-"}
             </div>
           </div>
         </div>
@@ -236,7 +231,7 @@ export default async function Page({ params }) {
   };
 
   // cek file sk kgb ada atau tidak
-  const isBerkas = await checkURLStatus(resultDataKgb?.data?.berkas);
+  const isBerkas = await checkURLStatus(riwayat_pangkat?.data.row?.berkas);
 
   const renderButtonVerifikasi = () => {
     if (isBerkas !== "OK") {
@@ -253,15 +248,15 @@ export default async function Page({ params }) {
               SIMPEG
             </Link>
           </strong>{" "}
-          Riwayat KGB Terkahir ASN
+          Riwayat Pangkat Terkahir ASN
         </p>
       );
     }
 
     return (
-      <BtnKgbConfirm
-        dataSilka={resultDataKgb}
-        session_silka={session_silka}
+      <BtnPangkatConfirm
+        RIWAYAT_PANGKAT={riwayat_pangkat}
+        SESSION={session_silka}
         {...sigapok}
       />
     );
@@ -279,9 +274,9 @@ export default async function Page({ params }) {
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
                   <p className="text-xl flex flex-col">
-                    <span className="uppercase">Kenaikaan gaji berkala</span>
+                    <span className="uppercase">Kenaikaan Pangkat</span>
                     <span className="text-base">
-                      {resultDataKgb?.data?.nama_lengkap}
+                      {riwayat_pangkat?.data.row?.nama_lengkap}
                     </span>
                   </p>
                 </div>
@@ -295,7 +290,7 @@ export default async function Page({ params }) {
                     <div className="flex flex-col">
                       <p className="text-md">SILKa Online</p>
                       <p className="text-small text-default-500">
-                        Data Kenaikan Gaji Berkala
+                        Data Kenaikan Pangkat
                       </p>
                     </div>
                   </CardHeader>

@@ -11,27 +11,31 @@ import { getPeriodeTPP } from "@/dummy/data-tpp-periode";
 export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
   const sigapok = useSession("USER_GAPOK");
   // get periode tpp
-  const { data: periode } = useQuery({
+  const { data: periode, isLoading: isLoadingPeriode } = useQuery({
     queryKey: ["periode.tpp"],
     queryFn: async () => {
       const res = await getPeriodeTPP();
       return res;
     },
   });
+
   const PERIODE_TPP = `${periode?.bulan.toString().padStart(2, "0")}${
     periode?.tahun
   }`;
 
-  // get skpd_simgaji
-  const { data: queryGetKodeSkpd, isLoading: isLoadingKodeSkpd } = useQuery({
-    queryKey: ["count.sigapok.kode_skpd", KODE_SKPD_SIMPEG],
+  // get jumlah pns berdasarkan skpd
+  const {
+    data: querySilkaCountPns,
+    isLoading: isLoadingSilka,
+    isError: isErrorSilka,
+    error: errorMessageSilka,
+  } = useQuery({
+    queryKey: ["count.silka.tpp", KODE_SKPD_SIMPEG],
     queryFn: async () => {
-      const getKodeSkpd = await getSkpdSigapokByKodeSimpeg(
-        sigapok.access_token,
-        KODE_SKPD_SIMPEG
-      );
-      return getKodeSkpd;
+      const getPegawaiByUnorId = await getASNByUnor(KODE_SKPD_SIMPEG);
+      return getPegawaiByUnorId;
     },
+    enabled: !!KODE_SKPD_SIMPEG,
   });
 
   // get jumlah tpp sudah dikirim
@@ -41,33 +45,21 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
     isError: isErrorSigapok,
     error: errorMessageSigapok,
   } = useQuery({
-    queryKey: ["count.sigapok.tpp", queryGetKodeSkpd?.data[0]],
+    queryKey: [
+      "count.sigapok.tpp",
+      sigapok.access_token,
+      querySilkaCountPns?.data.id_skpd_simgaji,
+      PERIODE_TPP,
+    ],
     queryFn: async () => {
       const getJumlahTpp = await getTppSigapokBySkpd(
         sigapok.access_token,
-        queryGetKodeSkpd?.data[0].id_skpd_gaji, //bkpsdm
+        querySilkaCountPns?.data.id_skpd_simgaji, //bkpsdm
         PERIODE_TPP
       );
       return getJumlahTpp;
     },
-    enabled: !!queryGetKodeSkpd?.data[0],
-  });
-
-  // get jumlah pns berdasarkan skpd
-  const {
-    data: querySilkaCountPns,
-    isLoading: isLoadingSilka,
-    isError: isErrorSilka,
-    error: errorMessageSilka,
-  } = useQuery({
-    queryKey: ["count.silka.tpp", queryGetKodeSkpd?.data[0]],
-    queryFn: async () => {
-      const getPegawaiByUnorId = await getASNByUnor(
-        queryGetKodeSkpd?.data[0].id_simpeg
-      );
-      return getPegawaiByUnorId;
-    },
-    enabled: !!queryGetKodeSkpd?.data[0],
+    enabled: !!querySilkaCountPns?.data.id_skpd_simgaji,
   });
 
   if (periode?.status !== "OPEN") {
@@ -80,7 +72,7 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
         {errorMessageSigapok.message || errorMessageSilka.message}
       </p>
     );
-  if (isLoadingKodeSkpd || isLoadingSigapok || isLoadingSilka)
+  if (isLoadingPeriode || isLoadingSigapok || isLoadingSilka)
     return <p className="mb-4">Memuat Data ...</p>;
 
   let percent = Math.round(

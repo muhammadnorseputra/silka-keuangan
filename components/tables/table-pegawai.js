@@ -193,10 +193,24 @@ export const TablePegawai = ({ unors, pegawais }) => {
             ) : (
               ""
             );
+          let pangkat_is_sync =
+            datapegawai.pangkat_sync === "1" ? (
+              <Chip
+                startContent={
+                  <CheckBadgeIcon className="size-4 text-purple-700" />
+                }
+                variant="flat"
+                color="secondary"
+                size="sm">
+                PANGKAT
+              </Chip>
+            ) : (
+              ""
+            );
           return (
             <>
               <p>{datapegawai.jabatan} </p>
-              {peremajaan_is_sync} {tpp_is_sync} {kgb_is_sync}
+              {peremajaan_is_sync} {tpp_is_sync} {kgb_is_sync} {pangkat_is_sync}
             </>
           );
         case "aksi":
