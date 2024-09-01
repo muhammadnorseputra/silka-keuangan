@@ -7,7 +7,6 @@ import { Suspense } from "react";
 import { PlaceholderBar } from "@/components/skeleton/placeholder-bar";
 import RenderSilkaService from "./silka";
 import RenderGapokServices from "./sigapok";
-import ProgresTpp from "@/components/proggres/tpp";
 
 export const revalidate = 0;
 
