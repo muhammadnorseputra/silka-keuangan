@@ -11,7 +11,7 @@ import { LockClosedIcon } from "@heroicons/react/24/solid";
 export default function Login() {
   return (
     <>
-      <div className="p-5 max-w-2xl hidden lg:block">
+      <div className="md:p-5 max-w-2xl hidden lg:block">
         <Image
           isBlurred
           loading="lazy"
@@ -40,7 +40,7 @@ export default function Login() {
         isFooterBlurred
         fullWidth={false}
         shadow="none"
-        className="px-4 px-md-8 py-6 max-w-lg bg-white/30 dark:bg-black/30">
+        className="px-0 md:px-8 md:py-6 md:max-w-lg bg-white/30 dark:bg-black/30">
         <CardHeader>
           <div className="flex flex-col">
             <h3 className="text-3xl fw-bold mb-4 flex items-center justify-start gap-x-3">
@@ -55,7 +55,7 @@ export default function Login() {
         <CardBody>
           <FormAuth />
         </CardBody>
-        <CardFooter className="flex items-end justify-between">
+        <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between">
           <span className="text-gray-300 text-sm text-ellipsis">
             &copy; Develop by BKPSDM
           </span>

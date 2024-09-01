@@ -3,7 +3,7 @@ import { getTppSigapokBySkpd } from "@/dummy/sigapok-get-tpp";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "@/lib/session";
 import { Progress, Skeleton } from "@nextui-org/react";
-import { getPegawaiByUnor } from "@/dummy/data-pegawai-by-unor";
+import { getASNByUnor, getPegawaiByUnor } from "@/dummy/data-pegawai-by-unor";
 import { useEffect, useState } from "react";
 import { getSkpdSigapokByKodeSimpeg } from "@/dummy/sigapok-get-skpd";
 import { getPeriodeTPP } from "@/dummy/data-tpp-periode";
@@ -62,7 +62,7 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
   } = useQuery({
     queryKey: ["count.silka.tpp", queryGetKodeSkpd?.data[0]],
     queryFn: async () => {
-      const getPegawaiByUnorId = await getPegawaiByUnor(
+      const getPegawaiByUnorId = await getASNByUnor(
         queryGetKodeSkpd?.data[0].id_simpeg
       );
       return getPegawaiByUnorId;
@@ -84,8 +84,7 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
     return <p className="mb-4">Memuat Data ...</p>;
 
   let percent = Math.round(
-    (querySigapokCountTpp?.data?.length / querySilkaCountPns?.data?.length) *
-      100
+    (querySigapokCountTpp?.data?.length / querySilkaCountPns?.data?.total) * 100
   );
 
   return (
@@ -95,7 +94,7 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
           size="md"
           radius="lg"
           color="success"
-          label={`Progress Sinkronisasi TPP (${PERIODE_TPP}) ${querySigapokCountTpp?.data?.length} / ${querySilkaCountPns?.data?.length}`}
+          label={`Progress Sinkronisasi TPP (${PERIODE_TPP}) ${querySigapokCountTpp?.data?.length} / ${querySilkaCountPns?.data?.total}`}
           value={percent === Infinity ? 0 : percent}
           showValueLabel={true}
         />

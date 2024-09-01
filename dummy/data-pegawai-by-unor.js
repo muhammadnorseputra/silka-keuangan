@@ -32,3 +32,27 @@ export const dataPegawaiByUnor = async (unorid) => {
   const responses = await getPegawaiByUnor(unorid);
   return responses;
 };
+
+export const getASNByUnor = async (unorid) => {
+  const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
+  try {
+    const req = await fetch(
+      `${url}/services/tpp/index/jumlahasn?id=${unorid}`,
+      {
+        method: "GET",
+        cache: "force-cache",
+        headers,
+        next: { tags: ["get.asn.by.unor"] },
+      }
+    );
+
+    const result = await req.json();
+    return result;
+  } catch (err) {
+    return {
+      status: false,
+      message: `Gagal menghubungkan ke server ${url} (${err})`,
+      data: [],
+    };
+  }
+};
