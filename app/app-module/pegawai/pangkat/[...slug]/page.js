@@ -33,7 +33,6 @@ export default async function Page({ params }) {
     riwayat_pangkat?.data.row.tmt, // tmt sk
     riwayat_pangkat?.data.row.id_status_pegawai_simgaji //status pegawai
   );
-  console.log(resultDataPerubaahan);
   const renderSilkaService = () => {
     if (riwayat_pangkat.status === false) {
       return (

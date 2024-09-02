@@ -164,14 +164,14 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
   };
 
   const isYakin = () => {
-    if (isPendingSubmit) {
+    if (isValid || isPendingSubmit) {
       toast.loading("Processing ...");
       setIsLoadingSubmit(true);
       return;
     }
 
     if (isErrorSubmit) {
-      toast.loading(errorSubmit.message);
+      toast.error(errorSubmit.message);
       setIsLoadingSubmit(false);
       return;
     }
