@@ -60,7 +60,7 @@ export default async function Page({ params }) {
                 <Card fullWidth>
                   <CardHeader className="flex gap-3">
                     <div className="flex flex-col">
-                      <p className="text-md">Gapok Services</p>
+                      <p className="text-md">Sigapok</p>
                       <p className="text-small text-default-500">
                         Data Badan Keuangan Daerah
                       </p>

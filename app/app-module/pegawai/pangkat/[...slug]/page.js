@@ -30,8 +30,8 @@ export default async function Page({ params }) {
     sigapok.access_token, //token
     1, // jenis kenaikan pangkat
     $getNip, // nip baru
-    riwayat_pangkat?.data.row.tmt, // tmt sk
-    riwayat_pangkat?.data.row.id_status_pegawai_simgaji //status pegawai
+    riwayat_pangkat?.data?.row?.tmt, // tmt sk
+    riwayat_pangkat?.data?.row?.id_status_pegawai_simgaji //status pegawai
   );
   const renderSilkaService = () => {
     if (riwayat_pangkat.status === false) {
@@ -230,7 +230,7 @@ export default async function Page({ params }) {
   };
 
   // cek file sk kgb ada atau tidak
-  const isBerkas = await checkURLStatus(riwayat_pangkat?.data.row?.berkas);
+  const isBerkas = await checkURLStatus(riwayat_pangkat?.data?.row?.berkas);
 
   const renderButtonVerifikasi = () => {
     if (isBerkas !== "OK") {
@@ -275,7 +275,7 @@ export default async function Page({ params }) {
                   <p className="text-xl flex flex-col">
                     <span className="uppercase">Kenaikaan Pangkat</span>
                     <span className="text-base">
-                      {riwayat_pangkat?.data.row?.nama_lengkap}
+                      {riwayat_pangkat?.data?.row?.nama_lengkap}
                     </span>
                   </p>
                 </div>

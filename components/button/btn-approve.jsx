@@ -48,17 +48,17 @@ export const BtnApprove = ({
     PENDIDIKAN: row.nama_tingkat_pendidikan,
     TMTCAPEG: row.tmt_capeg,
     TMTSKMT: row.tmt_skmt,
-    KDSTAWIN: "1",
+    KDSTAWIN: row.kode_statkawin_simgaji,
     JISTRI: Number(row.jumlah_sutri), //jika laki = jumlah_istri, jika perempuan = jumlah suami
     JANAK: Number(row.jumlah_anak),
     KDSTAPEG: Number(row.kode_status_pegawai),
     KDPANGKAT: row.kode_pangkat,
     MKGOLT: Number(row.makertotal_tahun), // ambil di simpeg
     BLGOLT: Number(row.makertotal_bulan), // ambil di simpeg
-    GAPOK: 0, // boleh 0
+    GAPOK: Number(row.gapok), // boleh 0
     MASKER: Number(row.makertotal_tahun), // ambil di simpeg
     PRSNGAPOK: row.kode_status_pegawai === 3 ? 80 : 100,
-    KDESELON: row.fid_eselon.slice(-2),
+    KDESELON: row.kode_eselon,
     TJESELON: 0,
     KDFUNGSI1: "0",
     KDFUNGSI: "0",
@@ -68,7 +68,7 @@ export const BtnApprove = ({
     KDGURU: "",
     KDSKPD: row.simgaji_id_skpd,
     KDSATKER: row.simgaji_id_satker,
-    ALAMAT: row.alamat,
+    ALAMAT: row.alamat_ktp,
     KDDATI2: process.env.NEXT_PUBLIC_GAPOK_KDDATI2,
     KDDATI1: process.env.NEXT_PUBLIC_GAPOK_KDDATI1,
     NOTELP: row.whatsapp,
@@ -129,6 +129,7 @@ export const BtnApprove = ({
         isLoading={isPending}
       />
       <Button
+      fullWidth
         color="primary"
         isLoading={isPending}
         variant="shadow"

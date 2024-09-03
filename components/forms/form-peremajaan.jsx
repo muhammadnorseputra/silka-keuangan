@@ -74,17 +74,14 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
     no_npwp,
     no_ktp,
     whatsapp,
-    // norek,
-    // induk_bank,
     jumlah_anak,
     jumlah_sutri,
     simgaji_id_skpd,
     simgaji_id_satker,
     kode_status_pegawai,
     kode_pangkat,
-    kode_jenis_pegawai,
     status_data,
-    // gapok,
+    kode_eselon,
     update_at,
     tmt_capeg,
     tgl_spmt,
@@ -164,7 +161,7 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
   };
 
   const isYakin = () => {
-    if (isValid || isPendingSubmit) {
+    if (isValid && isPendingSubmit) {
       toast.loading("Processing ...");
       setIsLoadingSubmit(true);
       return;
@@ -190,6 +187,9 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
       no_telpon: whatsapp,
       no_ktp,
       npwp: no_npwp,
+      kode_eselon,
+      masakerja_golongan_tahun: makertotal_tahun,
+      masakerja_golongan_bulan: makertotal_bulan,
       // @ts-ignore
       tmt_skmt: data.tgl_spmt,
       kode_status_kawin: fid_status_kawin,
@@ -202,7 +202,7 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
       // @ts-ignore
       kode_jenis_pegawai: data.kode_jenis.split("-")[0],
       // @ts-ignore
-      kode_pangkat: data.kode_pangkat.split("-")[0],
+      kode_pangkat: kode_pangkat,
       // @ts-ignore
       kode_status_pegawai: data.kode_stapeg.split("-")[0],
       created_by: session_silka?.data.nama_lengkap,
@@ -570,7 +570,7 @@ const FormPeremajaan = ({ sigapok, pegawais, session_silka }) => {
                       <AutocompleteItem
                         key={pangkat.kode_golongan}
                         value={pangkat.kode_golongan}
-                        textValue={`${pangkat.kode_golongan} - ${pangkat.ket_pangkat} (${pangkat.nama_golongan})`}>
+                        textValue={`${pangkat.ket_pangkat} (${pangkat.nama_golongan})`}>
                         {pangkat.nama_golongan} - {pangkat.ket_pangkat}
                       </AutocompleteItem>
                     ))}
