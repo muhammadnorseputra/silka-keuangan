@@ -1,19 +1,26 @@
 "use client";
 
+import { UpdateSyncPegawai } from "@/dummy/post-data-pegawai";
 import { DeletePNSSigapok } from "@/dummy/sigapok-delete-pns";
 import { UserMinusIcon } from "@heroicons/react/24/solid";
 import { Button } from "@nextui-org/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 export const BtnRollBackPNSSigapok = ({ sigapok, data }) => {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const { mutate: rollbackFn, isPending: rollbackIsPending } = useMutation({
     mutationKey: ["rollback.pns.sigapok"],
     mutationFn: async (req) => {
       const res = await DeletePNSSigapok(sigapok.access_token, req);
+      if (res.success === true) {
+        await UpdateSyncPegawai({
+          nip: data.NIP,
+          status: "VERIFIKASI",
+        });
+      }
       return res;
     },
   });
@@ -28,7 +35,7 @@ export const BtnRollBackPNSSigapok = ({ sigapok, data }) => {
 
   function handleRollback() {
     const RAWJSON = {
-      nip: data.nip,
+      nip: data.NIP,
     };
     // @ts-ignore
     rollbackFn(RAWJSON, {
@@ -41,7 +48,9 @@ export const BtnRollBackPNSSigapok = ({ sigapok, data }) => {
         toast.success(response.message, {
           id: "Toaster",
         });
-        router.refresh();
+        queryClient.invalidateQueries({
+          queryKey: ["verval.sigapok.pegawai", data.NIP],
+        });
       },
       onError: (err) => {
         toast.error(err.message, {
@@ -53,7 +62,7 @@ export const BtnRollBackPNSSigapok = ({ sigapok, data }) => {
   return (
     <>
       <Button
-      fullWidth
+        fullWidth
         isLoading={rollbackIsPending}
         isDisabled={rollbackIsPending}
         color={rollbackIsPending ? "secondary" : "danger"}

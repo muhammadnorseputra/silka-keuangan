@@ -1,49 +1,16 @@
 "use server";
 import { BtnBackNextUi } from "@/components/button/btn-back";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Divider,
-} from "@nextui-org/react";
+import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useSessionServer } from "../../../server-session";
 import { decrypt } from "@/helpers/encrypt";
 import { FormPeremajaan } from "@/components/forms/form-peremajaan";
-import { getPegawaiByNip } from "@/dummy/data-pegawai-by-nip";
-import DataNotFound from "@/components/errors/DataNotFound";
 import { AlertWarning } from "@/components/alert";
-// import { Error500 } from "@/components/errors/500";
 
-export default async function Page({ params, searchParams }) {
+export default async function Page({ params }) {
   const sigapok = useSessionServer("USER_GAPOK");
-  const session_silka = useSessionServer("USER_PEGAWAI");
+  const silka = useSessionServer("USER_PEGAWAI");
 
-  const getNip = decrypt(params?.slug[0], "bkpsdm");
-
-  const getPegawais = await getPegawaiByNip(getNip);
-
-  const { nama, nip, gelar_depan, gelar_belakang } = getPegawais;
-  const renderForm = () => {
-    if (getPegawais.status === false) {
-      return (
-        <Card className="w-full h-screen">
-          <CardBody className="flex flex-col items-center justify-center gap-6">
-            <DataNotFound message={getPegawais.message} />
-          </CardBody>
-        </Card>
-      );
-    }
-
-    return (
-      <FormPeremajaan
-        sigapok={sigapok}
-        pegawais={getPegawais}
-        session_silka={session_silka}
-      />
-    );
-  };
+  const nip = decrypt(params?.slug[0], "bkpsdm");
 
   return (
     <>
@@ -61,9 +28,6 @@ export default async function Page({ params, searchParams }) {
                     <span className="uppercase font-bold">
                       Peremajaan Data Pegawai
                     </span>
-                    <span className="text-base">
-                      {gelar_depan} {nama} {gelar_belakang} {nip}
-                    </span>
                   </p>
                 </div>
               </div>
@@ -72,7 +36,9 @@ export default async function Page({ params, searchParams }) {
                 message="Jika terdapat kesalahan data  pada section ini, silahkan hubungi BKPSDM untuk melakukan update data tersebut"
               />
             </CardHeader>
-            <CardBody>{renderForm()}</CardBody>
+            <CardBody>
+              <FormPeremajaan sigapok={sigapok} silka={silka} nip={nip} />
+            </CardBody>
           </Card>
         </div>
       </div>

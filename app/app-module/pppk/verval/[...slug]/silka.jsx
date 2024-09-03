@@ -3,14 +3,15 @@ import { ButtonPeremajaanP3k } from "@/components/button/btn-peremajaan";
 import { ModalPeremajaanApprove } from "@/components/modal/modal-peremajaan-approve";
 import { getPPPKByNipppk } from "@/dummy/data-pppk-by-nipppk";
 import { RollbackPPPK, UpdateSyncPPPK } from "@/dummy/post-data-pppk";
-import { TambahPegawaiPppk } from "@/dummy/sigapok-post-pppk";
+import { TambahPegawai } from "@/dummy/sigapok-post-pegawai";
 import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
+import { getTanggalHariIni } from "@/helpers/fn_tanggal";
+import { limitCharacters } from "@/helpers/text";
 import { useModalContext } from "@/lib/context/modal-context";
 import revalidateTag from "@/lib/revalidateTags";
 import { HandThumbUpIcon, UserMinusIcon } from "@heroicons/react/24/solid";
 import { Button, Divider, Skeleton } from "@nextui-org/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next-nprogress-bar";
 import { useEffect } from "react";
 import { ExclamationCircle } from "react-bootstrap-icons";
 import toast from "react-hot-toast";
@@ -25,7 +26,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
   } = useQuery({
     queryKey: ["getDataPppkBySilka"],
     queryFn: async () => {
-      const getPppk = await await getPPPKByNipppk(nip);
+      const getPppk = await getPPPKByNipppk(nip);
       return getPppk;
     },
     refetchOnWindowFocus: false,
@@ -34,7 +35,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
   const { mutate, isPending, isError, error } = useMutation({
     mutationKey: ["peremajaanPppk"],
     mutationFn: async (body) => {
-      const res = await TambahPegawaiPppk(access_token, body);
+      const res = await TambahPegawai(access_token, body);
       if (res.success === true) {
         await UpdateSyncPPPK({
           nipppk: nip,
@@ -131,27 +132,52 @@ export default function SilkaDataP3k({ access_token, nip }) {
       KDJENKEL: row.jns_kelamin == "PRIA" ? 1 : 2,
       TEMPATLHR: row.tmp_lahir,
       TGLLHR: row.tgl_lahir,
-      JISTRI: row.jumlah_sutri,
-      JANAK: row.jumlah_anak,
+      AGAMA: row.simgaji_id_agama,
+      zakat_dg: 0,
+      PENDIDIKAN: row.nama_tingkat_pendidikan,
+      TMTCAPEG: row.tmt_pppk_awal,
+      TMTSKMT: row.tmt_spmt,
+      KDSTAWIN: row.simgaji_id_status_kawin,
+      JISTRI: Number(row.jumlah_sutri),
+      JANAK: Number(row.jumlah_anak),
       KDSTAPEG: Number(row.kode_statuspeg), //berdasarkan status pegawai 12 = ppppk
-      KDPANGKAT: row.nama_golru,
-      GAPOK: row.gaji_pokok,
-      MKGOLT: row.maker_tahun,
-      KD_SKPD: row.simgaji_id_skpd,
-      KETERANGAN: "",
-      TMTGAJI: row.tmt_pppk_awal,
-      INDUK_BANK: "",
-      NOREK: "",
+      KDPANGKAT: row.nama_golru, //kode pangkat beda dengan di simpeg
+      MKGOLT: Number(row.maker_tahun),
+      BLGOLT: 0,
+      GAPOK: Number(row.gaji_pokok),
+      MASKER: Number(row.maker_tahun),
+      PRSNGAPOK: 0,
+      KDESELON: "",
+      TJESELON: 0,
+      KDFUNGSI1: "0",
+      KDFUNGSI: "0",
+      TJFUNGSI: 0,
+      KDSTRUK: "0",
+      TJSTRUK: 0,
+      KDGURU: "",
+      KDSKPD: row.simgaji_id_skpd,
+      KDSATKER: row.simgaji_id_satker,
+      ALAMAT: limitCharacters(row.alamat, 60),
+      KDDATI2: process.env.NEXT_PUBLIC_GAPOK_KDDATI2,
+      KDDATI1: process.env.NEXT_PUBLIC_GAPOK_KDDATI1,
+      NOTELP: row.no_handphone,
       NOKTP: row.nik,
       NPWP: row.no_npwp,
-      NOTELP: row.no_handphone,
-      NOMORSKEP: row.nomor_sk,
-      PENERBITSKEP: row.pejabat_sk,
-      TGLSKEP: row.tgl_sk,
-      ALAMAT: row.alamat,
-      KDGURU: "",
+      KDHITUNG: 1,
+      induk_bank: "",
+      NOREK: "",
+      // TMTGAJI: row.tmt_pppk_awal,
+      TMTBERLAKU: getTanggalHariIni(),
+      KDJNSTRANS: "",
+      INPUTER: row.status_data_add_by,
+      KD_JNS_PEG: 4, // 4 = pppk
+      // NOMORSKEP: row.nomor_sk,
+      // PENERBITSKEP: row.pejabat_sk,
+      // TGLSKEP: row.tgl_sk,
+      // KDGURU: "",
       // KATEGORI: row.jenis_formasi,
-      KATEGORI: 4, //kode berdasarkan jenis pegawai 4 = pppk
+      // KATEGORI: 4, //kode berdasarkan jenis pegawai 4 = pppk
+      TMT_JOIN: row.tmt_pppk_awal,
       FORMASI: row.tahun_formasi,
       AKHIRKONTRAK: row.tmt_pppk_akhir,
     };
@@ -236,9 +262,28 @@ export default function SilkaDataP3k({ access_token, nip }) {
         </div>
         <div>
           <div className="text-gray-400">STATUS PEGAWAI</div>
-          <div className="font-bold">{row.kode_statuspeg ?? "-"}</div>
+          <div className="font-bold">{row.nama_statuspeg ?? "-"}</div>
         </div>
       </div>
+      <div className="flex flex-col sm:flex-row justify-start gap-x-16">
+        <div>
+          <div className="text-gray-400">TMT AWAL PPPK</div>
+          <div className="font-bold">
+            {formatTanggalIndonesia(row?.tmt_pppk_awal) ?? "-"}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">PANGKAT</div>
+          <div className="font-bold">{row?.nama_golru ?? "-"}</div>
+        </div>
+        <div>
+          <div className="text-gray-400">AKHIR KONTRAK</div>
+          <div className="font-bold">
+            {formatTanggalIndonesia(row?.tmt_pppk_akhir) ?? "-"}
+          </div>
+        </div>
+      </div>
+      <Divider />
       <div className="flex flex-col sm:flex-row justify-start gap-x-16">
         <div>
           <div className="text-gray-400">
@@ -251,7 +296,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
           <div className="font-bold">{row.jumlah_anak}</div>
         </div>
       </div>
-      <Divider />
+      {/*
       <div>
         <div className="text-gray-400">NOMOR SK</div>
         <div className="font-bold">{row.nomor_sk ?? "-"}</div>
@@ -265,17 +310,18 @@ export default function SilkaDataP3k({ access_token, nip }) {
       <div>
         <div className="text-gray-400">PENERBIT SK</div>
         <div className="font-bold">{row.pejabat_sk ?? "-"}</div>
-      </div>
+      </div> */}
       <Divider />
-      <div className="flex flex-col sm:flex-row w-full gap-x-3 justify-between">
+      <div className="flex flex-col sm:flex-row w-full gap-3 justify-between">
         <Button
           isLoading={rollbackIsPending}
           isDisabled={rollbackIsPending}
-          className="w-1/2"
+          className="w-full sm:w-1/2"
           color="danger"
           variant="shadow"
           onPress={() => handleRollback()}>
           <UserMinusIcon className="size-5 text-white" />
+          <Divider orientation="vertical" />
           Rollback
         </Button>
         <Button

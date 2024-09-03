@@ -3,13 +3,12 @@
 import { RollbackPegawai } from "@/dummy/post-data-pegawai";
 import { UserMinusIcon } from "@heroicons/react/24/solid";
 import { Button } from "@nextui-org/react";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 export const BtnRollBackPNS = ({ data }) => {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const { mutate: rollbackFn, isPending: rollbackIsPending } = useMutation({
     mutationKey: ["rollbackPegawaai"],
     mutationFn: async (body) => {
@@ -42,7 +41,9 @@ export const BtnRollBackPNS = ({ data }) => {
         toast.success(response.message, {
           id: "Toaster",
         });
-        router.refresh();
+        queryClient.invalidateQueries({
+          queryKey: ["verval.silka.pegawai", data.nip],
+        });
       },
       onError: (err) => {
         toast.error(err.message, {
@@ -54,6 +55,7 @@ export const BtnRollBackPNS = ({ data }) => {
   return (
     <>
       <Button
+        fullWidth
         isLoading={rollbackIsPending}
         isDisabled={rollbackIsPending}
         color={rollbackIsPending ? "secondary" : "danger"}

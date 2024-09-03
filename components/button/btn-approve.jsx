@@ -5,9 +5,8 @@ import { Button, Divider } from "@nextui-org/react";
 import { useModalContext } from "@/lib/context/modal-context";
 import { ModalPeremajaanApprove } from "../modal/modal-peremajaan-approve";
 import toast from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TambahPegawai } from "@/dummy/sigapok-post-pegawai";
-import { useRouter } from "next-nprogress-bar";
 import { useEffect } from "react";
 import { getTanggalHariIni } from "@/helpers/fn_tanggal";
 import { UpdateSyncPegawai } from "@/dummy/post-data-pegawai";
@@ -18,7 +17,7 @@ export const BtnApprove = ({
   data: row,
   session_silkaonline: session,
 }) => {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const { isOpen, setIsOpen } = useModalContext();
 
   const { mutate, isPending, isSuccess } = useMutation({
@@ -105,9 +104,10 @@ export const BtnApprove = ({
           id: "Toaster",
         });
         revalidateTag("datapegawai");
-        revalidateTag("datap3k");
+        queryClient.invalidateQueries({
+          queryKey: ["verval.sigapok.pegawai", row.nip],
+        });
         setIsOpen(false);
-        router.refresh();
       },
       onError: (Error) => {
         toast.error(
@@ -129,13 +129,12 @@ export const BtnApprove = ({
         isLoading={isPending}
       />
       <Button
-      fullWidth
+        fullWidth
         color="primary"
         isLoading={isPending}
         variant="shadow"
         onPress={() => setIsOpen(true)}>
         <HandThumbUpIcon className="size-5 text-white" />
-        <Divider orientation="vertical" />
         Approve
       </Button>
     </>

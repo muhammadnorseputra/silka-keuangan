@@ -14,3 +14,17 @@ export const DeleteP3k = async (token, nipppk) => {
   const result = await req.json();
   return result;
 };
+
+export const DeletePPPKSigapok = async (token, data) => {
+  const url = process.env.NEXT_PUBLIC_GAPOK_BASE_URL;
+  const path = process.env.NEXT_PUBLIC_GAPOK_PATH;
+  const headers = sigapok_headers(token);
+  const req = await fetch(`${url}/${path}/pegawai/${data.NIP}`, {
+    method: "DELETE",
+    cache: "no-store",
+    headers,
+  });
+
+  const result = await req.json();
+  return result;
+};

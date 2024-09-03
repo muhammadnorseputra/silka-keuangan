@@ -1,7 +1,8 @@
 "use client";
 import { BtnRollBackPPPK } from "@/components/button/btn-rollback-pppk";
-import { getSigapokP3K } from "@/dummy/sigapok-get-pppk";
+import { getInfoPegawai } from "@/dummy/sigapok-get-pegawai";
 import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
+import { useNamaSKPD } from "@/lib/FetchQuery";
 import { Divider, Skeleton } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { ExclamationCircle } from "react-bootstrap-icons";
@@ -14,11 +15,17 @@ export default function SigapokDataP3k({ sigapok, nip }) {
   } = useQuery({
     queryKey: ["getDataPppk"],
     queryFn: async () => {
-      const getPppk = await getSigapokP3K(sigapok.access_token, nip);
+      const getPppk = await getInfoPegawai(sigapok.access_token, nip);
       return getPppk;
     },
     refetchOnWindowFocus: false,
   });
+
+  const {
+    data: SKPD,
+    isLoading: isLoadingSKPD,
+    isFetching: isFetchingSKPD,
+  } = useNamaSKPD(row?.KDSKPD);
 
   if (isLoading || isFetching) {
     return (
@@ -41,7 +48,7 @@ export default function SigapokDataP3k({ sigapok, nip }) {
     );
   }
 
-  if (row?.success === false || !row?.success) {
+  if (!row?.NIP) {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
         <ExclamationCircle className="size-8" />
@@ -54,11 +61,13 @@ export default function SigapokDataP3k({ sigapok, nip }) {
     <>
       <div>
         <div className="text-gray-400">NAMA</div>
-        <div className="font-bold">{row.data.NAMA ?? "-"}</div>
+        <div className="font-bold">
+          {row?.GLRDEPAN} {row?.NAMA ?? "-"} {row?.GLRBELAKANG}
+        </div>
       </div>
       <div>
         <div className="text-gray-400">NIP</div>
-        <div className="font-bold">{row.data.NIP ?? "-"}</div>
+        <div className="font-bold">{row?.NIP ?? "-"}</div>
       </div>
       {/* <div>
         <div className="text-gray-400">GELAR DEPAN</div>
@@ -70,73 +79,77 @@ export default function SigapokDataP3k({ sigapok, nip }) {
       </div> */}
       <div>
         <div className="text-gray-400">TEMPAT LAHIR</div>
-        <div className="font-bold">{row.data.TEMPATLHR ?? "-"}</div>
+        <div className="font-bold">{row?.TEMPATLHR ?? "-"}</div>
       </div>
       <div>
         <div className="text-gray-400">TANGGAL LAHIR</div>
         <div className="font-bold">
-          {formatTanggalIndonesia(row.data.TGLLHR) ?? "-"}
+          {formatTanggalIndonesia(row?.TGLLHR) ?? "-"}
         </div>
       </div>
       <div>
         <div className="text-gray-400">ALAMAT SESUAI KTP</div>
-        <div className="font-bold">{row.data.ALAMAT ?? "-"}</div>
+        <div className="font-bold">{row?.ALAMAT ?? "-"}</div>
       </div>
       <div>
         <div className="text-gray-400">JENIS KELAMIN</div>
         <div className="font-bold">
-          {row.data.KDJENKEL === 1 ? "PRIA" : "PEREMPUAN"}
+          {row?.KDJENKEL === 1 ? "PRIA" : "PEREMPUAN"}
         </div>
       </div>
       <Divider />
       <div>
         <div className="text-gray-400">UNIT KERJA</div>
-        <div className="font-bold">{row.data.NAMA_SKPD ?? "-"}</div>
+        <div className="font-bold">
+          {isLoadingSKPD || isFetchingSKPD
+            ? "Loading ..."
+            : SKPD?.data[0]?.nama_unit_kerja}
+        </div>
       </div>
       <div className="flex flex-col flex-wrap sm:flex-row justify-start gap-x-16 gap-y-6">
         <div>
           <div className="text-gray-400">GAJI POKOK</div>
-          <div className="font-bold">{formatRupiah(row.data.GAPOK) ?? "-"}</div>
+          <div className="font-bold">{formatRupiah(row?.GAPOK) ?? "-"}</div>
         </div>
         <div>
-          <div className="text-gray-400">PANGKAT</div>
-          <div className="font-bold">{row.data.KDPANGKAT ?? "-"}</div>
+          <div className="text-gray-400">FORMASI</div>
+          <div className="font-bold">{row?.FORMASI ?? "-"}</div>
         </div>
         <div>
           <div className="text-gray-400">MK GOL TAHUN</div>
-          <div className="font-bold">{row.data.MKGOLT ?? "-"}</div>
+          <div className="font-bold">{row?.MKGOLT ?? "-"}</div>
         </div>
-        {/* <div>
-          <div className="text-gray-400">MG GOL BULAN</div>
-          <div className="font-bold">{row.data.BLGOLT ?? "-"}</div>
-        </div> */}
       </div>
       <div className="flex flex-col sm:flex-row justify-start gap-x-16">
         <div>
-          <div className="text-gray-400">FORMASI</div>
-          <div className="font-bold">{row.data.FORMASI ?? "-"}</div>
+          <div className="text-gray-400">TMT AWAL PPPK</div>
+          <div className="font-bold">
+            {formatTanggalIndonesia(row?.TMT_JOIN) ?? "-"}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">PANGKAT</div>
+          <div className="font-bold">{row?.KDPANGKAT ?? "-"}</div>
         </div>
         <div>
           <div className="text-gray-400">AKHIR KONTRAK</div>
           <div className="font-bold">
-            {formatTanggalIndonesia(row.data.AKHIRKONTRAK) ?? "-"}
+            {formatTanggalIndonesia(row?.AKHIRKONTRAK) ?? "-"}
           </div>
         </div>
       </div>
       <Divider />
-      <div>
-        <div className="text-gray-400">NOMOR SK</div>
-        <div className="font-bold">{row.data.NOMORSKEP ?? "-"}</div>
-      </div>
-      <div>
-        <div className="text-gray-400">TANGGAL SK</div>
-        <div className="font-bold">
-          {formatTanggalIndonesia(row.data.TGLSKEP) ?? "-"}
+      <div className="flex flex-col sm:flex-row justify-start gap-x-16">
+        <div>
+          <div className="text-gray-400">
+            {row.KDJENKEL === 1 ? "JUMLAH ISTRI" : "JUMLAH SUAMI"}
+          </div>
+          <div className="font-bold">{row?.JISTRI ?? "-"}</div>
         </div>
-      </div>
-      <div>
-        <div className="text-gray-400">PENERBIT SK</div>
-        <div className="font-bold">{row.data.PENERBITSKEP ?? "-"}</div>
+        <div>
+          <div className="text-gray-400">JUMLAH ANAK</div>
+          <div className="font-bold">{row?.JANAK ?? "-"}</div>
+        </div>
       </div>
       <Divider />
       <RollBackPPPK sigapok={sigapok} pppk={row} />
@@ -145,7 +158,7 @@ export default function SigapokDataP3k({ sigapok, nip }) {
 }
 
 const RollBackPPPK = ({ sigapok, pppk }) => {
-  if (pppk.success === false) {
+  if (!pppk?.NIP) {
     return;
   }
 
