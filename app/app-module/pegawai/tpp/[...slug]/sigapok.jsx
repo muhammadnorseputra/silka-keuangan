@@ -1,24 +1,11 @@
-import {
-  hasSessionServer,
-  useSessionServer,
-} from "@/app/app-module/server-session";
 import { getTppByNip } from "@/dummy/data-tpp-by-nip";
 import { getTppSigapok } from "@/dummy/sigapok-get-tpp";
 import { formatRupiahManual } from "@/helpers/cx";
-import { decrypt } from "@/helpers/encrypt";
 import { polaNIP } from "@/helpers/polanip";
 import { terbilangRupiah } from "@/helpers/rupiah";
-import { redirect } from "next/navigation";
 import { ExclamationCircle } from "react-bootstrap-icons";
 
-export default async function RenderGapokServices({ slug }) {
-  const session = hasSessionServer("USER_GAPOK");
-  const sigapok = useSessionServer("USER_GAPOK");
-  if (session === false) {
-    return redirect("/app-integrasi/dashboard");
-  }
-  const NIP = decrypt(slug[0], "bkpsdm");
-
+export default async function RenderGapokServices({ nip: NIP, sigapok }) {
   const getTppSilka = await getTppByNip(NIP);
 
   if (getTppSilka.status === false) {

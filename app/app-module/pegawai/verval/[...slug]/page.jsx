@@ -2,10 +2,10 @@ import { BtnBackNextUi } from "@/components/button/btn-back";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 import { useSessionServer } from "../../../server-session";
 import { decrypt } from "@/helpers/encrypt";
-import { getPegawaiByNip } from "@/dummy/data-pegawai-by-nip";
 import VervalSigapokPegawai from "./sigapok";
 import VervalSilkaPegawai from "./silka";
 import { ShowProfile } from "@/helpers/profile";
+import { BtnRefreshQuery } from "@/components/button/btn-reload";
 export const revalidate = 0;
 
 export default async function Page({ params }) {
@@ -30,7 +30,7 @@ export default async function Page({ params }) {
                     <span className="uppercase font-bold">
                       Verifikasi & Validasi Data Peremajaan
                     </span>
-                    <ShowProfile jenis="PNS" nipnama={NIP}/>
+                    <ShowProfile jenis="PNS" nipnama={NIP} />
                   </div>
                 </div>
               </div>
@@ -38,17 +38,18 @@ export default async function Page({ params }) {
             <CardBody>
               <div className="flex flex-col md:flex-row justify-between items-start gap-x-6 gap-y-3">
                 {/* Get Data Silka */}
-                <Card fullWidth className="relative">
-                  <CardHeader className="flex gap-3">
+                <Card fullWidth className="lg:sticky top-0">
+                  <CardHeader className="flex justify-between items-center gap-3">
                     <div className="flex flex-col">
                       <p className="text-md">SILKa Online</p>
                       <p className="text-small text-default-500">
                         Data Verifikasi & Validasi Data Peremajaan
                       </p>
                     </div>
+                    <BtnRefreshQuery queryKey={["verval.silka.pegawai", NIP]} />
                   </CardHeader>
                   <Divider />
-                  <CardBody className="flex flex-col gap-y-4 px-8 py-8">
+                  <CardBody className="flex flex-col gap-y-4 pb-8">
                     <VervalSilkaPegawai
                       sigapok={sigapok}
                       silka={silkaonline}

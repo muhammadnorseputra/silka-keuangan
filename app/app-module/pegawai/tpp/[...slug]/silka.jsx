@@ -1,65 +1,70 @@
-import { useSessionServer } from "@/app/app-module/server-session";
+"use client";
+
 import { BtnKirimTPP } from "@/components/button/btn-tpp-kirim";
+import { PlaceholderBar } from "@/components/skeleton/placeholder-bar";
 import { getTppByNip } from "@/dummy/data-tpp-by-nip";
 import { formatRupiahManual } from "@/helpers/cx";
-import { decrypt } from "@/helpers/encrypt";
 import { polaNIP } from "@/helpers/polanip";
 import { terbilangRupiah } from "@/helpers/rupiah";
+import { useSession } from "@/lib/session";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { Divider } from "@nextui-org/react";
+import { useQuery } from "@tanstack/react-query";
 import { ExclamationCircle } from "react-bootstrap-icons";
 
-export default async function RenderSilkaService({ slug }) {
-  const sigapok = useSessionServer("USER_GAPOK");
-  const silka = useSessionServer("USER_SILKA");
+export default function RenderSilkaService({ nip: NIP, sigapok }) {
+  const silka = useSession("USER_SILKA");
 
-  const NIP = decrypt(slug[0], "bkpsdm");
+  const {
+    data: row,
+    isFetching,
+    isPending,
+  } = useQuery({
+    queryKey: ["silka.tpp.nip", NIP],
+    queryFn: async () => {
+      const result = await getTppByNip(NIP);
+      return result;
+    },
+  });
 
-  const resultDataTpp = await getTppByNip(NIP);
-  if (resultDataTpp.status === false) {
+  if (isFetching || isPending) return <PlaceholderBar />;
+
+  if (row.status === false) {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
         <ExclamationCircle className="size-8" />
-        <p className="text-gray-400">{resultDataTpp.message}</p>
+        <p className="text-gray-400">{row.message}</p>
       </div>
     );
   }
-  const {
-    nip,
-    nama,
-    gelar_depan,
-    gelar_belakang,
-    tpp_diterima,
-    tahun,
-    bulan,
-    fid_status,
-  } = resultDataTpp?.data;
+  const { nip, nama, gelar_depan, gelar_belakang, tpp_diterima, tahun, bulan } =
+    row?.data;
 
   const renderButtonKirim = () => {
-    if(resultDataTpp?.data.fid_status !== "4" && resultDataTpp?.data.fid_status !== "5") {
+    if (row?.data.fid_status !== "4" && row?.data.fid_status !== "5") {
       return (
         <p className="text-red-500 border-1 border-red-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
           <InformationCircleIcon className="size-5 text-red-300" />
           TPP masih dalam proses perhitungan atau belum disetujui.
         </p>
-      ) 
+      );
     }
 
-    if(resultDataTpp?.data.fid_status === "5") {
+    if (row?.data.fid_status === "5") {
       return (
         <>
-        <p className="text-green-500 border-t-1 border-dashed border-green-500 px-2 py-4 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
-          <InformationCircleIcon className="size-5 text-green-500" />
-          TPP sudah selesai cetak
-        </p>
+          <p className="text-green-500 border-t-1 border-dashed border-green-500 px-2 py-4 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
+            <InformationCircleIcon className="size-5 text-green-500" />
+            TPP sudah selesai cetak
+          </p>
         </>
-      ) 
+      );
     }
-    if (resultDataTpp?.data.is_sync_simgaji === "1") return null;
+    if (row?.data.is_sync_simgaji === "1") return null;
     return (
       <>
         <Divider />
-        <BtnKirimTPP {...sigapok} {...resultDataTpp?.data} silka={silka} />
+        <BtnKirimTPP {...sigapok} {...row?.data} silka={silka} />
       </>
     );
   };
