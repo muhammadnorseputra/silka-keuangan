@@ -109,8 +109,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
     mutate,
     isPending: isPendingSubmit,
     isError: isErrorSubmit,
-    error: errorSubmit,
-    variables,
+    error: errorSubmit
   } = useMutation({
     mutationKey: ["updatePegawai"],
     mutationFn: async (body) => {
@@ -179,6 +178,9 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
       },
       onSettled: (data) => {
         if (data.status === true) {
+          queryClient.invalidateQueries({
+            queryKey: ["pegawai.silka.nip"]
+          })
           toast.remove();
         }
       },
@@ -207,8 +209,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
   }
 
   if (
-    (row?.status_data !== "ENTRI" && row?.status_data !== null) ||
-    variables
+    (row?.status_data !== "ENTRI" && row?.status_data !== null)
   ) {
     return (
       <Card className="w-full h-screen">

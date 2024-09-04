@@ -8,8 +8,7 @@ import { useEffect, useState } from "react";
 import { getSkpdSigapokByKodeSimpeg } from "@/dummy/sigapok-get-skpd";
 import { getPeriodeTPP } from "@/dummy/data-tpp-periode";
 
-export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
-  const sigapok = useSession("USER_GAPOK");
+export default function ProgresTpp({ KODE_SKPD_SIMPEG, sigapok }) {
   // get periode tpp
   const { data: periode, isLoading: isLoadingPeriode } = useQuery({
     queryKey: ["periode.tpp"],
@@ -17,6 +16,7 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
       const res = await getPeriodeTPP();
       return res;
     },
+    enabled: !!KODE_SKPD_SIMPEG
   });
 
   const PERIODE_TPP = `${periode?.bulan.toString().padStart(2, "0")}${
@@ -35,7 +35,7 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG }) {
       const getPegawaiByUnorId = await getASNByUnor(KODE_SKPD_SIMPEG);
       return getPegawaiByUnorId;
     },
-    enabled: !!KODE_SKPD_SIMPEG,
+    enabled: !!PERIODE_TPP,
   });
 
   // get jumlah tpp sudah dikirim

@@ -20,16 +20,17 @@ import { checkURLStatus } from "@/helpers/cekurlstatus";
 import { polaNIP } from "@/helpers/polanip";
 import { getPangkatByNip } from "@/dummy/data-pangkat-by-nip";
 import BtnPangkatConfirm from "@/components/button/btn-pangkat-confirm";
+import { ShowProfile } from "@/helpers/profile";
 
 export default async function Page({ params }) {
   const sigapok = useSessionServer("USER_GAPOK");
   const session_silka = useSessionServer("USER_SILKA");
-  const $getNip = decrypt(params.slug[0], "bkpsdm");
-  const riwayat_pangkat = await getPangkatByNip($getNip);
+  const NIP = decrypt(params.slug[0], "bkpsdm");
+  const riwayat_pangkat = await getPangkatByNip(NIP);
   const resultDataPerubaahan = await getPerubahanData(
     sigapok.access_token, //token
     1, // jenis kenaikan pangkat
-    $getNip, // nip baru
+    NIP, // nip baru
     riwayat_pangkat?.data?.row?.tmt, // tmt sk
     riwayat_pangkat?.data?.row?.id_status_pegawai_simgaji //status pegawai
   );
@@ -272,12 +273,10 @@ export default async function Page({ params }) {
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <p className="text-xl flex flex-col">
-                    <span className="uppercase">Kenaikaan Pangkat</span>
-                    <span className="text-base">
-                      {riwayat_pangkat?.data?.row?.nama_lengkap}
-                    </span>
-                  </p>
+                  <div className="text-xl flex flex-col">
+                    <span className="uppercase font-bold">Kenaikaan Pangkat</span>
+                    <ShowProfile jenis="PNS" nipnama={NIP}/>
+                  </div>
                 </div>
               </div>
             </CardHeader>

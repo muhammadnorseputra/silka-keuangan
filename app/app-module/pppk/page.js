@@ -12,12 +12,13 @@ import ProgresTpp from "@/components/proggres/tpp";
 
 async function Page({ searchParams }) {
   const session = hasSessionServer("USER_GAPOK");
+  const sigapok = useSessionServer("USER_GAPOK");
+  const silka_session = useSessionServer("USER_SILKA");
+
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const silka_session = useSessionServer("USER_SILKA");
   const { unker, unker_id } = silka_session?.data?.pegawai;
   const { nip, level } = silka_session?.data;
 
@@ -60,7 +61,7 @@ async function Page({ searchParams }) {
               <BtnProfile profile={silka_session} />
             </CardHeader>
             <CardBody>
-              <ProgresTpp KODE_SKPD_SIMPEG={getIdUnker} />
+              <ProgresTpp KODE_SKPD_SIMPEG={getIdUnker} sigapok={sigapok}/>
               {renderTable()}
             </CardBody>
           </Card>

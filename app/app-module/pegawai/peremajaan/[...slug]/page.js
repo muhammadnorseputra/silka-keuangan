@@ -5,6 +5,7 @@ import { useSessionServer } from "../../../server-session";
 import { decrypt } from "@/helpers/encrypt";
 import { FormPeremajaan } from "@/components/forms/form-peremajaan";
 import { AlertWarning } from "@/components/alert";
+import { ShowProfile } from "@/helpers/profile";
 
 export default async function Page({ params }) {
   const sigapok = useSessionServer("USER_GAPOK");
@@ -24,11 +25,13 @@ export default async function Page({ params }) {
               <div className="inline-flex items-start gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <p className="text-xl flex flex-col">
+                  <div className="text-xl flex flex-col">
                     <span className="uppercase font-bold">
                       Peremajaan Data Pegawai
                     </span>
-                  </p>
+                    
+                    <ShowProfile jenis="PNS" nipnama={nip}/>
+                  </div>
                 </div>
               </div>
               <AlertWarning

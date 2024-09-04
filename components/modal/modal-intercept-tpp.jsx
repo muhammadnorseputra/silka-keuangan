@@ -51,6 +51,7 @@ export default function ModalInterceptTppPegawai({ params }) {
       </p>
     ) : (
       <Button
+      radius="none"
         className="disabled:cursor-not-allowed"
         isDisabled={queryTPP?.data.is_sync_simgaji !== "1"}
         color="success"
@@ -63,12 +64,25 @@ export default function ModalInterceptTppPegawai({ params }) {
 
   const renderActionKirim = useCallback(() => {
     if (isLoading || isFetching) return "";
-    return queryTPP?.data.fid_status !== "5" ? (
-      <p className="text-red-500 border-1 border-red-500 p-2 hover:cursor-not-allowed inline-flex items-center justify-center gap-x-2">
-        <InformationCircleIcon className="size-5 text-red-300" />
-        TPP masih dalam proses perhitungan atau belum disetujui.
-      </p>
-    ) : (
+    if(queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5") {
+      return (
+        <p className="text-red-500 border-1 border-red-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
+          <InformationCircleIcon className="size-5 text-red-300" />
+          TPP masih dalam proses perhitungan atau belum disetujui.
+        </p>
+      ) 
+    }
+
+    if(queryTPP?.data.fid_status === "5") {
+      return (
+        <p className="text-green-500 border-1 border-green-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
+          <InformationCircleIcon className="size-5 text-green-500" />
+          TPP sudah selesai cetak
+        </p>
+      ) 
+    }
+
+    return (
       <div className="inline-flex items-center gap-x-3">
         <Button color="danger" variant="light" onPress={() => router.back()}>
           Batal
@@ -239,6 +253,7 @@ export const ModalInterceptTppPppk = ({ params }) => {
       </p>
     ) : (
       <Button
+      radius="none"
         className="disabled:cursor-not-allowed"
         isDisabled={queryTPP?.data.is_sync_simgaji !== "1"}
         color="success"
@@ -251,12 +266,26 @@ export const ModalInterceptTppPppk = ({ params }) => {
 
   const renderActionKirim = useCallback(() => {
     if (isLoading || isFetching) return "";
-    return queryTPP?.data.fid_status !== "5" ? (
-      <p className="text-red-500 border-1 border-red-500 p-2 hover:cursor-not-allowed inline-flex items-center justify-center gap-x-2">
-        <InformationCircleIcon className="size-5 text-red-300" />
-        TPP masih dalam proses perhitungan atau belum disetujui.
-      </p>
-    ) : (
+
+    if(queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5") {
+      return (
+        <p className="text-red-500 border-1 border-red-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
+          <InformationCircleIcon className="size-5 text-red-300" />
+          TPP masih dalam proses perhitungan atau belum disetujui.
+        </p>
+      ) 
+    }
+
+    if(queryTPP?.data.fid_status === "5") {
+      return (
+        <p className="text-green-500 border-1 border-green-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
+          <InformationCircleIcon className="size-5 text-green-500" />
+          TPP sudah selesai cetak
+        </p>
+      ) 
+    }
+
+    return (
       <div className="inline-flex items-center gap-x-3">
         <Button color="danger" variant="light" onPress={() => router.back()}>
           Batal

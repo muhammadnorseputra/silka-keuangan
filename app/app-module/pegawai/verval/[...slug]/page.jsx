@@ -5,6 +5,7 @@ import { decrypt } from "@/helpers/encrypt";
 import { getPegawaiByNip } from "@/dummy/data-pegawai-by-nip";
 import VervalSigapokPegawai from "./sigapok";
 import VervalSilkaPegawai from "./silka";
+import { ShowProfile } from "@/helpers/profile";
 export const revalidate = 0;
 
 export default async function Page({ params }) {
@@ -25,12 +26,12 @@ export default async function Page({ params }) {
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <p className="text-xl flex flex-col">
-                    <span className="uppercase">
+                  <div className="text-xl flex flex-col">
+                    <span className="uppercase font-bold">
                       Verifikasi & Validasi Data Peremajaan
                     </span>
-                    {/* <span className="text-base">{namalengkap}</span> */}
-                  </p>
+                    <ShowProfile jenis="PNS" nipnama={NIP}/>
+                  </div>
                 </div>
               </div>
             </CardHeader>

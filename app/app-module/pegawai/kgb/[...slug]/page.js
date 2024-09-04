@@ -19,18 +19,19 @@ import { getPerubahanData } from "@/dummy/sigapok-get-perubahan";
 import BtnKgbConfirm from "@/components/button/btn-kgb-confirm";
 import { checkURLStatus } from "@/helpers/cekurlstatus";
 import { polaNIP } from "@/helpers/polanip";
+import { ShowProfile } from "@/helpers/profile";
 
 export const revalidate = 0;
 
 export default async function Page({ params }) {
   const sigapok = useSessionServer("USER_GAPOK");
   const session_silka = useSessionServer("USER_SILKA");
-  const $getNip = decrypt(params.slug[0], "bkpsdm");
-  const resultDataKgb = await getKgbByNip($getNip);
+  const NIP = decrypt(params.slug[0], "bkpsdm");
+  const resultDataKgb = await getKgbByNip(NIP);
   const resultDataPerubaahan = await getPerubahanData(
     sigapok.access_token, //token
     2, // jenis kenaikan
-    $getNip, // nip baru
+    NIP, // nip baru
     resultDataKgb?.data.tmt, // tmt sk
     resultDataKgb?.data.id_status_pegawai_simgaji //status pegawai
   );
@@ -279,10 +280,8 @@ export default async function Page({ params }) {
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
                   <p className="text-xl flex flex-col">
-                    <span className="uppercase">Kenaikaan gaji berkala</span>
-                    <span className="text-base">
-                      {resultDataKgb?.data?.nama_lengkap}
-                    </span>
+                    <span className="uppercase font-bold">Kenaikaan gaji berkala</span>
+                    <ShowProfile jenis="PNS" nipnama={NIP}/>
                   </p>
                 </div>
               </div>

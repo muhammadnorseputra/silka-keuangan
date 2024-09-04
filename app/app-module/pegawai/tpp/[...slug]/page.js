@@ -7,6 +7,8 @@ import { Suspense } from "react";
 import { PlaceholderBar } from "@/components/skeleton/placeholder-bar";
 import RenderSilkaService from "./silka";
 import RenderGapokServices from "./sigapok";
+import { ShowProfile } from "@/helpers/profile";
+import { decrypt } from "@/helpers/encrypt";
 
 export const revalidate = 0;
 
@@ -15,6 +17,8 @@ export default async function Page({ params }) {
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }
+
+  const NIP = decrypt(params.slug[0], "bkpsdm");
 
   return (
     <>
@@ -28,12 +32,12 @@ export default async function Page({ params }) {
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <p className="text-xl flex flex-col">
+                  <div className="text-xl flex flex-col">
                     <span className="uppercase font-bold">
                       Tambahan Penghasilan Pegawai
                     </span>
-                    {/* <span className="text-base">{namalengkap}</span> */}
-                  </p>
+                      <ShowProfile jenis="PNS" nipnama={NIP}/>
+                  </div>
                 </div>
               </div>
             </CardHeader>

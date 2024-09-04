@@ -36,13 +36,24 @@ export default async function RenderSilkaService({ slug }) {
   } = resultDataTpp?.data;
 
   const renderButtonKirim = () => {
-    if (resultDataTpp?.data.fid_status !== "5") {
+    if(resultDataTpp?.data.fid_status !== "4" && resultDataTpp?.data.fid_status !== "5") {
       return (
-        <p className="text-red-500 border-1 border-red-500 p-2 hover:cursor-not-allowed inline-flex items-center justify-center gap-x-2">
+        <p className="text-red-500 border-1 border-red-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
           <InformationCircleIcon className="size-5 text-red-300" />
           TPP masih dalam proses perhitungan atau belum disetujui.
         </p>
-      );
+      ) 
+    }
+
+    if(resultDataTpp?.data.fid_status === "5") {
+      return (
+        <>
+        <p className="text-green-500 border-t-1 border-dashed border-green-500 px-2 py-4 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
+          <InformationCircleIcon className="size-5 text-green-500" />
+          TPP sudah selesai cetak
+        </p>
+        </>
+      ) 
     }
     if (resultDataTpp?.data.is_sync_simgaji === "1") return null;
     return (
