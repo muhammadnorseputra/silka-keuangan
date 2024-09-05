@@ -29,7 +29,6 @@ export default async function Page({ params }) {
                     <span className="uppercase font-bold">
                       Peremajaan Data Pegawai
                     </span>
-                    
                     <ShowProfile jenis="PNS" nipnama={nip}/>
                   </div>
                 </div>
@@ -39,7 +38,7 @@ export default async function Page({ params }) {
                 message="Jika terdapat kesalahan data  pada section ini, silahkan hubungi BKPSDM untuk melakukan update data tersebut"
               />
             </CardHeader>
-            <CardBody>
+            <CardBody className="h-screen overflow-y-auto">
               <FormPeremajaan sigapok={sigapok} silka={silka} nip={nip} />
             </CardBody>
           </Card>

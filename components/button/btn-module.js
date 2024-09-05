@@ -77,7 +77,7 @@ const BtnModule = ({ goTo, isDisabled }) => {
         ) : (
           <div className="flex justify-center items-center gap-x-4">
             Pilih
-            <ArrowRightCircleFill className="size-6 group-hover:text-white/30 group-hover:translate-x-9 ease-in duration-300 group-hover:transition-all" />
+            <ArrowRightCircleFill className="size-6 group-hover:text-white/30 ease-in duration-300 group-hover:transition-all" />
           </div>
         )}
       </button>

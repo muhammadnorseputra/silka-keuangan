@@ -37,6 +37,7 @@ import {
   Chip,
   Progress,
 } from "@nextui-org/react";
+import { BtnRefreshQuery } from "../button/btn-reload";
 
 const FormPeremajaan = ({ sigapok, silka, nip }) => {
   const queryClient = useQueryClient();
@@ -836,7 +837,8 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
             </Card>
           </Tab>
         </Tabs>
-        <div className="w-full flex justify-center items-end my-4">
+        <div className="w-full flex justify-between items-center my-4 gap-x-3">
+          <BtnRefreshQuery queryKey={["pegawai.silka.nip", nip]} variant="shadow"/>
           <Button
             fullWidth
             color="primary"

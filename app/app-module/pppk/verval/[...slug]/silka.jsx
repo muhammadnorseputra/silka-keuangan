@@ -141,7 +141,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
       JISTRI: Number(row.jumlah_sutri),
       JANAK: Number(row.jumlah_anak),
       KDSTAPEG: Number(row.kode_statuspeg), //berdasarkan status pegawai 12 = ppppk
-      KDPANGKAT: row.nama_golru, //kode pangkat beda dengan di simpeg
+      KDPANGKAT: row.simgaji_id_pangkat, //kode pangkat beda dengan di simpeg
       MKGOLT: Number(row.maker_tahun),
       BLGOLT: 0,
       GAPOK: Number(row.gaji_pokok),
@@ -157,7 +157,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
       KDGURU: "",
       KDSKPD: row.simgaji_id_skpd,
       KDSATKER: row.simgaji_id_satker,
-      ALAMAT: limitCharacters(row.alamat, 60),
+      ALAMAT: row.alamat,
       KDDATI2: process.env.NEXT_PUBLIC_GAPOK_KDDATI2,
       KDDATI1: process.env.NEXT_PUBLIC_GAPOK_KDDATI1,
       NOTELP: row.no_handphone,

@@ -43,7 +43,7 @@ export default async function Page() {
         <h1 className="text-2xl text-center font-bold ml-8 mt-8">
           Pilih Module 🔥
         </h1>
-        <section className="grid grid-flow-row grid-cols-1 md:grid-cols-3 gap-4 p-8">
+        <section className="grid grid-flow-row grid-cols-1 md:grid-cols-3 gap-4 p-8 group">
           {renderModule()}
         </section>
       </div>

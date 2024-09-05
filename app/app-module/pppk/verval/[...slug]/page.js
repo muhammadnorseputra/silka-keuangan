@@ -13,6 +13,7 @@ import { getPegawaiByNip } from "@/dummy/data-pegawai-by-nip";
 import { BtnApprove } from "@/components/button/btn-approve";
 import SigapokDataP3k from "./sigapok";
 import SilkaDataP3k from "./silka";
+import { ShowProfile } from "@/helpers/profile";
 
 export const revalidate = 0;
 
@@ -37,11 +38,12 @@ export default async function Page({ params }) {
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <p className="text-xl flex flex-col">
-                    <span className="uppercase">
+                  <div className="text-xl flex flex-col">
+                    <span className="uppercase font-bold">
                       Verifikasi & Validasi Data Peremajaan
                     </span>
-                  </p>
+                    <ShowProfile jenis="PPPK" nipnama={NIP}/>
+                  </div>
                 </div>
               </div>
             </CardHeader>

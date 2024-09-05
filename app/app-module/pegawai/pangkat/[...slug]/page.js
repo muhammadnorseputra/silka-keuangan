@@ -15,7 +15,6 @@ import { ExclamationCircle } from "react-bootstrap-icons";
 import { decrypt } from "@/helpers/encrypt";
 import { getPerubahanData } from "@/dummy/sigapok-get-perubahan";
 
-import BtnKgbConfirm from "@/components/button/btn-kgb-confirm";
 import { checkURLStatus } from "@/helpers/cekurlstatus";
 import { polaNIP } from "@/helpers/polanip";
 import { getPangkatByNip } from "@/dummy/data-pangkat-by-nip";

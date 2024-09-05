@@ -19,6 +19,7 @@ import { useCallback } from "react";
 import { PlaceholderBar } from "../skeleton/placeholder-bar";
 import { BtnKirimTPP } from "../button/btn-tpp-kirim";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
+import toast from "react-hot-toast";
 
 export default function ModalInterceptTppPegawai({ params }) {
   const router = useRouter();
@@ -40,7 +41,10 @@ export default function ModalInterceptTppPegawai({ params }) {
       const resultDataTpp = await getTppByNip(NIP);
       return resultDataTpp;
     },
+    refetchOnWindowFocus: false,
+    enabled: !!NIP
   });
+
 
   const renderActionHasil = useCallback(() => {
     if (isLoading || isFetching) return "";
@@ -60,7 +64,7 @@ export default function ModalInterceptTppPegawai({ params }) {
         Hasil Sinkronisasi
       </Button>
     );
-  }, [isFetching, isLoading, queryTPP?.data.is_sync_simgaji]);
+  }, [isFetching, isLoading, queryTPP?.data?.is_sync_simgaji]);
 
   const renderActionKirim = useCallback(() => {
     if (isLoading || isFetching) return "";
@@ -143,7 +147,23 @@ export default function ModalInterceptTppPegawai({ params }) {
       </>
     );
   }, [isFetching, isLoading, queryTPP?.data]);
-
+  
+  if(queryTPP?.status === false) {
+    return (
+      <>
+        <Modal
+          size="2xl"
+          backdrop="blur"
+          isOpen={true}
+          onClose={() => router.back()}>
+          <ModalContent>
+          <ModalBody><p>Data TPP Tidak Ditemukan</p></ModalBody>
+            
+          </ModalContent>
+        </Modal>
+      </>
+    )
+  }
   return (
     <>
       <Modal
