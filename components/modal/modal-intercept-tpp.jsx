@@ -314,6 +314,24 @@ export const ModalInterceptTppPppk = ({ params }) => {
       </div>
     );
   }, [isFetching, isLoading, queryTPP?.data, router, sigapok, silka]);
+
+  if(queryTPP?.status === false) {
+    return (
+      <>
+        <Modal
+          size="2xl"
+          backdrop="blur"
+          isOpen={true}
+          onClose={() => router.back()}>
+          <ModalContent>
+          <ModalBody><p>Data TPP Tidak Ditemukan</p></ModalBody>
+            
+          </ModalContent>
+        </Modal>
+      </>
+    )
+  }
+  
   return (
     <>
       <Modal
