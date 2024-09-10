@@ -18,7 +18,7 @@ import { useRouter } from "next-nprogress-bar";
 import { useCallback } from "react";
 import { PlaceholderBar } from "../skeleton/placeholder-bar";
 import { BtnKirimTPP } from "../button/btn-tpp-kirim";
-import { InformationCircleIcon } from "@heroicons/react/24/solid";
+import { InboxIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 
 export default function ModalInterceptTppPegawai({ params }) {
@@ -157,7 +157,16 @@ export default function ModalInterceptTppPegawai({ params }) {
           isOpen={true}
           onClose={() => router.back()}>
           <ModalContent>
-          <ModalBody><p>Data TPP Tidak Ditemukan</p></ModalBody>
+          <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900">
+            SINKRONISASI TPP{" "}
+            <div className="text-sm text-gray-400 font-normal">
+              Data TPP SILKa Online
+            </div>
+          </ModalHeader>
+          <ModalBody className="flex flex-column justify-center items-center gap-y-3">
+            <InboxIcon className="size-8 text-gray-300 dark:text-gray-700"/>
+            <p>Data TPP Tidak Ditemukan</p>
+          </ModalBody>
             
           </ModalContent>
         </Modal>
@@ -282,7 +291,7 @@ export const ModalInterceptTppPppk = ({ params }) => {
         Hasil Sinkronisasi
       </Button>
     );
-  }, [isFetching, isLoading, queryTPP?.data.is_sync_simgaji]);
+  }, [isFetching, isLoading, queryTPP?.data?.is_sync_simgaji]);
 
   const renderActionKirim = useCallback(() => {
     if (isLoading || isFetching) return "";
@@ -324,7 +333,16 @@ export const ModalInterceptTppPppk = ({ params }) => {
           isOpen={true}
           onClose={() => router.back()}>
           <ModalContent>
-          <ModalBody><p>Data TPP Tidak Ditemukan</p></ModalBody>
+          <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900">
+                SINKRONISASI TPP{" "}
+                <div className="text-sm text-gray-400 font-normal">
+                  Data TPP SILKa Online
+                </div>
+              </ModalHeader>
+          <ModalBody className="flex flex-column justify-center items-center gap-y-3">
+            <InboxIcon className="size-8 text-gray-300 dark:text-gray-700"/>
+            <p>Data TPP Tidak Ditemukan</p>
+          </ModalBody>
             
           </ModalContent>
         </Modal>
