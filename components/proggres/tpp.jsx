@@ -45,12 +45,7 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG, sigapok }) {
     isError: isErrorSigapok,
     error: errorMessageSigapok,
   } = useQuery({
-    queryKey: [
-      "count.sigapok.tpp",
-      sigapok.access_token,
-      querySilkaCountPns?.data.id_skpd_simgaji,
-      PERIODE_TPP,
-    ],
+    queryKey: ["count.sigapok.tpp"],
     queryFn: async () => {
       const getJumlahTpp = await getTppSigapokBySkpd(
         sigapok.access_token,
