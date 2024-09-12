@@ -1,11 +1,8 @@
 "use client";
 import { getTppSigapokBySkpd } from "@/dummy/sigapok-get-tpp";
 import { useQuery } from "@tanstack/react-query";
-import { useSession } from "@/lib/session";
-import { Progress, Skeleton } from "@nextui-org/react";
-import { getASNByUnor, getPegawaiByUnor } from "@/dummy/data-pegawai-by-unor";
-import { useEffect, useState } from "react";
-import { getSkpdSigapokByKodeSimpeg } from "@/dummy/sigapok-get-skpd";
+import { Progress } from "@nextui-org/react";
+import { getASNByUnor } from "@/dummy/data-pegawai-by-unor";
 import { getPeriodeTPP } from "@/dummy/data-tpp-periode";
 
 export default function ProgresTpp({ KODE_SKPD_SIMPEG, sigapok }) {
