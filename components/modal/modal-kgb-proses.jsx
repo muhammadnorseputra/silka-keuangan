@@ -12,22 +12,23 @@ import {
   Chip,
   Skeleton,
 } from "@nextui-org/react";
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 import { AlertInfo, AlertWarning } from "../alert";
 import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
 import { DocumentCurrencyDollarIcon } from "@heroicons/react/24/solid";
 
-const MyPDF = dynamic(
-  () => import("../pdf/viewer").then((mod) => mod.PDFViewer),
-  {
-    ssr: false,
-    loading: () => (
-      <Skeleton className="rounded-lg">
-        <div className="h-36 w-full rounded-lg bg-default-300"></div>
-      </Skeleton>
-    ),
-  }
-);
+// const MyPDF = dynamic(
+//   () => import("../pdf/viewer").then((mod) => mod.PDFViewer),
+//   {
+//     ssr: false,
+//     loading: () => (
+//       <Skeleton className="rounded-lg">
+//         <div className="h-36 w-full rounded-lg bg-default-300"></div>
+//       </Skeleton>
+//     ),
+//   }
+// );
+
 export const ModalKgbProses = ({
   dataSilka,
   isOpenModal = false,
@@ -65,18 +66,18 @@ export const ModalKgbProses = ({
           </ModalHeader>
           <ModalBody>
             {/* <MyPDF src={berkas} /> */}
-            <MyPDF src={berkas} />
+            {/* <MyPDF src={berkas} /> */}
             {/* <iframe
               allowFullScreen={true}
               height={600}
               src={`${berkas}#zoom=FitH`}
               sandbox="allow-scripts"
             /> */}
-            <div className="grid grid-flow-row-dense grid-cols-4 gap-4 border-b border-l border-r border-gray-500 -mt-3 p-6">
+            <div className="grid grid-flow-row-dense grid-cols-4 gap-4 p-6">
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">GAJI BARU</div>
-                <div className="font-bold">
-                  {formatRupiah(gapok_baru) ?? "-"}
+                <div className="font-bold text-green-600 text-xl">
+                  Rp. {formatRupiah(gapok_baru) ?? "-"}
                 </div>
               </div>
               <div className="col-span-4 md:col-span-1">
@@ -107,7 +108,8 @@ export const ModalKgbProses = ({
               </div>
             </div>
             <AlertWarning title="Confirm">
-              Apakah anda yakin data tersebut sudah benar ? <br /> Klik tombol
+              Silahkan lakukan verifikasi jika data tersebut sudah benar, dengan
+              klik tombol
               <Chip as="span" color="primary" variant="faded" className="mx-2">
                 Kirim
               </Chip>{" "}

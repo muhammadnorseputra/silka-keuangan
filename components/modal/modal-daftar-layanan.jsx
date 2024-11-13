@@ -99,6 +99,8 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
               </ListboxSection>
               <ListboxSection title="Layanan Integrasi">
                 <ListboxItem
+                  isDisabled={jenis === "PPPK"}
+                  hideSelectedIcon={jenis === "PPPK"}
                   key="kgb"
                   onPress={() => {
                     if (jenis === "PNS") {
@@ -118,6 +120,8 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   Proses Kenaikan Gaji Berkala
                 </ListboxItem>
                 <ListboxItem
+                  isDisabled={jenis === "PPPK"}
+                  hideSelectedIcon={jenis === "PPPK"}
                   key="kp"
                   onPress={() => {
                     if (jenis === "PNS") {
@@ -136,6 +140,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }>
                   Proses Kenaikan Pangkat
                 </ListboxItem>
+
                 <ListboxItem
                   key="tpp"
                   onPress={() => {

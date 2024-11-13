@@ -110,7 +110,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
     mutate,
     isPending: isPendingSubmit,
     isError: isErrorSubmit,
-    error: errorSubmit
+    error: errorSubmit,
   } = useMutation({
     mutationKey: ["updatePegawai"],
     mutationFn: async (body) => {
@@ -180,8 +180,8 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
       onSettled: (data) => {
         if (data.status === true) {
           queryClient.invalidateQueries({
-            queryKey: ["pegawai.silka.nip"]
-          })
+            queryKey: ["pegawai.silka.nip"],
+          });
           toast.remove();
         }
       },
@@ -209,9 +209,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
     );
   }
 
-  if (
-    (row?.status_data !== "ENTRI" && row?.status_data !== null)
-  ) {
+  if (row?.status_data !== "ENTRI" && row?.status_data !== null) {
     return (
       <Card className="w-full h-screen">
         <CardBody className="flex flex-col items-center justify-center gap-6">
@@ -644,7 +642,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
                   label="TMT SPMT"
                   name="tgl_spmt"
                   variant="flat"
-                  description="Format Tanggal : tahun-bulan-tanggal"
+                  description="Format: tahun-bulan-tanggal"
                   defaultValue={row?.tmt_skmt ?? row?.tgl_spmt}
                   errorMessage={
                     errors?.tgl_spmt?.message && `${errors.tgl_spmt.message}`
@@ -838,7 +836,10 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
           </Tab>
         </Tabs>
         <div className="w-full flex justify-between items-center my-4 gap-x-3">
-          <BtnRefreshQuery queryKey={["pegawai.silka.nip", nip]} variant="shadow"/>
+          <BtnRefreshQuery
+            queryKey={["pegawai.silka.nip", nip]}
+            variant="shadow"
+          />
           <Button
             fullWidth
             color="primary"

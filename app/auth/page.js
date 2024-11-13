@@ -57,7 +57,7 @@ export default function Login() {
         </CardBody>
         <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between">
           <span className="text-gray-300 text-sm text-ellipsis">
-            &copy; Develop by BKPSDM
+            &copy; Dikembangakan oleh PPIK.
           </span>
           <Link
             isBlock
