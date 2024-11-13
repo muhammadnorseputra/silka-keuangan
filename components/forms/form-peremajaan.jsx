@@ -638,13 +638,13 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
                 /> */}
                 <Input
                   isRequired
-                  isReadOnly
                   size="lg"
                   className="col-span-4 sm:col-span-1"
                   labelPlacement="outside"
                   label="TMT SPMT"
                   name="tgl_spmt"
                   variant="flat"
+                  description="Format Tanggal : tahun-bulan-tanggal"
                   defaultValue={row?.tmt_skmt ?? row?.tgl_spmt}
                   errorMessage={
                     errors?.tgl_spmt?.message && `${errors.tgl_spmt.message}`
