@@ -8,7 +8,7 @@ import { polaNIP } from "@/helpers/polanip";
 import { terbilangRupiah } from "@/helpers/rupiah";
 import { useSession } from "@/lib/session";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
-import { Divider } from "@nextui-org/react";
+import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { ExclamationCircle } from "react-bootstrap-icons";
 
@@ -37,8 +37,23 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
       </div>
     );
   }
-  const { nip, nama, gelar_depan, gelar_belakang, tpp_diterima, tahun, bulan } =
-    row?.data;
+  const {
+    nip,
+    nama,
+    gelar_depan,
+    gelar_belakang,
+    jabatan,
+    tpp_diterima,
+    tahun,
+    bulan,
+    basic_bk,
+    basic_pk,
+    basic_kk,
+    basic_kp,
+    jml_pph,
+    jml_iwp,
+    jml_bpjs,
+  } = row?.data;
 
   const renderButtonKirim = () => {
     if (row?.data.fid_status !== "4" && row?.data.fid_status !== "5") {
@@ -79,8 +94,14 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
         <div>
           <div className="text-gray-400">NAMA</div>
           <div className="font-bold">
-            {`${gelar_depan} ${nama} ${gelar_belakang}` ?? "-"}
+            {`${gelar_depan} ${nama} ${gelar_belakang}`}
           </div>
+        </div>
+      </div>
+      <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
+        <div>
+          <div className="text-gray-400">JABATAN</div>
+          <div className="font-bold">{jabatan ?? "-"}</div>
         </div>
       </div>
       <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
@@ -93,7 +114,62 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
           <div className="font-bold">{tahun ?? "-"}</div>
         </div>
       </div>
-      <div>
+      <Accordion variant="bordered" defaultExpandedKeys={["1"]}>
+        <AccordionItem
+          key="1"
+          aria-label="Accordion 1"
+          title="Detail Kalkulasi TPP">
+          <div className="inline-flex flex-col sm:flex-row justify-start gap-x-12 gap-y-8">
+            <div>
+              <div className="text-gray-400">BEBAN KERJA</div>
+              <div className="font-bold">
+                {formatRupiahManual(basic_bk) ?? "-"}
+              </div>
+            </div>
+            <div>
+              <div className="text-gray-400">PRESTASI KERJA</div>
+              <div className="font-bold">
+                {formatRupiahManual(basic_pk) ?? "-"}
+              </div>
+            </div>
+            <div>
+              <div className="text-gray-400">KONDISI KERJA</div>
+              <div className="font-bold">
+                {formatRupiahManual(basic_kk) ?? "-"}
+              </div>
+            </div>
+          </div>
+          <div className="inline-flex flex-col sm:flex-row justify-start gap-x-6 gap-y-8 mt-4">
+            <div>
+              <div className="text-gray-400">KELANGKAAN PROFESI</div>
+              <div className="font-bold">
+                {formatRupiahManual(basic_kp) ?? "-"}
+              </div>
+            </div>
+            <div>
+              <div className="text-gray-400">PPH21</div>
+              <div className="font-bold">
+                {formatRupiahManual(jml_pph) ?? "-"}
+              </div>
+            </div>
+            <div>
+              <div className="text-gray-400">IWP</div>
+              <div className="font-bold">
+                {formatRupiahManual(jml_iwp) ?? "-"}
+              </div>
+            </div>
+          </div>
+          <div className="inline-flex flex-col sm:flex-row justify-start gap-x-6 gap-y-8 mt-4">
+            <div>
+              <div className="text-gray-400">BPJS</div>
+              <div className="font-bold">
+                {formatRupiahManual(jml_bpjs) ?? "-"}
+              </div>
+            </div>
+          </div>
+        </AccordionItem>
+      </Accordion>
+      <div className="border-t border-dashed border-green-600 pt-3">
         <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
         <div className="font-bold text-green-600 text-2xl">
           {formatRupiahManual(tpp_diterima) ?? "-"}

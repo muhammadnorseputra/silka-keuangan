@@ -651,7 +651,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
                   {...register("tgl_spmt", {
                     pattern: {
                       value: /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/,
-                      message: "Date input tidak valid",
+                      message: "Input tanggal tidak valid !",
                     },
                     required: {
                       value: true,
@@ -684,7 +684,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
                   label="Jumlah Istri / Suami"
                   name="jumlah_sutri"
                   variant="flat"
-                  defaultValue={row?.jumlah_sutri}
+                  defaultValue={row.jumlah_sutri}
                   {...register("jumlah_sutri")}
                 />
                 <Input
@@ -836,10 +836,6 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
           </Tab>
         </Tabs>
         <div className="w-full flex justify-between items-center my-4 gap-x-3">
-          <BtnRefreshQuery
-            queryKey={["pegawai.silka.nip", nip]}
-            variant="shadow"
-          />
           <Button
             fullWidth
             color="primary"

@@ -1,4 +1,5 @@
 "use client";
+import revalidateTag from "@/lib/revalidateTags";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { Button, Tooltip } from "@nextui-org/react";
 import { useIsFetching, useQueryClient } from "@tanstack/react-query";
@@ -21,13 +22,15 @@ export const BtnRefreshQuery = ({ queryKey, ...args }) => {
       <Button
         {...args}
         color="danger"
-        onClick={() =>
+        onClick={() => {
           queryClient.invalidateQueries({
             queryKey,
-            refetchType: 'active',
-          })
-        }>
-        <ArrowPathIcon className={`size-5 ${isFetching ? 'animate-spin' : ''}`} />
+            type: "active",
+          });
+        }}>
+        <ArrowPathIcon
+          className={`size-5 ${isFetching ? "animate-spin" : ""}`}
+        />
       </Button>
     </Tooltip>
   );

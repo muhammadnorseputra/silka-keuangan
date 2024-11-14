@@ -1,4 +1,3 @@
-"use server";
 import { BtnBackNextUi } from "@/components/button/btn-back";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useSessionServer } from "../../../server-session";
@@ -29,7 +28,7 @@ export default async function Page({ params }) {
                     <span className="uppercase font-bold">
                       Peremajaan Data Pegawai
                     </span>
-                    <ShowProfile jenis="PNS" nipnama={nip}/>
+                    <ShowProfile jenis="PNS" nipnama={nip} />
                   </div>
                 </div>
               </div>
