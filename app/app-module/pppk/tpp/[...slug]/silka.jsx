@@ -8,6 +8,7 @@ import { terbilangRupiah } from "@/helpers/rupiah";
 import { Divider } from "@nextui-org/react";
 import { ExclamationCircle } from "react-bootstrap-icons";
 import DetailKalkulasi from "./detailKalkulasi";
+import { AlertSuccess } from "@/components/alert";
 
 export default async function RenderSilkaService({ slug }) {
   const sigapok = useSessionServer("USER_GAPOK");
@@ -30,22 +31,16 @@ export default async function RenderSilkaService({ slug }) {
     gelar_depan,
     gelar_blk,
     jabatan,
-    tpp_diterima,
     tahun,
     bulan,
     fid_status,
   } = resultDataTpp?.data;
 
   const renderButtonKirim = () => {
-    // if (resultDataTpp?.data.fid_status !== "CETAK") {
-    //   return (
-    //     <div className="text-red-500">TPP masih dalam proses perhitungan.</div>
-    //   );
-    // }
     if (resultDataTpp?.data.is_sync_simgaji === "1") return null;
+    if (resultDataTpp?.data.fid_status === "5") return null;
     return (
       <>
-        <Divider />
         <BtnKirimTPP {...sigapok} {...resultDataTpp?.data} silka={silka} />
       </>
     );
@@ -53,6 +48,11 @@ export default async function RenderSilkaService({ slug }) {
 
   return (
     <>
+      {resultDataTpp?.data.fid_status === "5" && (
+        <AlertSuccess title="Perhatian">
+          TPP sudah selesai cetak pada silka online.
+        </AlertSuccess>
+      )}
       <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
         <div>
           <div className="text-gray-400">NIP</div>
@@ -82,18 +82,6 @@ export default async function RenderSilkaService({ slug }) {
         </div>
       </div>
       <DetailKalkulasi data={resultDataTpp?.data} />
-      <div>
-        <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
-        <div className="font-bold text-green-600 text-2xl">
-          {formatRupiahManual(tpp_diterima) ?? "-"}
-        </div>
-      </div>
-      <div>
-        <div className="text-gray-400">TERBILANG</div>
-        <div className="font-bold text-gray-400 italic uppercase">
-          {terbilangRupiah(tpp_diterima) ?? "-"}
-        </div>
-      </div>
       {renderButtonKirim()}
     </>
   );

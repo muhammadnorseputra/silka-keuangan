@@ -8,12 +8,12 @@ import { getPeriodeTPP } from "@/dummy/data-tpp-periode";
 export default function ProgresTpp({ KODE_SKPD_SIMPEG, sigapok }) {
   // get periode tpp
   const { data: periode, isLoading: isLoadingPeriode } = useQuery({
-    queryKey: ["periode.tpp"],
+    queryKey: ["periode.tpp", KODE_SKPD_SIMPEG],
     queryFn: async () => {
       const res = await getPeriodeTPP();
       return res;
     },
-    enabled: !!KODE_SKPD_SIMPEG
+    enabled: !!KODE_SKPD_SIMPEG,
   });
 
   const PERIODE_TPP = `${periode?.bulan.toString().padStart(2, "0")}${
@@ -42,7 +42,7 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG, sigapok }) {
     isError: isErrorSigapok,
     error: errorMessageSigapok,
   } = useQuery({
-    queryKey: ["count.sigapok.tpp"],
+    queryKey: ["count.sigapok.tpp", querySilkaCountPns?.data.id_skpd_simgaji],
     queryFn: async () => {
       const getJumlahTpp = await getTppSigapokBySkpd(
         sigapok.access_token,

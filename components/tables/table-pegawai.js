@@ -284,12 +284,13 @@ export const TablePegawai = ({ unors, pegawais }) => {
             isDisabled={isLoadingTable}
             placeholder={`Pilih Unit Kerja`}
             selectedKey={`${selectedKeyUnor}`}
+            variant="bordered"
             classNames={{
               base: "max-w-xl",
               listboxWrapper: "max-h-[320px]",
               selectorButton: "text-default-500",
             }}
-            // style={{ width: "500px" }}
+            style={{ width: "500px" }}
             allowsCustomValue={true}
             onSelectionChange={onSelectionChange}
             label={

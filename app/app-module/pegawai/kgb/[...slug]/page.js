@@ -20,6 +20,7 @@ import BtnKgbConfirm from "@/components/button/btn-kgb-confirm";
 import { checkURLStatus } from "@/helpers/cekurlstatus";
 import { polaNIP } from "@/helpers/polanip";
 import { ShowProfile } from "@/helpers/profile";
+import { AlertDanger, AlertWarning } from "@/components/alert";
 
 export const revalidate = 0;
 
@@ -35,6 +36,10 @@ export default async function Page({ params }) {
     resultDataKgb?.data.tmt, // tmt sk
     resultDataKgb?.data.id_status_pegawai_simgaji //status pegawai
   );
+
+  // cek file sk kgb ada atau tidak
+  const isBerkas = await checkURLStatus(resultDataKgb?.data?.berkas);
+
   const renderSilkaService = () => {
     if (resultDataKgb.status === false) {
       return (
@@ -57,9 +62,26 @@ export default async function Page({ params }) {
       no_sk,
       pejabat_sk,
       berkas,
+      id_status_pegawai_simgaji,
+      id_jenis_pegawai_simgaji,
     } = resultDataKgb?.data;
     return (
       <>
+        {isBerkas !== "OK" && (
+          <AlertDanger
+            title="Perhatian"
+            message="File SK / Berkas tidak ditemukan, verifikasi tidak dapat dilakukan !
+            Silahkan Upload pada Riwayat KGB Terkahir ASN"
+          />
+        )}
+        {(id_status_pegawai_simgaji === null ||
+          id_jenis_pegawai_simgaji === null) && (
+          <AlertWarning
+            title="Perhatian"
+            message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
+          />
+        )}
+
         <div>
           <div className="text-gray-400">NAMA</div>
           <div className="font-bold">{nama_lengkap ?? "-"}</div>
@@ -236,28 +258,13 @@ export default async function Page({ params }) {
     );
   };
 
-  // cek file sk kgb ada atau tidak
-  const isBerkas = await checkURLStatus(resultDataKgb?.data?.berkas);
-
   const renderButtonVerifikasi = () => {
-    if (isBerkas !== "OK") {
-      return (
-        <p className="text-red-600">
-          File SK / Berkas tidak ditemukan, verifikasi tidak dapat dilakukan !
-          Silahkan Upload pada{" "}
-          <strong>
-            <Link
-              showAnchorIcon
-              color="primary"
-              href={process.env.NEXT_PUBLIC_SILKA_BASE_URL}
-              target="_blank">
-              SIMPEG
-            </Link>
-          </strong>{" "}
-          Riwayat KGB Terkahir ASN
-        </p>
-      );
-    }
+    if (isBerkas !== "OK") return null;
+    if (
+      resultDataKgb?.data.id_status_pegawai_simgaji === null ||
+      resultDataKgb?.data.id_jenis_pegawai_simgaji === null
+    )
+      return null;
 
     return (
       <BtnKgbConfirm
@@ -280,8 +287,10 @@ export default async function Page({ params }) {
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
                   <p className="text-xl flex flex-col">
-                    <span className="uppercase font-bold">Kenaikaan gaji berkala</span>
-                    <ShowProfile jenis="PNS" nipnama={NIP}/>
+                    <span className="uppercase font-bold">
+                      Kenaikaan gaji berkala
+                    </span>
+                    <ShowProfile jenis="PNS" nipnama={NIP} />
                   </p>
                 </div>
               </div>

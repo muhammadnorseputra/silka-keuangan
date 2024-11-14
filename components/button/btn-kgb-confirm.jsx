@@ -142,23 +142,9 @@ export default function BtnKgbConfirm({
     });
   }
 
-  const disabled = kgb.status === false ?? true;
+  const disabled = kgb.status === false;
 
   const isPeremajaan = () => {
-    if (
-      id_status_pegawai_simgaji === null ||
-      id_jenis_pegawai_simgaji === null
-    ) {
-      return (
-        <div className="text-red-500 flex justify-start items-start gap-3">
-          <ExclamationCircleIcon className="size-8 text-red-400" />
-          <p>
-            Data Pegawai belum diremajakan, silahkan melakukan peremajaan data
-            terlebih dahulu
-          </p>
-        </div>
-      );
-    }
     return (
       <Button
         onPress={() => {

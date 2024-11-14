@@ -251,6 +251,7 @@ export const TablePppk = ({ silka, unorlist, pegawais }) => {
             classNames={{
               selectorButton: "text-default-800",
             }}
+            style={{ width: "500px" }}
             allowsCustomValue={true}
             onSelectionChange={onSelectionChange}
             label={

@@ -22,7 +22,8 @@ import { PlaceholderBar } from "../skeleton/placeholder-bar";
 import { BtnKirimTPP } from "../button/btn-tpp-kirim";
 import { InboxIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
-import { AlertDanger, AlertInfo } from "../alert";
+import { AlertDanger, AlertInfo, AlertSuccess } from "../alert";
+import DetailKalkulasi from "@/app/app-module/pppk/tpp/[...slug]/detailKalkulasi";
 
 export default function ModalInterceptTppPegawai({ params }) {
   const router = useRouter();
@@ -50,12 +51,7 @@ export default function ModalInterceptTppPegawai({ params }) {
 
   const renderActionHasil = useCallback(() => {
     if (isLoading || isFetching) return "";
-    return queryTPP?.data.is_sync_simgaji !== "1" ? (
-      <p className="text-red-500 py-2 hover:cursor-not-allowed inline-flex items-center justify-start gap-x-2">
-        <InformationCircleIcon className="size-5 text-red-300" />
-        <span>Belum Sinkron</span>
-      </p>
-    ) : (
+    return queryTPP?.data.is_sync_simgaji !== "1" ? null : (
       <Button
         // radius="none"
         className="disabled:cursor-not-allowed"
@@ -74,29 +70,9 @@ export default function ModalInterceptTppPegawai({ params }) {
     if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
       return null;
     if (queryTPP?.data.fid_status === "5") return null;
-    // if (
-    //   queryTPP?.data.fid_status !== "4" &&
-    //   queryTPP?.data.fid_status !== "5"
-    // ) {
-    //   return (
-    //     <p className="text-red-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
-    //       <InformationCircleIcon className="size-5 text-red-300" />
-    //       TPP masih dalam proses perhitungan atau belum disetujui.
-    //     </p>
-    //   );
-    // }
-
-    // if (queryTPP?.data.fid_status === "5") {
-    //   return (
-    //     <p className="text-green-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
-    //       <InformationCircleIcon className="size-5 text-green-500" />
-    //       TPP sudah selesai cetak
-    //     </p>
-    //   );
-    // }
 
     return (
-      <div className="inline-flex items-center gap-x-3">
+      <div className="inline-flex w-full justify-between items-center gap-x-3">
         <Button color="danger" variant="light" onPress={() => router.back()}>
           Batal
         </Button>
@@ -127,6 +103,9 @@ export default function ModalInterceptTppPegawai({ params }) {
     } = queryTPP?.data;
     return (
       <>
+        {queryTPP?.data.is_sync_simgaji !== "1" && (
+          <AlertDanger title="Perhatian" message="Data belum tersenkronisasi" />
+        )}
         {queryTPP?.data.fid_status !== "4" &&
           queryTPP?.data.fid_status !== "5" && (
             <AlertDanger title="Perhatian">
@@ -134,7 +113,9 @@ export default function ModalInterceptTppPegawai({ params }) {
             </AlertDanger>
           )}
         {queryTPP?.data.fid_status === "5" && (
-          <AlertInfo title="Perhatian">TPP sudah selesai cetak</AlertInfo>
+          <AlertSuccess title="Perhatian">
+            TPP sudah selesai cetak pada silka online
+          </AlertSuccess>
         )}
         <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-6">
           <div>
@@ -164,23 +145,27 @@ export default function ModalInterceptTppPegawai({ params }) {
             <div className="font-bold">{tahun ?? "-"}</div>
           </div>
         </div>
-
-        <div className="border-t border-dashed border-green-600 pt-3">
-          <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
-          <div className="font-bold text-green-600 text-2xl">
-            {formatRupiahManual(tpp_diterima) ?? "-"}
-          </div>
-        </div>
-        <div>
-          <div className="text-gray-400">TERBILANG</div>
-          <div className="font-bold text-gray-400 italic uppercase">
-            {terbilangRupiah(tpp_diterima) ?? "-"}
-          </div>
-        </div>
-        <Accordion variant="bordered" defaultExpandedKeys={["1"]}>
+        <Accordion
+          variant="bordered"
+          defaultExpandedKeys={["1", "2"]}
+          selectionMode="multiple">
+          <AccordionItem key="1" aria-label="Accordion 1" title="Take Home Pay">
+            <div className="mb-3">
+              <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
+              <div className="font-bold text-green-600 text-2xl">
+                {formatRupiahManual(tpp_diterima) ?? "-"}
+              </div>
+            </div>
+            <div>
+              <div className="text-gray-400">TERBILANG</div>
+              <div className="font-bold text-gray-400 italic uppercase">
+                {terbilangRupiah(tpp_diterima) ?? "-"}
+              </div>
+            </div>
+          </AccordionItem>
           <AccordionItem
-            key="1"
-            aria-label="Accordion 1"
+            key="2"
+            aria-label="Accordion 2"
             title="Detail Kalkulasi TPP">
             <div className="inline-flex flex-col sm:flex-row justify-start gap-x-12 gap-y-8">
               <div>
@@ -315,20 +300,26 @@ export const ModalInterceptTppPppk = ({ params }) => {
       gelar_depan,
       gelar_blk,
       jabatan,
-      tpp_diterima,
       tahun,
       bulan,
-      basic_bk,
-      basic_pk,
-      basic_kk,
-      basic_kp,
-      jml_pph,
-      jml_iwp,
-      jml_bpjs,
       fid_status,
     } = queryTPP?.data;
     return (
       <>
+        {queryTPP?.data.is_sync_simgaji !== "1" && (
+          <AlertDanger title="Perhatian" message="Data belum tersenkronisasi" />
+        )}
+        {queryTPP?.data.fid_status !== "4" &&
+          queryTPP?.data.fid_status !== "5" && (
+            <AlertDanger title="Perhatian">
+              TPP masih dalam proses perhitungan atau belum disetujui.
+            </AlertDanger>
+          )}
+        {queryTPP?.data.fid_status === "5" && (
+          <AlertSuccess title="Perhatian">
+            TPP sudah selesai cetak pada silka online
+          </AlertSuccess>
+        )}
         <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-6">
           <div>
             <div className="text-gray-400">NIP</div>
@@ -357,83 +348,14 @@ export const ModalInterceptTppPppk = ({ params }) => {
             <div className="font-bold">{tahun ?? "-"}</div>
           </div>
         </div>
-        <div className="border-t border-dashed border-green-600 pt-3">
-          <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
-          <div className="font-bold text-green-600 text-2xl">
-            {formatRupiahManual(tpp_diterima) ?? "-"}
-          </div>
-        </div>
-        <div>
-          <div className="text-gray-400">TERBILANG</div>
-          <div className="font-bold text-gray-400 italic uppercase">
-            {terbilangRupiah(tpp_diterima) ?? "-"}
-          </div>
-        </div>
-        <Accordion variant="bordered" defaultExpandedKeys={["1"]}>
-          <AccordionItem
-            key="1"
-            aria-label="Accordion 1"
-            title="Detail Kalkulasi TPP">
-            <div className="inline-flex flex-col sm:flex-row justify-start gap-x-12 gap-y-8">
-              <div>
-                <div className="text-gray-400">BEBAN KERJA</div>
-                <div className="font-bold">
-                  {formatRupiahManual(basic_bk) ?? "-"}
-                </div>
-              </div>
-              <div>
-                <div className="text-gray-400">PRESTASI KERJA</div>
-                <div className="font-bold">
-                  {formatRupiahManual(basic_pk) ?? "-"}
-                </div>
-              </div>
-              <div>
-                <div className="text-gray-400">KONDISI KERJA</div>
-                <div className="font-bold">
-                  {formatRupiahManual(basic_kk) ?? "-"}
-                </div>
-              </div>
-            </div>
-            <div className="inline-flex flex-col sm:flex-row justify-start gap-x-6 gap-y-8 mt-4">
-              <div>
-                <div className="text-gray-400">KELANGKAAN PROFESI</div>
-                <div className="font-bold">
-                  {formatRupiahManual(basic_kp) ?? "-"}
-                </div>
-              </div>
-              <div>
-                <div className="text-gray-400">PPH21</div>
-                <div className="font-bold">
-                  {formatRupiahManual(jml_pph) ?? "-"}
-                </div>
-              </div>
-              <div>
-                <div className="text-gray-400">IWP</div>
-                <div className="font-bold">
-                  {formatRupiahManual(jml_iwp) ?? "-"}
-                </div>
-              </div>
-              <div>
-                <div className="text-gray-400">BPJS</div>
-                <div className="font-bold">
-                  {formatRupiahManual(jml_bpjs) ?? "-"}
-                </div>
-              </div>
-            </div>
-          </AccordionItem>
-        </Accordion>
+        <DetailKalkulasi data={queryTPP?.data} />
       </>
     );
   }, [isFetching, isLoading, queryTPP?.data]);
 
   const renderActionHasil = useCallback(() => {
     if (isLoading || isFetching) return "";
-    return queryTPP?.data.is_sync_simgaji !== "1" ? (
-      <p className="text-red-500 py-2 hover:cursor-not-allowed inline-flex items-center justify-start gap-x-2">
-        <InformationCircleIcon className="size-5 text-red-300" />
-        <span>Belum Sinkron</span>
-      </p>
-    ) : (
+    return queryTPP?.data.is_sync_simgaji !== "1" ? null : (
       <Button
         // radius="none"
         className="disabled:cursor-not-allowed"
@@ -449,29 +371,13 @@ export const ModalInterceptTppPppk = ({ params }) => {
   const renderActionKirim = useCallback(() => {
     if (isLoading || isFetching) return "";
     if (queryTPP?.data.is_sync_simgaji === "1") return null;
-    if (
-      queryTPP?.data.fid_status !== "4" &&
-      queryTPP?.data.fid_status !== "5"
-    ) {
-      return (
-        <p className="text-red-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
-          <InformationCircleIcon className="size-5 text-red-300" />
-          TPP masih dalam proses perhitungan atau belum disetujui.
-        </p>
-      );
-    }
+    if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
+      return null;
 
-    if (queryTPP?.data.fid_status === "5") {
-      return (
-        <p className="text-green-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
-          <InformationCircleIcon className="size-5 text-green-500" />
-          TPP sudah selesai cetak
-        </p>
-      );
-    }
+    if (queryTPP?.data.fid_status === "5") return null;
 
     return (
-      <div className="inline-flex items-center gap-x-3">
+      <div className="inline-flex w-full justify-between items-center gap-x-3">
         <Button color="danger" variant="light" onPress={() => router.back()}>
           Batal
         </Button>

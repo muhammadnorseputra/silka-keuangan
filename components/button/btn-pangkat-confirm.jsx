@@ -107,23 +107,9 @@ export default function BtnPangkatConfirm({
     });
   }
 
-  const disabled = pangkat.data.status === false ?? true;
+  const disabled = pangkat.data.status === false;
 
   const isPeremajaan = () => {
-    if (
-      pangkat.data.row.id_status_pegawai_simgaji === null ||
-      pangkat.data.row.id_jenis_pegawai_simgaji === null
-    ) {
-      return (
-        <div className="text-red-500 flex justify-start items-start gap-3">
-          <ExclamationCircleIcon className="size-8 text-red-400" />
-          <p>
-            Data Pegawai belum diremajakan, silahkan melakukan peremajaan data
-            terlebih dahulu
-          </p>
-        </div>
-      );
-    }
     return (
       <Button
         onPress={() => setIsOpenModal(true)}

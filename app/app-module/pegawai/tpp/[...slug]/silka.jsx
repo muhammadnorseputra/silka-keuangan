@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertDanger, AlertSuccess } from "@/components/alert";
 import { BtnKirimTPP } from "@/components/button/btn-tpp-kirim";
 import { PlaceholderBar } from "@/components/skeleton/placeholder-bar";
 import { getTppByNip } from "@/dummy/data-tpp-by-nip";
@@ -56,26 +57,11 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
   } = row?.data;
 
   const renderButtonKirim = () => {
-    if (row?.data.fid_status !== "4" && row?.data.fid_status !== "5") {
-      return (
-        <p className="text-red-500 border-1 border-red-500 p-2 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
-          <InformationCircleIcon className="size-5 text-red-300" />
-          TPP masih dalam proses perhitungan atau belum disetujui.
-        </p>
-      );
-    }
-
-    if (row?.data.fid_status === "5") {
-      return (
-        <>
-          <p className="text-green-500 border-t-1 border-dashed border-green-500 px-2 py-4 hover:cursor-not-allowed select-none inline-flex items-center justify-center gap-x-2">
-            <InformationCircleIcon className="size-5 text-green-500" />
-            TPP sudah selesai cetak
-          </p>
-        </>
-      );
-    }
+    if (row?.data.fid_status !== "4" && row?.data.fid_status !== "5")
+      return null;
     if (row?.data.is_sync_simgaji === "1") return null;
+    if (row?.data.fid_status === "5") return null;
+
     return (
       <>
         <Divider />
@@ -86,6 +72,16 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
 
   return (
     <>
+      {row?.data.fid_status !== "4" && row?.data.fid_status !== "5" && (
+        <AlertDanger title="Perhatian">
+          TPP masih dalam proses perhitungan atau belum disetujui.
+        </AlertDanger>
+      )}
+      {row?.data.fid_status === "5" && (
+        <AlertSuccess title="Perhatian">
+          TPP sudah selesai cetak pada silka online.
+        </AlertSuccess>
+      )}
       <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
         <div>
           <div className="text-gray-400">NIP</div>
@@ -114,10 +110,27 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
           <div className="font-bold">{tahun ?? "-"}</div>
         </div>
       </div>
-      <Accordion variant="bordered" defaultExpandedKeys={["1"]}>
+      <Accordion
+        variant="bordered"
+        defaultExpandedKeys={["1", "2"]}
+        selectionMode="multiple">
+        <AccordionItem key="1" aria-label="Accordion 1" title="Take Home Pay">
+          <div className="mb-3">
+            <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
+            <div className="font-bold text-green-600 text-2xl">
+              {formatRupiahManual(tpp_diterima) ?? "-"}
+            </div>
+          </div>
+          <div>
+            <div className="text-gray-400">TERBILANG</div>
+            <div className="font-bold text-gray-400 italic uppercase">
+              {terbilangRupiah(tpp_diterima) ?? "-"}
+            </div>
+          </div>
+        </AccordionItem>
         <AccordionItem
-          key="1"
-          aria-label="Accordion 1"
+          key="2"
+          aria-label="Accordion 2"
           title="Detail Kalkulasi TPP">
           <div className="inline-flex flex-col sm:flex-row justify-start gap-x-12 gap-y-8">
             <div>
@@ -169,18 +182,6 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
           </div>
         </AccordionItem>
       </Accordion>
-      <div className="border-t border-dashed border-green-600 pt-3">
-        <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
-        <div className="font-bold text-green-600 text-2xl">
-          {formatRupiahManual(tpp_diterima) ?? "-"}
-        </div>
-      </div>
-      <div>
-        <div className="text-gray-400">TERBILANG</div>
-        <div className="font-bold text-gray-400 italic uppercase">
-          {terbilangRupiah(tpp_diterima) ?? "-"}
-        </div>
-      </div>
       {renderButtonKirim()}
     </>
   );

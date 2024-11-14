@@ -1,17 +1,43 @@
 "use client";
 import { formatRupiahManual } from "@/helpers/cx";
+import { terbilangRupiah } from "@/helpers/rupiah";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import React from "react";
 
 function DetailKalkulasi({ data }) {
-  const { basic_bk, basic_pk, basic_kk, basic_kp, jml_pph, jml_iwp, jml_bpjs } =
-    data;
+  const {
+    tpp_diterima,
+    basic_bk,
+    basic_pk,
+    basic_kk,
+    basic_kp,
+    jml_pph,
+    jml_iwp,
+    jml_bpjs,
+  } = data;
   return (
     <>
-      <Accordion variant="bordered" defaultExpandedKeys={["1"]}>
+      <Accordion
+        variant="bordered"
+        defaultExpandedKeys={["1", "2"]}
+        selectionMode="multiple">
+        <AccordionItem key="1" aria-label="Accordion 1" title="Take Home Pay">
+          <div className="mb-3">
+            <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
+            <div className="font-bold text-green-600 text-2xl">
+              {formatRupiahManual(tpp_diterima) ?? "-"}
+            </div>
+          </div>
+          <div>
+            <div className="text-gray-400">TERBILANG</div>
+            <div className="font-bold text-gray-400 italic uppercase">
+              {terbilangRupiah(tpp_diterima) ?? "-"}
+            </div>
+          </div>
+        </AccordionItem>
         <AccordionItem
-          key="1"
-          aria-label="Accordion 1"
+          key="2"
+          aria-label="Accordion 2"
           title="Detail Kalkulasi TPP">
           <div className="inline-flex flex-col sm:flex-row justify-start gap-x-12 gap-y-8">
             <div>

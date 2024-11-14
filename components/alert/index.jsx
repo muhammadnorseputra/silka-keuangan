@@ -1,6 +1,6 @@
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
-export const AlertDanger = ({ title, message = "", children = "" }) => {
+export const AlertDanger = ({ title, message = "", children = null }) => {
   return (
     <div
       role="alert"
@@ -62,6 +62,20 @@ export const AlertInfo = ({ title, message = "", children }) => {
         <strong className="block font-medium"> {title} </strong>
       </div>
       <div className="mt-2 text-sm text-blue-700">{children ?? message}</div>
+    </div>
+  );
+};
+
+export const AlertSuccess = ({ title, message = "", children }) => {
+  return (
+    <div
+      role="alert"
+      className="rounded border-s-4 border-green-500 bg-green-100 p-4 w-full">
+      <div className="flex items-center gap-2 text-green-800">
+        <InformationCircleIcon className="size-6" fill="currentColor" />
+        <strong className="block font-medium"> {title} </strong>
+      </div>
+      <div className="mt-2 text-sm text-green-700">{children ?? message}</div>
     </div>
   );
 };

@@ -20,6 +20,7 @@ import { polaNIP } from "@/helpers/polanip";
 import { getPangkatByNip } from "@/dummy/data-pangkat-by-nip";
 import BtnPangkatConfirm from "@/components/button/btn-pangkat-confirm";
 import { ShowProfile } from "@/helpers/profile";
+import { AlertDanger, AlertWarning } from "@/components/alert";
 
 export default async function Page({ params }) {
   const sigapok = useSessionServer("USER_GAPOK");
@@ -33,6 +34,10 @@ export default async function Page({ params }) {
     riwayat_pangkat?.data?.row?.tmt, // tmt sk
     riwayat_pangkat?.data?.row?.id_status_pegawai_simgaji //status pegawai
   );
+
+  // cek file sk kgb ada atau tidak
+  const isBerkas = await checkURLStatus(riwayat_pangkat?.data?.row?.berkas);
+
   const renderSilkaService = () => {
     if (riwayat_pangkat.status === false) {
       return (
@@ -44,6 +49,20 @@ export default async function Page({ params }) {
     }
     return (
       <>
+        {isBerkas !== "OK" && (
+          <AlertDanger
+            title="Perhatian"
+            message="File SK / Berkas tidak ditemukan, verifikasi tidak dapat dilakukan !
+            Silahkan Upload pada Riwayat Pangkat Terkahir ASN"
+          />
+        )}
+        {(riwayat_pangkat.data.row.id_status_pegawai_simgaji === null ||
+          riwayat_pangkat.data.row.id_jenis_pegawai_simgaji === null) && (
+          <AlertWarning
+            title="Perhatian"
+            message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
+          />
+        )}
         <div>
           <div className="text-gray-400">NAMA</div>
           <div className="font-bold">
@@ -65,7 +84,7 @@ export default async function Page({ params }) {
         <div>
           <div className="text-gray-400">GAJI POKOK</div>
           <div className="font-bold text-2xl text-green-700">
-            {`Rp. ${formatRupiah(riwayat_pangkat?.data?.row?.gapok)}` ?? "-"}
+            {`Rp. ${formatRupiah(riwayat_pangkat?.data?.row?.gapok)}`}
           </div>
         </div>
         <div className="inline-flex flex-row justify-between">
@@ -164,8 +183,7 @@ export default async function Page({ params }) {
         <div>
           <div className="text-gray-400">GAJI POKOK BARU</div>
           <div className="font-bold text-2xl text-green-700">
-            {`Rp. ${formatRupiah(resultDataPerubaahan?.data[0]?.GAJI_POKOK)}` ??
-              "-"}
+            {`Rp. ${formatRupiah(resultDataPerubaahan?.data[0]?.GAJI_POKOK)}`}
           </div>
         </div>
         <div className="inline-flex flex-row justify-start gap-x-8">
@@ -229,28 +247,13 @@ export default async function Page({ params }) {
     );
   };
 
-  // cek file sk kgb ada atau tidak
-  const isBerkas = await checkURLStatus(riwayat_pangkat?.data?.row?.berkas);
-
   const renderButtonVerifikasi = () => {
-    if (isBerkas !== "OK") {
-      return (
-        <p className="text-red-600">
-          File SK / Berkas tidak ditemukan, verifikasi tidak dapat dilakukan !
-          Silahkan Upload pada{" "}
-          <strong>
-            <Link
-              showAnchorIcon
-              color="primary"
-              href={process.env.NEXT_PUBLIC_SILKA_BASE_URL}
-              target="_blank">
-              SIMPEG
-            </Link>
-          </strong>{" "}
-          Riwayat Pangkat Terkahir ASN
-        </p>
-      );
-    }
+    if (isBerkas !== "OK") return null;
+    if (
+      riwayat_pangkat.data.row.id_status_pegawai_simgaji === null ||
+      riwayat_pangkat.data.row.id_jenis_pegawai_simgaji === null
+    )
+      return null;
 
     return (
       <BtnPangkatConfirm
@@ -273,8 +276,10 @@ export default async function Page({ params }) {
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
                   <div className="text-xl flex flex-col">
-                    <span className="uppercase font-bold">Kenaikaan Pangkat</span>
-                    <ShowProfile jenis="PNS" nipnama={NIP}/>
+                    <span className="uppercase font-bold">
+                      Kenaikaan Pangkat
+                    </span>
+                    <ShowProfile jenis="PNS" nipnama={NIP} />
                   </div>
                 </div>
               </div>
