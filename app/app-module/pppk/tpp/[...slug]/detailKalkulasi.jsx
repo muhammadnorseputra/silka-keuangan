@@ -79,7 +79,7 @@ function DetailKalkulasi({ data }) {
               </div>
             </div>
           </div>
-          <div className="inline-flex flex-col sm:flex-row justify-start gap-x-6 gap-y-8 mt-4">
+          <div className="flex flex-col sm:flex-row justify-start gap-x-6 gap-y-8 mt-4">
             <div>
               <div className="text-gray-400">BPJS</div>
               <div className="font-bold">

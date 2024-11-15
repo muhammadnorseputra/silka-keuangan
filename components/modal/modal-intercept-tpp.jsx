@@ -226,15 +226,16 @@ export default function ModalInterceptTppPegawai({ params }) {
           size="2xl"
           backdrop="blur"
           isOpen={true}
+          scrollBehavior="outside"
           onClose={() => router.back()}>
           <ModalContent>
-            <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900">
+            <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
               SINKRONISASI TPP{" "}
               <div className="text-sm text-gray-400 font-normal">
                 Data TPP SILKa Online
               </div>
             </ModalHeader>
-            <ModalBody className="flex flex-column justify-center items-center gap-y-3">
+            <ModalBody className="flex flex-column justify-center items-center gap-y-3 rounded-b-xl">
               <InboxIcon className="size-8 text-gray-300 dark:text-gray-700" />
               <p>Data TPP Tidak Ditemukan</p>
             </ModalBody>
@@ -249,18 +250,19 @@ export default function ModalInterceptTppPegawai({ params }) {
         size="2xl"
         backdrop="blur"
         isOpen={true}
+        scrollBehavior="outside"
         onClose={() => router.back()}>
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900">
+              <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
                 SINKRONISASI TPP{" "}
                 <div className="text-sm text-gray-400 font-normal">
                   Data TPP SILKa Online
                 </div>
               </ModalHeader>
               <ModalBody>{renderTPP()}</ModalBody>
-              <ModalFooter className="justify-between items-start">
+              <ModalFooter className="justify-between items-start bg-gray-100 dark:bg-blue-900 rounded-b-xl">
                 {renderActionHasil()} {renderActionKirim()}
               </ModalFooter>
             </>
@@ -373,7 +375,6 @@ export const ModalInterceptTppPppk = ({ params }) => {
     if (queryTPP?.data.is_sync_simgaji === "1") return null;
     if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
       return null;
-
     if (queryTPP?.data.fid_status === "5") return null;
 
     return (

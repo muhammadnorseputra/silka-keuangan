@@ -121,7 +121,9 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
 
   useEffect(() => {
     if (!isValid && isSubmitting) {
-      toast.error("Formulir Tidak Lengkap");
+      toast.error("Formulir Tidak Lengkap", {
+        id: "Toaster",
+      });
     }
   }, [isSubmitting, isValid]);
 
@@ -173,7 +175,9 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
         if (result.status === false) {
           return toast.error(`Terjadi Kesalahan ${result.message}`);
         }
-        toast.success(`${result.message}`);
+        toast.success(`${result.message}`, {
+          id: "Toaster",
+        });
         setIsLoadingSubmit(false);
         setIsOpen(false);
       },
@@ -182,13 +186,13 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
           queryClient.invalidateQueries({
             queryKey: ["pegawai.silka.nip"],
           });
-          toast.remove();
         }
       },
       onError: (err) => {
-        // @ts-ignore
-        toast.error(err);
         setIsLoadingSubmit(false);
+        toast.error(err.message, {
+          id: "Toaster",
+        });
       },
     });
   };

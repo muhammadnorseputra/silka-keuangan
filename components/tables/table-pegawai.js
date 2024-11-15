@@ -315,7 +315,7 @@ export const TablePegawai = ({ unors, pegawais }) => {
           <div className="flex align-items-end justify-content-end gap-3">
             <Input
               isClearable
-              className="w-full sm:max-w-[70%]"
+              className="hidden sm:flex w-full sm:max-w-[70%]"
               placeholder="Search by nama pegawai..."
               startContent={<Icon iconName="Search" />}
               value={filterValue}

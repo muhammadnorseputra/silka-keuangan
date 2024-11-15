@@ -47,5 +47,33 @@ export function formatTanggalIndonesia(tanggal = "0000-00-00") {
 }
 
 export function isNull(string) {
+  // @ts-ignore
   return string !== null ?? "-";
+}
+
+export function getNamaBulan(angka) {
+  const bulan = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+
+  // Kurangi 1 karena array dimulai dari 0
+  const index = angka - 1;
+
+  // Cek apakah angka valid (1-12)
+  if (angka >= 1 && angka <= 12) {
+    return bulan[index];
+  } else {
+    return "Angka bulan tidak valid (gunakan 1-12)";
+  }
 }

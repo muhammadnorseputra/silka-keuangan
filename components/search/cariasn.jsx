@@ -2,18 +2,13 @@
 
 import { SearchPegawai } from "@/dummy/search-pegawai";
 import { polaNIP } from "@/helpers/polanip";
-import { useModalContext } from "@/lib/context/modal-context";
 import {
   ArchiveBoxXMarkIcon,
   ChevronUpDownIcon,
-  DocumentCheckIcon,
-  DocumentCurrencyDollarIcon,
   MagnifyingGlassCircleIcon,
-  MagnifyingGlassPlusIcon,
   PhotoIcon,
   UserCircleIcon,
   UserGroupIcon,
-  UserPlusIcon,
 } from "@heroicons/react/24/solid";
 import {
   Avatar,
@@ -21,32 +16,19 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Code,
   Divider,
   Input,
-  Listbox,
-  ListboxItem,
-  ListboxSection,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
   ScrollShadow,
   Select,
   SelectItem,
   Skeleton,
   Spacer,
 } from "@nextui-org/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { encrypt } from "@/helpers/encrypt";
-import { useRouter } from "next-nprogress-bar";
-import Link from "next/link";
-import ModalDaftarLayananProvider, {
-  useModalDaftarLayananContext,
-} from "@/lib/context/modal-daftar-layanan-context";
+import { useModalDaftarLayananContext } from "@/lib/context/modal-daftar-layanan-context";
 import ModalLayanan from "../modal/modal-daftar-layanan";
 
 export default function CariASN() {
@@ -55,7 +37,7 @@ export default function CariASN() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading, isSubmitting, isValid },
+    formState: { errors, isLoading, isSubmitting },
   } = useForm();
 
   const { mutate, isPending: isPendingFn } = useMutation({
@@ -181,7 +163,12 @@ export default function CariASN() {
             {
               //@ts-ignore
               data?.status !== false && data?.status ? (
-                <p className="font-bold">{data?.message}</p>
+                <p className="font-bold">
+                  {
+                    // @ts-ignore
+                    data?.message
+                  }
+                </p>
               ) : (
                 ""
               )
@@ -219,7 +206,7 @@ export const Placeholder = () => {
 
 export const ListPegawai = ({ props }) => {
   const { setIsOpen, setData } = useModalDaftarLayananContext();
-  const { status, message, jenis, http_code, count, data } = props;
+  const { status, message, data } = props;
   if (status === false) {
     return (
       <p className="flex justify-center items-center flex-col gap-8 h-[400px]">

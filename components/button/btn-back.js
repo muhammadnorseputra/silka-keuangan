@@ -15,7 +15,7 @@ export const BtnBack = ({ path, ...args }) => {
 };
 
 export const BtnBackNextUi = ({
-  goTo,
+  goTo = null,
   title = "Kembali ke halaman module",
 }) => {
   const router = useRouter();

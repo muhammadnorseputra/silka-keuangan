@@ -10,11 +10,18 @@ export default async function Page() {
   const renderModule = () => {
     if (level === "PNS") {
       return (
-        <CardModule
-          title="Peremajaan Data"
-          icon="PersonVcard"
-          path={`/app-module/pegawai/peremajaan/${encrypt(nip, "bkpsdm")}`}
-        />
+        <>
+          <CardModule
+            title="Peremajaan Data"
+            icon="PersonVcard"
+            path={`/app-module/pegawai/peremajaan/${encrypt(nip, "bkpsdm")}`}
+          />
+          <CardModule
+            title="Approval TPP"
+            icon="BookmarkCheck"
+            path={`/app-integrasi/approval-tpp`}
+          />
+        </>
       );
     }
     return (

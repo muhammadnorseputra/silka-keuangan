@@ -19,6 +19,7 @@ export const BtnKirimTPP = ({
   simgaji_id_skpd,
   simgaji_id_satker,
   silka,
+  ...args
 }) => {
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
@@ -97,6 +98,7 @@ export const BtnKirimTPP = ({
   return (
     <>
       <Button
+        {...args}
         color="primary"
         variant="shadow"
         onPress={handleKirim}

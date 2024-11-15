@@ -37,15 +37,15 @@ export const ModalPeremajaan = ({
             System says !
           </ModalHeader>
           <ModalBody>
+            <AlertInfo title="Info">
+              Data yang anda kirim akan dikunci sementara dan dilakukan validasi
+              oleh admin SKPD, Klik tombol <Code color="primary">Yakin</Code>{" "}
+              untuk melanjutkan.
+            </AlertInfo>
             <AlertWarning
               title="Confirm"
               message="Apakah anda yakin data tersebut sudah benar ?"
             />
-            <AlertInfo title="Info">
-              Data yang anda kirim akan dikunci sementara dan dilakukan validasi
-              oleh admin SKPD, Klik tombol <Code color="primary">Yakin</Code>{" "}
-              untuk melanjutkan ...
-            </AlertInfo>
           </ModalBody>
           <ModalFooter>
             <Button color="danger" variant="light" onPress={onClose}>

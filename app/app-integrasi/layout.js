@@ -30,7 +30,7 @@ export default function Layout({ children }) {
               />
               <div className="text-base text-white">
                 <p className="font-bold">
-                  Sistem Informasi Layanan Kepegawaian
+                  Sistem Informasi Layanan Kepegawaian Terintegrasi
                 </p>
                 <p className="font-bold fs-6">Pemerintah Kab. Balangan</p>
                 <p>{unker}</p>
