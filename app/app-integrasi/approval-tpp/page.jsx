@@ -20,7 +20,7 @@ import { ExclamationCircle } from "react-bootstrap-icons";
 
 async function ApprovalTpp() {
   const silka = useSessionServer("USER_SILKA");
-  const sigapok = useSessionServer("USER_SIGAPOK");
+  const sigapok = useSessionServer("USER_GAPOK");
   const resultDataTpp = await getTppByNip(silka?.data.nip);
 
   const {

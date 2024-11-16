@@ -40,7 +40,7 @@ export const BtnKirimTPP = ({
 
   useEffect(() => {
     if (isPending) {
-      toast.loading(`Sending ...`, {
+      toast.loading(`Mengirim data ...`, {
         id: "Toaster",
       });
     }
@@ -68,10 +68,8 @@ export const BtnKirimTPP = ({
           toast.error(`${data.status} (${JSON.stringify(data.message)})`, {
             id: "Toaster",
           });
-
           return;
         }
-
         toast.success(data.message, {
           id: "Toaster",
         });
