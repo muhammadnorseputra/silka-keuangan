@@ -12,22 +12,22 @@ import {
   Chip,
   Skeleton,
 } from "@nextui-org/react";
-// import dynamic from "next/dynamic";
+import dynamic from "next/dynamic";
 import { AlertInfo, AlertWarning } from "../alert";
 import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
 import { DocumentCurrencyDollarIcon } from "@heroicons/react/24/solid";
 
-// const MyPDF = dynamic(
-//   () => import("../pdf/viewer").then((mod) => mod.PDFViewer),
-//   {
-//     ssr: false,
-//     loading: () => (
-//       <Skeleton className="rounded-lg">
-//         <div className="h-36 w-full rounded-lg bg-default-300"></div>
-//       </Skeleton>
-//     ),
-//   }
-// );
+const MyPDF = dynamic(
+  () => import("../pdf/viewer").then((mod) => mod.PDFViewer),
+  {
+    ssr: false,
+    loading: () => (
+      <Skeleton className="rounded-lg">
+        <div className="h-36 w-full rounded-lg bg-default-300"></div>
+      </Skeleton>
+    ),
+  }
+);
 
 export const ModalKgbProses = ({
   dataSilka,
@@ -66,7 +66,7 @@ export const ModalKgbProses = ({
           </ModalHeader>
           <ModalBody>
             {/* <MyPDF src={berkas} /> */}
-            {/* <MyPDF src={berkas} /> */}
+            <MyPDF src={berkas} />
             {/* <iframe
               allowFullScreen={true}
               height={600}
