@@ -40,7 +40,7 @@ export default function Home() {
           </p>
           <Link
             href="/auth"
-            className="w-full md:w-auto mb-14 inline-flex items-center justify-center py-3 px-7 text-base font-semibold text-center text-white rounded-full bg-indigo-600 shadow-xs hover:bg-indigo-700 transition-all duration-500">
+            className="w-full md:w-auto mb-14 inline-flex items-center justify-center py-3 px-7 text-base font-semibold text-center text-white rounded-full bg-indigo-600 shadow-xs hover:bg-indigo-700 hover:scale-105 hover:shadow-lg transition-all duration-500">
             Uji Coba Aplikasi SILKa - Inexis
             <svg
               className="ml-2"
@@ -58,15 +58,18 @@ export default function Home() {
               />
             </svg>
           </Link>
-          <div className="flex justify-center">
+          <div className="flex justify-center relative">
             <Image
               src="/assets/app-for-personal.png"
               alt="Dashboard image"
               width={1100}
               height={400}
-              className="rounded-t-3xl"
+              className="rounded-t-3xl transition-all ease-in-out delay-150 duration-350 hover:scale-105 filter grayscale blur-lg contrast-100 hover:blur-none hover:grayscale-0 "
               priority
             />
+            <div className="absolute text-3xl text-slate-100 top-[50%] [text-shadow:_0_4px_8px_rgb(0_0_0_/_60%)]">
+              Preview Dashboard
+            </div>
           </div>
         </div>
       </section>

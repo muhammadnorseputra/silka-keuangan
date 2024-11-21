@@ -19,12 +19,13 @@ export default function Login() {
           src="/silka.png"
           alt="Logo SILKa Online"
         />
-        <h2 className="mb-8 mt-8 text-2xl md:text-5xl uppercase font-bold text-blue-500/90 dark:text-white text-balance">
+        <h2 className="mb-8 mt-8 text-2xl md:text-5xl uppercase font-bold text-blue-400/90 dark:text-white text-balance">
           Sistem Informasi Layanan Kepegawaian Terintegrasi Keuangan Daerah
         </h2>
         <p className="text-lg md:text-2xl mb-5 text-gray-500/80 dark:text-white/50">
-          Layanan Integrasi Kenaikan Gaji Berkala dan Tambahan Penghasilan
-          Pegawai ke Sistem Keuangan Daerah Kab. Balangan
+          Layanan Integrasi Kenaikan Gaji Berkala, Kenaikan Pangkat dan Tambahan
+          Penghasilan Pegawai ke Sistem INEXIS Badan Keuangan Daerah Kab.
+          Balangan
         </p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -39,7 +40,7 @@ export default function Login() {
       <Card
         isFooterBlurred
         fullWidth={false}
-        shadow="none"
+        shadow="sm"
         className="px-0 md:px-8 md:py-6 md:max-w-lg bg-white/30 dark:bg-black/30">
         <CardHeader>
           <div className="flex flex-col">
