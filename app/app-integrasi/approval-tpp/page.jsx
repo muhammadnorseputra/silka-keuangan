@@ -71,9 +71,9 @@ async function ApprovalTpp() {
         <CardHeader className="flex justify-start gap-x-4 items-center bg-white border-b border-gray-200 dark:border-blue-700 dark:bg-blue-900 rounded-t-xl">
           <BtnBackNextUi />
           <div>
-            <h2 className="text-lg font-bold">Approval TPP</h2>
+            <h2 className="text-lg font-bold">Kirim TPP</h2>
             <p className="text-gray-400">
-              Data TPP pada SILKa Periode {getNamaBulan(bulan)} {tahun}
+              Kirim Data TPP pada SILKa Periode {getNamaBulan(bulan)} {tahun}
             </p>
           </div>
           {resultDataTpp?.data.is_sync_simgaji === "1" && (

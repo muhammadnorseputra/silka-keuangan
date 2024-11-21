@@ -13,14 +13,24 @@ export default async function Page() {
       return (
         <>
           <CardModule
+            title="Kirim TPP"
+            icon="WalletFill"
+            path={`/app-integrasi/approval-tpp`}
+          />
+          <CardModule
+            title="Kirim KGB"
+            icon="Cash"
+            path={`/app-module/pegawai/kgb/${encrypt(nip, "bkpsdm")}`}
+          />
+          <CardModule
+            title="Kirim KP"
+            icon="Stars"
+            path={`/app-module/pegawai/pangkat/${encrypt(nip, "bkpsdm")}`}
+          />
+          <CardModule
             title="Peremajaan Data"
             icon="PersonVcard"
             path={`/app-module/pegawai/peremajaan/${encrypt(nip, "bkpsdm")}`}
-          />
-          <CardModule
-            title="Approval TPP"
-            icon="BookmarkCheck"
-            path={`/app-integrasi/approval-tpp`}
           />
         </>
       );
