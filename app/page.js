@@ -8,7 +8,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative text-center">
           <div className="border border-indigo-600 p-1 w-80 mx-auto rounded-full flex items-center justify-between mb-4">
             <span className="font-inter text-xs font-medium text-gray-900 dark:text-gray-100 ml-3 mr-3">
-              Selamat Datang SILKa - Keuangan Daerah
+              Selamat datang SILKa - Inexis
             </span>
             <Link
               href="/auth"
@@ -33,14 +33,15 @@ export default function Home() {
             Sistem Informasi Layanan Kepegawaian
             <span className="text-indigo-600"> Terintegrasi </span>
           </h1>
-          <p className="max-w-md mx-auto text-center text-base font-normal leading-7 text-gray-500 dark:text-gray-2s00 mb-9">
-            Layanan Kenaikan Gaji Berkala (KGB) dan Tambahan Penghasilan Pegawai
-            (TPP)
+          <p className="max-w-3xl mx-auto text-center text-base font-normal leading-7 text-gray-500 dark:text-gray-2s00 mb-9">
+            Telah Terintegrasi Layanan Kenaikan Gaji Berkala (KGB), Kenaikan
+            Pangkat (KP) dan Tambahan Penghasilan Pegawai (TPP) dengan Inexis -
+            Badan Keuangan Daerah Kabupaten Balangan.
           </p>
           <Link
             href="/auth"
             className="w-full md:w-auto mb-14 inline-flex items-center justify-center py-3 px-7 text-base font-semibold text-center text-white rounded-full bg-indigo-600 shadow-xs hover:bg-indigo-700 transition-all duration-500">
-            Uji Coba Aplikasi SILKa Integrasi
+            Uji Coba Aplikasi SILKa - Inexis
             <svg
               className="ml-2"
               width="20"
@@ -59,7 +60,7 @@ export default function Home() {
           </Link>
           <div className="flex justify-center">
             <Image
-              src="/assets/app.png"
+              src="/assets/app-for-personal.png"
               alt="Dashboard image"
               width={1100}
               height={400}
