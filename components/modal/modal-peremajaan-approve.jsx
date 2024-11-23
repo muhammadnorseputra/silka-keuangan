@@ -21,6 +21,10 @@ export const ModalPeremajaanApprove = ({
         aria-hidden="true"
         size="lg"
         backdrop="opaque"
+        classNames={{
+          backdrop:
+            "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
+        }}
         isOpen={isOpenModal}
         onClose={onClose}
         isDismissable={false}

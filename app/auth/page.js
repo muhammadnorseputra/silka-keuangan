@@ -6,7 +6,7 @@ import {
   CardFooter,
   Image,
 } from "@nextui-org/react";
-import { Link } from "@nextui-org/react";
+import Link from "next/link";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 export default function Login() {
   return (
@@ -61,8 +61,8 @@ export default function Login() {
             &copy; Dikembangakan oleh PPIK.
           </span>
           <Link
-            isBlock
             color="primary"
+            prefetch={false}
             href="/auth/lupa-password"
             className="text-blue-500 hover:text-blue-800">
             Lupa Password ?

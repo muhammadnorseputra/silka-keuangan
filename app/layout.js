@@ -8,7 +8,7 @@ import SpinnerProvider from "@/lib/context/spinner-context";
 import ModalDaftarLayananProvider from "@/lib/context/modal-daftar-layanan-context";
 
 export const metadata = {
-  title: "Welcome SILKa Keuangan Daerah",
+  title: "Welcome SILKa - INEXIS",
   description:
     "Layanan Integrasi KGB dan TPP dengan Badan Keuangan Daerah Kab. Balangan",
 };

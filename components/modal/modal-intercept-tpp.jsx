@@ -394,9 +394,10 @@ export const ModalInterceptTppPppk = ({ params }) => {
           size="2xl"
           backdrop="blur"
           isOpen={true}
+          scrollBehavior="outside"
           onClose={() => router.back()}>
           <ModalContent>
-            <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900">
+            <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
               SINKRONISASI TPP{" "}
               <div className="text-sm text-gray-400 font-normal">
                 Data TPP SILKa Online
@@ -419,11 +420,12 @@ export const ModalInterceptTppPppk = ({ params }) => {
         size="2xl"
         backdrop="blur"
         isOpen={true}
+        scrollBehavior="outside"
         onClose={() => router.back()}>
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900">
+              <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
                 SINKRONISASI TPP{" "}
                 <div className="text-sm text-gray-400 font-normal">
                   Data TPP SILKa Online

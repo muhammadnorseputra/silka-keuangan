@@ -27,6 +27,7 @@ import { useRouter } from "next-nprogress-bar";
 export default function ModalLayanan({ isOpenModal = false, onClose }) {
   const { data, jenis } = useModalDaftarLayananContext();
   const router = useRouter();
+
   if (data === null) {
     return;
   }
@@ -35,14 +36,17 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
     <>
       <Modal
         aria-hidden="true"
-        backdrop="blur"
+        backdrop="opaque"
+        classNames={{
+          backdrop: "bg-blue-600/50 backdrop-opacity-20",
+        }}
         isOpen={isOpenModal}
         onClose={onClose}
         size="lg"
         // radius="none"
         shadow="lg"
-        isDismissable={true}
-        isKeyboardDismissDisabled={true}>
+        isDismissable={false}
+        isKeyboardDismissDisabled={false}>
         <ModalContent>
           <ModalHeader className="flex flex-col bg-gray-50 dark:bg-gray-800">
             <div>Pilih Layanan Integrasi</div>
@@ -102,6 +106,17 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   isDisabled={jenis === "PPPK"}
                   hideSelectedIcon={jenis === "PPPK"}
                   key="kgb"
+                  onPressUp={() => {
+                    if (jenis === "PNS") {
+                      return router.prefetch(
+                        `/app-module/pegawai/kgb/${encrypt(nip, "bkpsdm")}`
+                      );
+                    }
+
+                    router.prefetch(
+                      `/app-module/pppk/kgb/${encrypt(nip, "bkpsdm")}`
+                    );
+                  }}
                   onPress={() => {
                     if (jenis === "PNS") {
                       return router.push(
@@ -123,6 +138,17 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   isDisabled={jenis === "PPPK"}
                   hideSelectedIcon={jenis === "PPPK"}
                   key="kp"
+                  onPressUp={() => {
+                    if (jenis === "PNS") {
+                      return router.prefetch(
+                        `/app-module/pegawai/pangkat/${encrypt(nip, "bkpsdm")}`
+                      );
+                    }
+
+                    router.prefetch(
+                      `/app-module/pppk/kgb/${encrypt(nip, "bkpsdm")}`
+                    );
+                  }}
                   onPress={() => {
                     if (jenis === "PNS") {
                       return router.push(
@@ -143,6 +169,16 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
 
                 <ListboxItem
                   key="tpp"
+                  onPressUp={() => {
+                    if (jenis === "PNS") {
+                      return router.prefetch(
+                        `/app-module/pegawai/tpp/${encrypt(nip, "bkpsdm")}`
+                      );
+                    }
+                    router.prefetch(
+                      `/app-module/pppk/tpp/${encrypt(nip, "bkpsdm")}`
+                    );
+                  }}
                   onPress={() => {
                     if (jenis === "PNS") {
                       return router.push(
