@@ -6,11 +6,12 @@ import ProgressProviders from "@/lib/ProgressBarProvider";
 import { FetchQueryProvider } from "@/lib/FetchQueryProvider";
 import SpinnerProvider from "@/lib/context/spinner-context";
 import ModalDaftarLayananProvider from "@/lib/context/modal-daftar-layanan-context";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata = {
   title: "Welcome SILKa - INEXIS",
   description:
-    "Layanan Integrasi KGB dan TPP dengan Badan Keuangan Daerah Kab. Balangan",
+    "Layanan Integrasi KGB, KP dan TPP dengan Sistem INEXIS Badan Keuangan Daerah Kab. Balangan",
 };
 
 export default function RootLayout({ children }) {
@@ -20,6 +21,7 @@ export default function RootLayout({ children }) {
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
       />
+      <GoogleAnalytics gaId="G-RPCQCQT1DE" />
       <body>
         <Providers>
           <ProgressProviders>
