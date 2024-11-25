@@ -179,6 +179,7 @@ export const FormAuth = () => {
           fullWidth
           color="primary"
           size="lg"
+          variant="solid"
           spinner={
             <svg
               className="animate-spin h-5 w-5 text-current"

@@ -5,6 +5,7 @@ import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { redirect } from "next/navigation";
 import { hasSessionServer, useSessionServer } from "../../../server-session";
 import { polaNIP } from "@/helpers/polanip";
+import { ShowProfile } from "@/helpers/profile";
 
 export default async function Page({ params }) {
   const session = hasSessionServer("USER_GAPOK");
@@ -27,12 +28,12 @@ export default async function Page({ params }) {
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <p className="text-xl flex flex-col">
+                  <div className="text-xl flex flex-col">
                     <span className="uppercase font-bold">
                       Peremajaan Data PPPK
                     </span>
-                    <span className="text-base">{polaNIP(nipppk)} </span>
-                  </p>
+                    <ShowProfile jenis="PPPK" nipnama={nipppk} />
+                  </div>
                 </div>
               </div>
             </CardHeader>

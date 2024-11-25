@@ -36,8 +36,10 @@ import {
   Textarea,
   Chip,
   Progress,
+  CardHeader,
 } from "@nextui-org/react";
 import { BtnRefreshQuery } from "../button/btn-reload";
+import { AlertInfo } from "../alert";
 
 const FormPeremajaan = ({ sigapok, silka, nip }) => {
   const queryClient = useQueryClient();
@@ -166,7 +168,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
       kode_pangkat: row.kode_pangkat,
       // @ts-ignore
       kode_status_pegawai: data.kode_stapeg.split("-")[0],
-      created_by: silka?.data.nama_lengkap,
+      created_by: silka?.data.nip,
     };
 
     // @ts-ignore
@@ -643,7 +645,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
                   size="lg"
                   className="col-span-4 sm:col-span-1"
                   labelPlacement="outside"
-                  label="TMT SPMT"
+                  label="TMT SKMT / SPMT"
                   name="tgl_spmt"
                   variant="flat"
                   description="Format: tahun-bulan-tanggal"
@@ -677,6 +679,12 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
               </div>
             }>
             <Card>
+              <CardHeader>
+                <AlertInfo title="Informasi">
+                  Jumlah data keluarga yang ditampilkan merupakan data yang
+                  berstatus HIDUP dan TANGGUNGAN
+                </AlertInfo>
+              </CardHeader>
               <CardBody className="grid grid-flow-row-dense grid-cols-2 grid-rows-2 gap-6 py-8 px-6">
                 <Input
                   isReadOnly

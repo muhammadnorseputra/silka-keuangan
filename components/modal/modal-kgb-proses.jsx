@@ -87,11 +87,11 @@ export const ModalKgbProses = ({
                 </div>
               </div>
               <div className="col-span-4 md:col-span-1">
-                <div className="text-gray-400">MASA KERJA BULAN</div>
+                <div className="text-gray-400">MASA KERJA TAHUN</div>
                 <div className="font-bold">{mk_thn ?? "-"}</div>
               </div>
               <div className="col-span-4 md:col-span-1">
-                <div className="text-gray-400">MASA KERJA TAHUN</div>
+                <div className="text-gray-400">MASA KERJA BULAN</div>
                 <div className="font-bold">{mk_bln ?? "-"}</div>
               </div>
               <div className="col-span-4 md:col-span-1">

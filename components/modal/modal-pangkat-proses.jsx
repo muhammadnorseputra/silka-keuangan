@@ -78,13 +78,13 @@ export const ModalPangkatProses = ({
                 </div>
               </div>
               <div className="col-span-4 md:col-span-1">
-                <div className="text-gray-400">MASA KERJA BULAN</div>
+                <div className="text-gray-400">MASA KERJA TAHUN</div>
                 <div className="font-bold">
                   {PANGKAT.data.row.mkgol_thn ?? "-"}
                 </div>
               </div>
               <div className="col-span-4 md:col-span-1">
-                <div className="text-gray-400">MASA KERJA TAHUN</div>
+                <div className="text-gray-400">MASA KERJA BULAN</div>
                 <div className="font-bold">
                   {PANGKAT.data.row.mkgol_bln ?? "-"}
                 </div>

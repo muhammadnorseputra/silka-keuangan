@@ -34,7 +34,7 @@ export default async function Page({ params }) {
               </div>
               <AlertWarning
                 title="Perhatian"
-                message="Jika terdapat kesalahan data  pada section ini, silahkan lakukan update data pada SILKa"
+                message="Jika terdapat kesalahan data  pada section ini, silahkan lakukan update data pada SILKa. Pastikan semua bagian terisi dengan benar sebelum diperbaharui."
               />
             </CardHeader>
             <CardBody className="h-screen overflow-y-auto">

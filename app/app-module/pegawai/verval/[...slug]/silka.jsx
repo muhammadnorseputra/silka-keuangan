@@ -31,7 +31,12 @@ export default function VervalSilkaPegawai({ sigapok, silka, nip }) {
 
   if (isLoading || isFetching) return <PlaceholderBar />;
 
-  if (row.status_data === "ENTRI" || !row.nama_jenis || !row.nama_statuspeg) {
+  if (
+    row.status_data === "ENTRI" ||
+    !row.nama_jenis ||
+    !row.nama_statuspeg ||
+    !row.tmt_skmt
+  ) {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
         <ExclamationCircle className="size-8" />

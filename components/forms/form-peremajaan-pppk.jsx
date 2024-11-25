@@ -138,7 +138,7 @@ export const FormPeremajaan = ({ sigapok, nipppk, session_silka }) => {
       formasi: silka.tahun_formasi,
       akhir_kontrak: silka.tmt_pppk_akhir,
       created_by: silka.created_by,
-      update_by: session_silka?.data.nama_lengkap,
+      update_by: session_silka?.data.nip,
     };
     setIsSending(true);
     // @ts-ignore
