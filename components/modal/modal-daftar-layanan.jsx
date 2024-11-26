@@ -31,7 +31,9 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
   if (data === null) {
     return;
   }
+
   const { nip } = data;
+
   return (
     <>
       <Modal
@@ -45,6 +47,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
         size="lg"
         // radius="none"
         shadow="lg"
+        placement="center"
         isDismissable={false}
         isKeyboardDismissDisabled={false}>
         <ModalContent>
@@ -63,7 +66,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
               <ListboxSection title="Peremajaan" showDivider>
                 <ListboxItem
                   key="peremajaan"
-                  onPress={() => {
+                  onClick={() => {
                     if (jenis === "PNS") {
                       return router.push(
                         `/app-module/pegawai/peremajaan/${encrypt(
@@ -84,7 +87,10 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                 </ListboxItem>
                 <ListboxItem
                   key="verval"
-                  onPress={() => {
+                  onPressUp={() => {
+                    return;
+                  }}
+                  onClick={() => {
                     if (jenis === "PNS") {
                       return router.push(
                         `/app-module/pegawai/verval/${encrypt(nip, "bkpsdm")}`
@@ -106,18 +112,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   isDisabled={jenis === "PPPK"}
                   hideSelectedIcon={jenis === "PPPK"}
                   key="kgb"
-                  onPressUp={() => {
-                    if (jenis === "PNS") {
-                      return router.prefetch(
-                        `/app-module/pegawai/kgb/${encrypt(nip, "bkpsdm")}`
-                      );
-                    }
-
-                    router.prefetch(
-                      `/app-module/pppk/kgb/${encrypt(nip, "bkpsdm")}`
-                    );
-                  }}
-                  onPress={() => {
+                  onClick={() => {
                     if (jenis === "PNS") {
                       return router.push(
                         `/app-module/pegawai/kgb/${encrypt(nip, "bkpsdm")}`
@@ -138,18 +133,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   isDisabled={jenis === "PPPK"}
                   hideSelectedIcon={jenis === "PPPK"}
                   key="kp"
-                  onPressUp={() => {
-                    if (jenis === "PNS") {
-                      return router.prefetch(
-                        `/app-module/pegawai/pangkat/${encrypt(nip, "bkpsdm")}`
-                      );
-                    }
-
-                    router.prefetch(
-                      `/app-module/pppk/kgb/${encrypt(nip, "bkpsdm")}`
-                    );
-                  }}
-                  onPress={() => {
+                  onClick={() => {
                     if (jenis === "PNS") {
                       return router.push(
                         `/app-module/pegawai/pangkat/${encrypt(nip, "bkpsdm")}`
@@ -166,20 +150,9 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }>
                   Proses Kenaikan Pangkat
                 </ListboxItem>
-
                 <ListboxItem
                   key="tpp"
-                  onPressUp={() => {
-                    if (jenis === "PNS") {
-                      return router.prefetch(
-                        `/app-module/pegawai/tpp/${encrypt(nip, "bkpsdm")}`
-                      );
-                    }
-                    router.prefetch(
-                      `/app-module/pppk/tpp/${encrypt(nip, "bkpsdm")}`
-                    );
-                  }}
-                  onPress={() => {
+                  onClick={() => {
                     if (jenis === "PNS") {
                       return router.push(
                         `/app-module/pegawai/tpp/${encrypt(nip, "bkpsdm")}`

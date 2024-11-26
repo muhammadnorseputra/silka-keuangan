@@ -12,7 +12,7 @@ export default function Home() {
             </span>
             <Link
               href="/auth"
-              prefetch={false}
+              prefetch={true}
               className="w-8 h-8 rounded-full flex justify-center items-center bg-indigo-600">
               <svg
                 width="17"
@@ -41,7 +41,7 @@ export default function Home() {
           </p>
           <Link
             href="/auth"
-            prefetch={false}
+            prefetch={true}
             className="w-full md:w-auto mb-14 inline-flex items-center justify-center py-3 px-7 text-base font-semibold text-center text-white rounded-full bg-indigo-600 shadow-xs hover:bg-indigo-700 hover:scale-105 hover:shadow-lg transition-all duration-500">
             Masuk Aplikasi SILKa - INEXIS
             <svg
