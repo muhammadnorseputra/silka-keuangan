@@ -13,13 +13,11 @@ import {
   Autocomplete,
   AutocompleteItem,
   Textarea,
-  Skeleton,
-  Spinner,
   Progress,
   Chip,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { BriefcaseFill, CheckCircleFill, Router } from "react-bootstrap-icons";
+import { BriefcaseFill, CheckCircleFill } from "react-bootstrap-icons";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useModalContext } from "@/lib/context/modal-context";
@@ -27,14 +25,11 @@ import { ModalPeremajaan } from "../modal/modal-peremajaan";
 import { formatDateSlash } from "@/helpers/fn_tanggal";
 import { formatRupiah } from "@/helpers/cx";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { TambahPegawaiPppk } from "@/dummy/sigapok-post-pppk";
-import { limitCharacters } from "@/helpers/text";
 import DataNotFound from "../errors/DataNotFound";
 import { getPPPKByNipppk } from "@/dummy/data-pppk-by-nipppk";
 import { PostDataPPPK } from "@/dummy/post-data-pppk";
 import SuccessUpdated from "../alert/SuccessUpdated";
-import { getCurrentDateTime } from "@/helpers/datetime";
-import { useRouter } from "next/navigation";
+import { AlertInfo, AlertSuccess, AlertWarning } from "../alert";
 
 export const FormPeremajaan = ({ sigapok, nipppk, session_silka }) => {
   const queryClient = useQueryClient();
@@ -200,25 +195,38 @@ export const FormPeremajaan = ({ sigapok, nipppk, session_silka }) => {
         ? silka.status_data_update
         : silka.status_data_add;
     return (
-      <Card className="w-full h-screen">
-        <CardBody className="flex flex-col items-center justify-center gap-6">
-          <SuccessUpdated style={{ width: 400 }}>
-            <h1 className="font-bold text-lg inline-flex items-center flex-col gap-y-3 mx-8 sm:mx-0">
-              Data anda sudah diperbaharui pada{" "}
-              <span className="text-gray-400">
-                {" "}
-                <Chip
-                  endContent={<CheckCircleFill className="size-6" />}
-                  color="success"
-                  size="lg"
-                  variant="flat">
-                  {updateAt}
-                </Chip>
-              </span>
-            </h1>
-          </SuccessUpdated>
-        </CardBody>
-      </Card>
+      <>
+        {silka?.status_data === "APPROVE" && (
+          <AlertSuccess title="Informasi">
+            Data Pegawai anda sudah tersenkronisasi dengan INEXIS Badan
+            Pengelola Keuangan Pendapatan dan Aset Daerah Kab. Balangan
+          </AlertSuccess>
+        )}
+        {silka?.status_data === "VERIFIKASI" && (
+          <AlertInfo title="Perhatian">
+            Menunggu verifikasi pengelola kepegawaian.
+          </AlertInfo>
+        )}
+        <Card className="w-full h-screen">
+          <CardBody className="flex flex-col items-center justify-center gap-6">
+            <SuccessUpdated style={{ width: 400 }}>
+              <h1 className="font-bold text-lg inline-flex items-center flex-col gap-y-3 mx-8 sm:mx-0">
+                Data anda sudah diperbaharui pada{" "}
+                <span className="text-gray-400">
+                  {" "}
+                  <Chip
+                    endContent={<CheckCircleFill className="size-6" />}
+                    color="success"
+                    size="lg"
+                    variant="flat">
+                    {updateAt}
+                  </Chip>
+                </span>
+              </h1>
+            </SuccessUpdated>
+          </CardBody>
+        </Card>
+      </>
     );
   }
 
@@ -230,10 +238,15 @@ export const FormPeremajaan = ({ sigapok, nipppk, session_silka }) => {
         handlePeremajaan={isSubmit}
         isPending={isPending || isSending}
       />
+      <AlertWarning
+        title="Perhatian"
+        message="Jika terdapat kesalahan data  pada section ini, silahkan lakukan update data pada SILKa. Pastikan semua bagian terisi dengan benar sebelum diperbaharui."
+      />
       <form
         onSubmit={handleSubmit(isConfirm)}
         method="POST"
         autoComplete="off"
+        className="mt-3"
         noValidate>
         <Tabs
           color="primary"

@@ -35,14 +35,23 @@ async function ApprovalTpp() {
   } = resultDataTpp?.data;
 
   const renderActionKirim = () => {
+    // jika sudah melakukan sinkronisasi
     if (resultDataTpp?.data.is_sync_simgaji === "1") return null;
+    // jika status data tpp tidak sama dengan APPROVE dan CETAK
     if (
       resultDataTpp?.data.fid_status !== "4" &&
       resultDataTpp?.data.fid_status !== "5"
     )
       return null;
-
+    // jika status data tpp sudah cetak
     if (resultDataTpp?.data.fid_status === "5") return null;
+    // jika status data peremajaan masih verifikasi, entri, null
+    if (
+      resultDataTpp?.data.is_peremajaan === "VERIFIKASI" ||
+      resultDataTpp?.data.is_peremajaan === "ENTRI" ||
+      resultDataTpp?.data.is_peremajaan === null
+    )
+      return null;
 
     return (
       <div className="inline-flex w-full justify-between items-center gap-x-3">
@@ -81,6 +90,11 @@ async function ApprovalTpp() {
           )}
         </CardHeader>
         <CardBody>
+          {resultDataTpp?.data.fid_status === "5" && (
+            <AlertSuccess title="Perhatian">
+              TPP sudah selesai cetak pada SILKa Online.
+            </AlertSuccess>
+          )}
           {resultDataTpp?.data.is_sync_simgaji !== "1" && (
             <AlertDanger
               title="Perhatian"
@@ -94,10 +108,17 @@ async function ApprovalTpp() {
                 message="TPP masih dalam proses perhitungan atau belum disetujui."
               />
             )}
-          {resultDataTpp?.data.fid_status === "5" && (
-            <AlertSuccess title="Perhatian">
-              TPP sudah selesai cetak pada SILKa Online.
-            </AlertSuccess>
+          {(resultDataTpp?.data.is_peremajaan === "ENTRI" ||
+            resultDataTpp?.data.is_peremajaan === null) && (
+            <AlertWarning
+              title="Perhatian"
+              message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
+            />
+          )}
+          {resultDataTpp?.data.is_peremajaan === "VERIFIKASI" && (
+            <AlertWarning title="Perhatian">
+              Peremajaan data belum verifikasi oleh pengelola kepegawaian.
+            </AlertWarning>
           )}
           <div className="flex flex-col gap-3 mt-3 p-5">
             <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">

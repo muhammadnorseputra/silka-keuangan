@@ -1,14 +1,11 @@
 import { useSessionServer } from "@/app/app-module/server-session";
 import { BtnKirimTPP } from "@/components/button/btn-tpp-kirim";
 import { getTppByNipppk } from "@/dummy/data-tpp-by-nip";
-import { formatRupiahManual } from "@/helpers/cx";
 import { decrypt } from "@/helpers/encrypt";
 import { polaNIP } from "@/helpers/polanip";
-import { terbilangRupiah } from "@/helpers/rupiah";
-import { Divider } from "@nextui-org/react";
 import { ExclamationCircle } from "react-bootstrap-icons";
 import DetailKalkulasi from "./detailKalkulasi";
-import { AlertSuccess } from "@/components/alert";
+import { AlertDanger, AlertSuccess, AlertWarning } from "@/components/alert";
 
 export default async function RenderSilkaService({ slug }) {
   const sigapok = useSessionServer("USER_GAPOK");
@@ -34,11 +31,17 @@ export default async function RenderSilkaService({ slug }) {
     tahun,
     bulan,
     fid_status,
+    is_peremajaan,
+    is_sync_simgaji,
   } = resultDataTpp?.data;
 
   const renderButtonKirim = () => {
-    if (resultDataTpp?.data.is_sync_simgaji === "1") return null;
-    if (resultDataTpp?.data.fid_status === "5") return null;
+    if (is_sync_simgaji === "1") return null;
+    if (fid_status === "5") return null;
+    if (fid_status !== "4" && fid_status !== "5") return null;
+    if (is_peremajaan === "ENTRI" || is_peremajaan === null) return null;
+    if (is_peremajaan === "VERIFIKASI") return null;
+
     return (
       <>
         <BtnKirimTPP {...sigapok} {...resultDataTpp?.data} silka={silka} />
@@ -48,10 +51,29 @@ export default async function RenderSilkaService({ slug }) {
 
   return (
     <>
-      {resultDataTpp?.data.fid_status === "5" && (
+      {fid_status === "5" && (
         <AlertSuccess title="Perhatian">
           TPP sudah selesai cetak pada silka online.
         </AlertSuccess>
+      )}
+      {is_sync_simgaji !== "1" && (
+        <AlertDanger title="Perhatian" message="Data belum tersenkronisasi" />
+      )}
+      {fid_status !== "4" && fid_status !== "5" && (
+        <AlertDanger title="Perhatian">
+          TPP masih dalam proses perhitungan atau belum disetujui.
+        </AlertDanger>
+      )}
+      {(is_peremajaan === "ENTRI" || is_peremajaan === null) && (
+        <AlertWarning
+          title="Perhatian"
+          message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
+        />
+      )}
+      {is_peremajaan === "VERIFIKASI" && (
+        <AlertWarning title="Perhatian">
+          Peremajaan data belum verifikasi oleh pengelola kepegawaian.
+        </AlertWarning>
       )}
       <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
         <div>

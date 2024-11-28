@@ -3,7 +3,6 @@ import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useSessionServer } from "../../../server-session";
 import { decrypt } from "@/helpers/encrypt";
 import { FormPeremajaan } from "@/components/forms/form-peremajaan";
-import { AlertWarning } from "@/components/alert";
 import { ShowProfile } from "@/helpers/profile";
 
 export default async function Page({ params }) {
@@ -32,10 +31,6 @@ export default async function Page({ params }) {
                   </div>
                 </div>
               </div>
-              <AlertWarning
-                title="Perhatian"
-                message="Jika terdapat kesalahan data  pada section ini, silahkan lakukan update data pada SILKa. Pastikan semua bagian terisi dengan benar sebelum diperbaharui."
-              />
             </CardHeader>
             <CardBody className="h-screen overflow-y-auto">
               <FormPeremajaan sigapok={sigapok} silka={silka} nip={nip} />

@@ -46,7 +46,7 @@ export default async function Page({ params }) {
               <div className="flex flex-col md:flex-row justify-between items-start gap-x-6 gap-y-3">
                 {/* Get Data Silka */}
                 <Card fullWidth>
-                  <CardHeader className="flex justify-between items-center gap-3">
+                  <CardHeader className="flex justify-between items-center gap-3 bg-blue-100">
                     <div className="flex flex-col">
                       <p className="text-md">SILKa Online</p>
                       <p className="text-small text-default-500">
@@ -62,7 +62,7 @@ export default async function Page({ params }) {
                 </Card>
                 {/* Get Data Gapok */}
                 <Card fullWidth>
-                  <CardHeader className="flex gap-3">
+                  <CardHeader className="flex gap-3 bg-amber-100">
                     <div className="flex flex-col">
                       <p className="text-md">Sigapok</p>
                       <p className="text-small text-default-500">

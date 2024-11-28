@@ -64,6 +64,7 @@ export default async function Page({ params }) {
       berkas,
       id_status_pegawai_simgaji,
       id_jenis_pegawai_simgaji,
+      is_peremajaan,
     } = resultDataKgb?.data;
     return (
       <>
@@ -74,14 +75,17 @@ export default async function Page({ params }) {
             Silahkan Upload pada Riwayat KGB Terkahir ASN"
           />
         )}
-        {(id_status_pegawai_simgaji === null ||
-          id_jenis_pegawai_simgaji === null) && (
+        {(is_peremajaan === "ENTRI" || is_peremajaan === null) && (
           <AlertWarning
             title="Perhatian"
             message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
           />
         )}
-
+        {is_peremajaan === "VERIFIKASI" && (
+          <AlertWarning title="Perhatian">
+            Peremajaan data belum verifikasi oleh pengelola kepegawaian.
+          </AlertWarning>
+        )}
         <div>
           <div className="text-gray-400">NAMA</div>
           <div className="font-bold">{nama_lengkap ?? "-"}</div>
@@ -261,8 +265,9 @@ export default async function Page({ params }) {
   const renderButtonVerifikasi = () => {
     if (isBerkas !== "OK") return null;
     if (
-      resultDataKgb?.data.id_status_pegawai_simgaji === null ||
-      resultDataKgb?.data.id_jenis_pegawai_simgaji === null
+      resultDataKgb?.data.is_peremajaan === "VERIFIKASI" ||
+      resultDataKgb?.data.is_peremajaan === "ENTRI" ||
+      resultDataKgb?.data.is_peremajaan === null
     )
       return null;
 

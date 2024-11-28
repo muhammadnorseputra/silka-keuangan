@@ -39,7 +39,7 @@ import {
   CardHeader,
 } from "@nextui-org/react";
 import { BtnRefreshQuery } from "../button/btn-reload";
-import { AlertInfo } from "../alert";
+import { AlertInfo, AlertSuccess, AlertWarning } from "../alert";
 
 const FormPeremajaan = ({ sigapok, silka, nip }) => {
   const queryClient = useQueryClient();
@@ -217,25 +217,38 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
 
   if (row?.status_data !== "ENTRI" && row?.status_data !== null) {
     return (
-      <Card className="w-full h-screen">
-        <CardBody className="flex flex-col items-center justify-center gap-6">
-          <SuccessUpdated style={{ width: 400 }}>
-            <h1 className="font-bold text-lg inline-flex items-center flex-col gap-y-3 mx-8 sm:mx-0">
-              Data anda sudah diperbaharui pada{" "}
-              <span className="text-gray-400">
-                {" "}
-                <Chip
-                  endContent={<CheckCircleFill className="size-6" />}
-                  color="success"
-                  size="lg"
-                  variant="flat">
-                  {row?.update_at}
-                </Chip>
-              </span>
-            </h1>
-          </SuccessUpdated>
-        </CardBody>
-      </Card>
+      <>
+        {row?.status_data === "APPROVE" && (
+          <AlertSuccess title="Informasi">
+            Data Pegawai anda sudah tersenkronisasi dengan INEXIS Badan
+            Pengelola Keuangan Pendapatan dan Aset Daerah Kab. Balangan
+          </AlertSuccess>
+        )}
+        {row?.status_data === "VERIFIKASI" && (
+          <AlertInfo title="Perhatian">
+            Menunggu verifikasi pengelola kepegawaian.
+          </AlertInfo>
+        )}
+        <Card className="w-full h-screen mt-3">
+          <CardBody className="flex flex-col items-center justify-center gap-6">
+            <SuccessUpdated style={{ width: 400 }}>
+              <h1 className="font-bold text-lg inline-flex items-center flex-col gap-y-3 mx-8 sm:mx-0">
+                Data anda sudah diperbaharui pada{" "}
+                <span className="text-gray-400">
+                  {" "}
+                  <Chip
+                    endContent={<CheckCircleFill className="size-6" />}
+                    color="success"
+                    size="lg"
+                    variant="flat">
+                    {row?.update_at}
+                  </Chip>
+                </span>
+              </h1>
+            </SuccessUpdated>
+          </CardBody>
+        </Card>
+      </>
     );
   }
 
@@ -247,10 +260,15 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
         handlePeremajaan={isYakin}
         isPending={isPendingSubmit || isLoadingSubmit}
       />
+      <AlertWarning
+        title="Perhatian"
+        message="Jika terdapat kesalahan data  pada section ini, silahkan lakukan update data pada SILKa. Pastikan semua bagian terisi dengan benar sebelum diperbaharui."
+      />
       <form
         onSubmit={handleSubmit(isConfirm)}
         method="POST"
         autoComplete="off"
+        className="mt-3"
         noValidate>
         {/* <input type="hidden" name="test" value="test" {...register("test")} /> */}
         <Tabs

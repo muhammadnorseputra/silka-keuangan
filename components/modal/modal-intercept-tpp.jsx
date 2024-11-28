@@ -20,9 +20,8 @@ import { useRouter } from "next-nprogress-bar";
 import { useCallback } from "react";
 import { PlaceholderBar } from "../skeleton/placeholder-bar";
 import { BtnKirimTPP } from "../button/btn-tpp-kirim";
-import { InboxIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
-import toast from "react-hot-toast";
-import { AlertDanger, AlertInfo, AlertSuccess } from "../alert";
+import { InboxIcon } from "@heroicons/react/24/solid";
+import { AlertDanger, AlertSuccess, AlertWarning } from "../alert";
 import DetailKalkulasi from "@/app/app-module/pppk/tpp/[...slug]/detailKalkulasi";
 
 export default function ModalInterceptTppPegawai({ params }) {
@@ -65,12 +64,23 @@ export default function ModalInterceptTppPegawai({ params }) {
   }, [isFetching, isLoading, queryTPP?.data?.is_sync_simgaji]);
 
   const renderActionKirim = useCallback(() => {
+    // jika loading data dan fetching data
     if (isLoading || isFetching) return "";
+    // jika sudah melakukan sinkronisasi
     if (queryTPP?.data.is_sync_simgaji === "1") return null;
+    // jika status data tpp tidak sama dengan APPROVE dan CETAK
     if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
       return null;
+    // jika status data tpp sudah cetak
     if (queryTPP?.data.fid_status === "5") return null;
-
+    // jika status data peremajaan masih verifikasi, entri, null
+    if (
+      queryTPP?.data.is_peremajaan === "VERIFIKASI" ||
+      queryTPP?.data.is_peremajaan === "ENTRI" ||
+      queryTPP?.data.is_peremajaan === null
+    )
+      return null;
+    // jika semua terpenuhi tampilkan tombol kirim
     return (
       <div className="inline-flex w-full justify-between items-center gap-x-3">
         <Button color="danger" variant="light" onPress={() => router.back()}>
@@ -103,6 +113,11 @@ export default function ModalInterceptTppPegawai({ params }) {
     } = queryTPP?.data;
     return (
       <>
+        {queryTPP?.data.fid_status === "5" && (
+          <AlertSuccess title="Perhatian">
+            TPP sudah selesai cetak pada silka online
+          </AlertSuccess>
+        )}
         {queryTPP?.data.is_sync_simgaji !== "1" && (
           <AlertDanger title="Perhatian" message="Data belum tersenkronisasi" />
         )}
@@ -112,10 +127,17 @@ export default function ModalInterceptTppPegawai({ params }) {
               TPP masih dalam proses perhitungan atau belum disetujui.
             </AlertDanger>
           )}
-        {queryTPP?.data.fid_status === "5" && (
-          <AlertSuccess title="Perhatian">
-            TPP sudah selesai cetak pada silka online
-          </AlertSuccess>
+        {(queryTPP?.data.is_peremajaan === "ENTRI" ||
+          queryTPP?.data.is_peremajaan === null) && (
+          <AlertWarning
+            title="Perhatian"
+            message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
+          />
+        )}
+        {queryTPP?.data.is_peremajaan === "VERIFIKASI" && (
+          <AlertWarning title="Perhatian">
+            Peremajaan data belum verifikasi oleh pengelola kepegawaian.
+          </AlertWarning>
         )}
         <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-6">
           <div>
@@ -322,6 +344,18 @@ export const ModalInterceptTppPppk = ({ params }) => {
             TPP sudah selesai cetak pada silka online
           </AlertSuccess>
         )}
+        {(queryTPP?.data.is_peremajaan === "ENTRI" ||
+          queryTPP?.data.is_peremajaan === null) && (
+          <AlertWarning
+            title="Perhatian"
+            message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
+          />
+        )}
+        {queryTPP?.data.is_peremajaan === "VERIFIKASI" && (
+          <AlertWarning title="Perhatian">
+            Peremajaan data belum verifikasi oleh pengelola kepegawaian.
+          </AlertWarning>
+        )}
         <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-6">
           <div>
             <div className="text-gray-400">NIP</div>
@@ -376,6 +410,13 @@ export const ModalInterceptTppPppk = ({ params }) => {
     if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
       return null;
     if (queryTPP?.data.fid_status === "5") return null;
+    // jika status data peremajaan masih verifikasi, entri, null
+    if (
+      queryTPP?.data.is_peremajaan === "VERIFIKASI" ||
+      queryTPP?.data.is_peremajaan === "ENTRI" ||
+      queryTPP?.data.is_peremajaan === null
+    )
+      return null;
 
     return (
       <div className="inline-flex w-full justify-between items-center gap-x-3">

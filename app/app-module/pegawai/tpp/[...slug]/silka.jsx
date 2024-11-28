@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertDanger, AlertSuccess } from "@/components/alert";
+import { AlertDanger, AlertSuccess, AlertWarning } from "@/components/alert";
 import { BtnKirimTPP } from "@/components/button/btn-tpp-kirim";
 import { PlaceholderBar } from "@/components/skeleton/placeholder-bar";
 import { getTppByNip } from "@/dummy/data-tpp-by-nip";
@@ -57,11 +57,20 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
   } = row?.data;
 
   const renderButtonKirim = () => {
+    // jika sudah melakukan sinkronisasi
+    if (row?.data.is_sync_simgaji === "1") return null;
+    // jika status data tpp tidak sama dengan APPROVE dan CETAK
     if (row?.data.fid_status !== "4" && row?.data.fid_status !== "5")
       return null;
-    if (row?.data.is_sync_simgaji === "1") return null;
+    // jika status data tpp sudah cetak
     if (row?.data.fid_status === "5") return null;
-
+    // jika status data peremajaan masih verifikasi, entri, null
+    if (
+      row?.data.is_peremajaan === "VERIFIKASI" ||
+      row?.data.is_peremajaan === "ENTRI" ||
+      row?.data.is_peremajaan === null
+    )
+      return null;
     return (
       <>
         <Divider />
@@ -72,15 +81,27 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
 
   return (
     <>
+      {row?.data.fid_status === "5" && (
+        <AlertSuccess title="Perhatian">
+          TPP sudah selesai cetak pada silka online.
+        </AlertSuccess>
+      )}
       {row?.data.fid_status !== "4" && row?.data.fid_status !== "5" && (
         <AlertDanger title="Perhatian">
           TPP masih dalam proses perhitungan atau belum disetujui.
         </AlertDanger>
       )}
-      {row?.data.fid_status === "5" && (
-        <AlertSuccess title="Perhatian">
-          TPP sudah selesai cetak pada silka online.
-        </AlertSuccess>
+      {row?.data.is_peremajaan === "VERIFIKASI" && (
+        <AlertWarning title="Perhatian">
+          Peremajaan data belum verifikasi oleh pengelola kepegawaian.
+        </AlertWarning>
+      )}
+      {(row?.data.is_peremajaan === "ENTRI" ||
+        row?.data.is_peremajaan === null) && (
+        <AlertWarning
+          title="Perhatian"
+          message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
+        />
       )}
       <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
         <div>
