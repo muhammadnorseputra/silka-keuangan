@@ -397,20 +397,20 @@ export const TablePegawai = ({ unors, pegawais }) => {
       <Table
         // isStriped
         // isCompact
-        isHeaderSticky
+        // isHeaderSticky
         removeWrapper
         selectionMode="single"
         className="relative"
         aria-label="Example static collection table"
         topContent={topContent}
-        topContentPlacement="outside"
+        topContentPlacement="inside"
         bottomContent={bottomContent}
-        bottomContentPlacement="outside"
+        bottomContentPlacement="inside"
         // @ts-ignore
         sortDescriptor={sortDescriptor}
         // @ts-ignore
         onSortChange={setSortDescriptor}>
-        <TableHeader columns={headerColumns} className="sticky top-20">
+        <TableHeader columns={headerColumns}>
           {(column) => (
             <TableColumn
               allowsSorting={column.sortable}

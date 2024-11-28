@@ -16,8 +16,6 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
-  Link,
   Listbox,
   ListboxItem,
   ListboxSection,
@@ -33,6 +31,22 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
   }
 
   const { nip } = data;
+
+  if (isOpenModal) {
+    if (jenis === "PNS") {
+      router.prefetch(
+        `/app-module/pegawai/peremajaan/${encrypt(nip, "bkpsdm")}`
+      );
+      router.prefetch(`/app-module/pegawai/verval/${encrypt(nip, "bkpsdm")}`);
+      router.prefetch(`/app-module/pegawai/kgb/${encrypt(nip, "bkpsdm")}`);
+      router.prefetch(`/app-module/pegawai/pangkat/${encrypt(nip, "bkpsdm")}`);
+      router.prefetch(`/app-module/pegawai/tpp/${encrypt(nip, "bkpsdm")}`);
+    } else {
+      router.prefetch(`/app-module/pppk/peremajaan/${encrypt(nip, "bkpsdm")}`);
+      router.prefetch(`/app-module/pppk/verval/${encrypt(nip, "bkpsdm")}`);
+      router.prefetch(`/app-module/pppk/tpp/${encrypt(nip, "bkpsdm")}`);
+    }
+  }
 
   return (
     <>
