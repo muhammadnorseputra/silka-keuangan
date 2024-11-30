@@ -2,6 +2,10 @@ import { BtnBackNextUi } from "@/components/button/btn-back";
 import CariASN from "@/components/search/cariasn";
 import { Stars } from "react-bootstrap-icons";
 
+export const metadata = {
+  title: "Cari ASN | SILKa - INEXIS",
+};
+
 export default function Page() {
   return (
     <>

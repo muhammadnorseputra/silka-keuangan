@@ -39,6 +39,10 @@ export function formatTanggalIndonesia(tanggal = "0000-00-00") {
     "Desember",
   ];
 
+  if (tanggal === null || tanggal === "") {
+    return `-`;
+  }
+
   const [tahun, bulan, hari] = tanggal.split("-");
 
   const namaBulan = bulanIndonesia[parseInt(bulan) - 1];

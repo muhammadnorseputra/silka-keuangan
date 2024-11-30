@@ -7,16 +7,12 @@ import { getTppByNip } from "@/dummy/data-tpp-by-nip";
 import { getNamaBulan } from "@/helpers/cx";
 import { polaNIP } from "@/helpers/polanip";
 import { CheckBadgeIcon } from "@heroicons/react/24/outline";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Divider,
-} from "@nextui-org/react";
-import { useCallback } from "react";
+import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import { ExclamationCircle } from "react-bootstrap-icons";
+
+export const metadata = {
+  title: "Kirim TPP Personal | SILKa - INEXIS",
+};
 
 async function ApprovalTpp() {
   const silka = useSessionServer("USER_SILKA");
