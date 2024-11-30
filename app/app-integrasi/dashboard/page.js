@@ -47,16 +47,19 @@ export default async function Page() {
         <CardModule
           title="Cari ASN"
           icon="Search"
+          iconColor="text-blue-400 dark:text-blue-200"
           path="/app-integrasi/cariasn"
         />
         <CardModule
           title="Nominatif PNS"
           icon="PersonVcard"
+          iconColor="text-green-400 dark:text-green-200"
           path="/app-module/pegawai"
         />
         <CardModule
           title="Nominatif PPPK"
           icon="Postcard"
+          iconColor="text-purple-400 dark:text-purple-200"
           path="/app-module/pppk"
         />
         <CardModule title="Comming soon !" icon="Stars" path="/" isDisabled />

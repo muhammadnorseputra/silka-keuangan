@@ -163,9 +163,9 @@ export const FormAuth = () => {
                 onClick={toggleVisibility}
                 aria-label="toggle password visibility">
                 {!isVisible ? (
-                  <EyeSlashIcon className="size-6 text-gray-400" />
+                  <EyeSlashIcon className="size-6 text-gray-400 dark:text-gray-200" />
                 ) : (
-                  <EyeIcon className="size-6 text-gray-800" />
+                  <EyeIcon className="size-6 text-gray-800 dark:text-gray-400" />
                 )}
               </button>
             </Tooltip>

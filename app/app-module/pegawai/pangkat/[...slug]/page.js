@@ -47,6 +47,8 @@ export default async function Page({ params }) {
         </div>
       );
     }
+
+    const { is_peremajaan } = riwayat_pangkat?.data.row;
     return (
       <>
         {isBerkas !== "OK" && (
@@ -56,12 +58,16 @@ export default async function Page({ params }) {
             Silahkan Upload pada Riwayat Pangkat Terkahir ASN"
           />
         )}
-        {(riwayat_pangkat.data.row.id_status_pegawai_simgaji === null ||
-          riwayat_pangkat.data.row.id_jenis_pegawai_simgaji === null) && (
+        {(is_peremajaan === "ENTRI" || is_peremajaan === null) && (
           <AlertWarning
             title="Perhatian"
             message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
           />
+        )}
+        {is_peremajaan === "VERIFIKASI" && (
+          <AlertWarning title="Perhatian">
+            Peremajaan data belum verifikasi oleh pengelola kepegawaian.
+          </AlertWarning>
         )}
         <div>
           <div className="text-gray-400">NAMA</div>
@@ -250,8 +256,9 @@ export default async function Page({ params }) {
   const renderButtonVerifikasi = () => {
     if (isBerkas !== "OK") return null;
     if (
-      riwayat_pangkat.data.row.id_status_pegawai_simgaji === null ||
-      riwayat_pangkat.data.row.id_jenis_pegawai_simgaji === null
+      riwayat_pangkat?.data.is_peremajaan === "VERIFIKASI" ||
+      riwayat_pangkat?.data.is_peremajaan === "ENTRI" ||
+      riwayat_pangkat?.data.is_peremajaan === null
     )
       return null;
 
