@@ -256,9 +256,9 @@ export default async function Page({ params }) {
   const renderButtonVerifikasi = () => {
     if (isBerkas !== "OK") return null;
     if (
-      riwayat_pangkat?.data.is_peremajaan === "VERIFIKASI" ||
-      riwayat_pangkat?.data.is_peremajaan === "ENTRI" ||
-      riwayat_pangkat?.data.is_peremajaan === null
+      riwayat_pangkat?.data.row.is_peremajaan === "VERIFIKASI" ||
+      riwayat_pangkat?.data.row.is_peremajaan === "ENTRI" ||
+      riwayat_pangkat?.data.row.is_peremajaan === null
     )
       return null;
 
