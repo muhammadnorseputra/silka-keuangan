@@ -64,7 +64,7 @@ export default function Home() {
             <Image
               src="/assets/app-for-personal.png"
               alt="Dashboard image"
-              width={1100}
+              width={1200}
               height={400}
               className="rounded-t-3xl transition-all ease-in-out delay-150 duration-350 hover:scale-105 filter grayscale blur-lg contrast-100 hover:blur-none hover:grayscale-0 "
               priority

@@ -2,6 +2,7 @@ import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "Login - SILKa Integrasi Badan Keuangan Daerah",
+  description: "Login Aplikasi Layanan Integrasi SILKa - INexiS Kab. Balangan",
 };
 
 export default function Layout({ children }) {

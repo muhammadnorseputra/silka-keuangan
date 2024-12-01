@@ -4,6 +4,8 @@ import { Card, CardBody } from "@nextui-org/react";
 
 export const metadata = {
   title: "Lupa Password - SILKa Integrasi Badan Keuangan Daerah",
+  description:
+    "Lupa password SILKa - INexiS ? Hubungi Pengelola Kepegawaian pada masing-masing SKPD untuk melakukan reset password pada SILKa Online",
 };
 
 export default function LupaPassword() {
