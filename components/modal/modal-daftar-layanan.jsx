@@ -122,7 +122,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                 </ListboxItem>
               </ListboxSection>
               <ListboxSection title="Layanan Integrasi">
-                <ListboxItem
+                {/* <ListboxItem
                   isDisabled={jenis === "PPPK"}
                   hideSelectedIcon={jenis === "PPPK"}
                   key="kgb"
@@ -142,7 +142,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                     <DocumentCurrencyDollarIcon className="size-8 text-red-400" />
                   }>
                   Proses Kenaikan Gaji Berkala
-                </ListboxItem>
+                </ListboxItem> */}
                 <ListboxItem
                   isDisabled={jenis === "PPPK"}
                   hideSelectedIcon={jenis === "PPPK"}
