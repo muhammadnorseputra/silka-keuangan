@@ -32,6 +32,7 @@ export default async function Page() {
             icon="Cash"
             iconColor="text-red-600"
             path={`/app-module/pegawai/kgb/${encrypt(nip, "bkpsdm")}`}
+            isDisabled
           />
           <CardModule
             title="Kirim KP"
