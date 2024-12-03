@@ -226,7 +226,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
         )}
         {row?.status_data === "VERIFIKASI" && (
           <AlertInfo title="Perhatian">
-            Menunggu verifikasi pengelola kepegawaian.
+            Menunggu verifikasi & validasi pengelola kepegawaian.
           </AlertInfo>
         )}
         <Card className="w-full h-screen mt-3">
@@ -860,6 +860,30 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
                       message: "Tidak valid, hanya boleh angka dan maksimal 16",
                     },
                   })}
+                />
+                <Input
+                  isReadOnly
+                  size="lg"
+                  className="col-span-2 sm:col-span-1"
+                  placeholder="Nomor Kartu Pegawai (Karpeg)"
+                  labelPlacement="outside"
+                  type="text"
+                  label="Nomor Kartu Pegawai (Karpeg)"
+                  name="no_karpeg"
+                  defaultValue={row?.no_karpeg}
+                  variant="flat"
+                />
+                <Input
+                  isReadOnly
+                  size="lg"
+                  className="col-span-2 sm:col-span-1"
+                  placeholder="Nomor Kartu Istri / Suami"
+                  labelPlacement="outside"
+                  type="text"
+                  label="Nomor Kartu Istri / Suami"
+                  name="no_karisu"
+                  defaultValue={row?.no_karis_karsu}
+                  variant="flat"
                 />
               </CardBody>
             </Card>

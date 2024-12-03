@@ -60,9 +60,9 @@ export default function VervalSilkaPegawai({ sigapok, silka, nip }) {
       <Tabs
         className="sticky top-0"
         aria-label="Options"
-        radius="none"
+        radius="md"
         size="lg"
-        variant="bordered"
+        variant="solid"
         color="primary"
         fullWidth
         selectedKey={isTab}
@@ -124,6 +124,10 @@ export default function VervalSilkaPegawai({ sigapok, silka, nip }) {
                 <div className="text-gray-400">UNIT KERJA</div>
                 <div className="font-bold">{row?.nama_unit_kerja}</div>
               </div>
+              <div>
+                <div className="text-gray-400">JABATAN</div>
+                <div className="font-bold">{row?.nama_jabatan}</div>
+              </div>
               <div className="flex flex-col sm:flex-row justify-start gap-x-16">
                 <div>
                   <div className="text-gray-400">JENIS PEGAWAI</div>
@@ -153,6 +157,36 @@ export default function VervalSilkaPegawai({ sigapok, silka, nip }) {
                   <div className="text-gray-400">JUMLAH ANAK</div>
                   <div className="font-bold">{row?.jumlah_anak}</div>
                 </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Tab>
+        <Tab key="lainnya" title="Lainnya">
+          <Card shadow="none" fullWidth>
+            <CardBody className="gap-y-4">
+              <div>
+                <div className="text-gray-400">NO. KTP</div>
+                <div className="font-bold">{row?.no_ktp ?? "-"}</div>
+              </div>
+              <div>
+                <div className="text-gray-400">NO. NPWP</div>
+                <div className="font-bold">{row?.no_npwp ?? "-"}</div>
+              </div>
+              <div>
+                <div className="text-gray-400">NO. KARPEG</div>
+                <div className="font-bold">{row?.no_karpeg ?? "-"}</div>
+              </div>
+              <div>
+                <div className="text-gray-400">NO. KARIS / KARSU</div>
+                <div className="font-bold">{row?.no_karis_karsu ?? "-"}</div>
+              </div>
+              <div>
+                <div className="text-gray-400">WHATSAPP</div>
+                <div className="font-bold">{row?.whatsapp ?? "-"}</div>
+              </div>
+              <div>
+                <div className="text-gray-400">EMAIL</div>
+                <div className="font-bold">{row?.email ?? "-"}</div>
               </div>
             </CardBody>
           </Card>

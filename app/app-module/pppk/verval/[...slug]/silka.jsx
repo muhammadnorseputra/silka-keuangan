@@ -251,6 +251,10 @@ export default function SilkaDataP3k({ access_token, nip }) {
         <div className="text-gray-400">UNIT KERJA</div>
         <div className="font-bold">{row.nama_unit_kerja}</div>
       </div>
+      <div>
+        <div className="text-gray-400">JABATAN</div>
+        <div className="font-bold">{row.nama_jabatan}</div>
+      </div>
       <div className="flex flex-col sm:flex-row justify-start gap-x-16">
         <div>
           <div className="text-gray-400">GAJI POKOK</div>

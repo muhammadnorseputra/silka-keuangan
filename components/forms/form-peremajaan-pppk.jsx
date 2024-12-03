@@ -198,13 +198,13 @@ export const FormPeremajaan = ({ sigapok, nipppk, session_silka }) => {
       <>
         {silka?.status_data === "APPROVE" && (
           <AlertSuccess title="Informasi">
-            Data Pegawai anda sudah tersenkronisasi dengan INEXIS Badan
-            Pengelola Keuangan Pendapatan dan Aset Daerah Kab. Balangan
+            Data PPPK anda sudah tersenkronisasi dengan INEXIS Badan Pengelola
+            Keuangan Pendapatan dan Aset Daerah Kab. Balangan
           </AlertSuccess>
         )}
         {silka?.status_data === "VERIFIKASI" && (
           <AlertInfo title="Perhatian">
-            Menunggu verifikasi pengelola kepegawaian.
+            Menunggu verifikasi & validasi pengelola kepegawaian.
           </AlertInfo>
         )}
         <Card className="w-full h-screen">
@@ -331,7 +331,7 @@ export const FormPeremajaan = ({ sigapok, nipppk, session_silka }) => {
                   type="text"
                   label="Tempat Lahir"
                   name="tempat_lahir"
-                  defaultValue={silka.tempat_lahir}
+                  defaultValue={silka.tmp_lahir}
                   {...register("tempat_lahir")}
                 />
                 <Input
