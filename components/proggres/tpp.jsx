@@ -68,7 +68,8 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG, sigapok }) {
     return <p className="mb-4">Memuat Data ...</p>;
 
   let percent = Math.round(
-    (querySigapokCountTpp?.data?.length / querySilkaCountPns?.data?.total) * 100
+    (querySigapokCountTpp?.data?.length ??
+      0 / querySilkaCountPns?.data?.total) * 100
   );
 
   return (
@@ -78,7 +79,9 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG, sigapok }) {
           size="md"
           radius="lg"
           color="success"
-          label={`Progress Sinkronisasi TPP (${PERIODE_TPP}) ${querySigapokCountTpp?.data?.length} / ${querySilkaCountPns?.data?.total}`}
+          label={`Progress Sinkronisasi TPP (${PERIODE_TPP}) ${
+            querySigapokCountTpp?.data?.length ?? 0
+          } / ${querySilkaCountPns?.data?.total}`}
           value={percent === Infinity ? 0 : percent}
           showValueLabel={true}
         />

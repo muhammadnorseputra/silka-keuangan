@@ -60,7 +60,7 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
     // jika sudah melakukan sinkronisasi
     if (row?.data.is_sync_simgaji === "1") return null;
     // jika status data tpp tidak sama dengan APPROVE dan CETAK
-    if (row?.data.fid_status !== "4" && row?.data.fid_status !== "5")
+    if (row?.data.fid_status !== "4" || row?.data.fid_status !== "5")
       return null;
     // jika status data tpp sudah cetak
     if (row?.data.fid_status === "5") return null;
@@ -86,10 +86,11 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
           TPP sudah selesai cetak pada silka online.
         </AlertSuccess>
       )}
-      {row?.data.fid_status !== "4" && row?.data.fid_status !== "5" && (
-        <AlertDanger title="Perhatian">
-          TPP masih dalam proses perhitungan atau belum disetujui.
-        </AlertDanger>
+      {(row?.data.fid_status !== "4" || row?.data.fid_status !== "5") && (
+        <AlertDanger
+          title="Perhatian"
+          message="TPP masih dalam proses perhitungan atau belum disetujui."
+        />
       )}
       {row?.data.is_peremajaan === "VERIFIKASI" && (
         <AlertWarning title="Perhatian">
