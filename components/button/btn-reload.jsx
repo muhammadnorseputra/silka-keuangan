@@ -5,11 +5,11 @@ import { Button, Tooltip } from "@nextui-org/react";
 import { useIsFetching, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-export const Reload = () => {
+export const Reload = ({ title = "Reconnected" }) => {
   const router = useRouter();
   return (
     <Button color="danger" onClick={() => router.refresh()}>
-      <ArrowPathIcon className="size-5" /> Reconnected
+      <ArrowPathIcon className="size-5" /> {title}
     </Button>
   );
 };

@@ -2,6 +2,7 @@ import DetailKalkulasi from "@/app/app-module/pppk/tpp/[...slug]/detailKalkulasi
 import { useSessionServer } from "@/app/app-module/server-session";
 import { AlertDanger, AlertSuccess, AlertWarning } from "@/components/alert";
 import { BtnBackNextUi } from "@/components/button/btn-back";
+import { Reload } from "@/components/button/btn-reload";
 import { BtnKirimTPP } from "@/components/button/btn-tpp-kirim";
 import { getTppByNip } from "@/dummy/data-tpp-by-nip";
 import { getNamaBulan } from "@/helpers/cx";
@@ -17,7 +18,19 @@ export const metadata = {
 async function ApprovalTpp() {
   const silka = useSessionServer("USER_SILKA");
   const sigapok = useSessionServer("USER_GAPOK");
-  const resultDataTpp = await getTppByNip(silka?.data.nip);
+  const resultDataTpp = await getTppByNip(silka?.data?.nip);
+
+  if (resultDataTpp.status === false) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen gap-4">
+        <ExclamationCircle className="size-8" />
+        <p className="text-gray-400">{resultDataTpp.message}</p>
+        <div className="inline-flex gap-4">
+          <BtnBackNextUi /> <Reload title="Refresh" />
+        </div>
+      </div>
+    );
+  }
 
   const {
     nip,
@@ -35,7 +48,7 @@ async function ApprovalTpp() {
     if (resultDataTpp?.data.is_sync_simgaji === "1") return null;
     // jika status data tpp tidak sama dengan APPROVE dan CETAK
     if (
-      resultDataTpp?.data.fid_status !== "4" &&
+      resultDataTpp?.data.fid_status !== "4" ||
       resultDataTpp?.data.fid_status !== "5"
     )
       return null;
@@ -60,15 +73,6 @@ async function ApprovalTpp() {
       </div>
     );
   };
-
-  if (resultDataTpp.status === false) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-4">
-        <ExclamationCircle className="size-8" />
-        <p className="text-gray-400">{resultDataTpp.message}</p>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -97,13 +101,13 @@ async function ApprovalTpp() {
               message="TPP belum tersenkronisasi dengan Badan Keuangan Daerah, silahkan kirim data."
             />
           )}
-          {resultDataTpp?.data.fid_status !== "4" &&
-            resultDataTpp?.data.fid_status !== "5" && (
-              <AlertWarning
-                title="Perhatian"
-                message="TPP masih dalam proses perhitungan atau belum disetujui."
-              />
-            )}
+          {(resultDataTpp?.data.fid_status !== "4" ||
+            resultDataTpp?.data.fid_status !== "5") && (
+            <AlertWarning
+              title="Perhatian"
+              message="TPP masih dalam proses perhitungan atau belum disetujui."
+            />
+          )}
           {(resultDataTpp?.data.is_peremajaan === "ENTRI" ||
             resultDataTpp?.data.is_peremajaan === null) && (
             <AlertWarning
