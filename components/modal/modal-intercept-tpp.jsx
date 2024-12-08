@@ -69,7 +69,7 @@ export default function ModalInterceptTppPegawai({ params }) {
     // jika sudah melakukan sinkronisasi
     if (queryTPP?.data.is_sync_simgaji === "1") return null;
     // jika status data tpp tidak sama dengan APPROVE dan CETAK
-    if (queryTPP?.data.fid_status !== "4" || queryTPP?.data.fid_status !== "5")
+    if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
       return null;
     // jika status data tpp sudah cetak
     if (queryTPP?.data.fid_status === "5") return null;
@@ -121,13 +121,13 @@ export default function ModalInterceptTppPegawai({ params }) {
         {queryTPP?.data.is_sync_simgaji !== "1" && (
           <AlertDanger title="Perhatian" message="Data belum tersenkronisasi" />
         )}
-        {(queryTPP?.data.fid_status !== "4" ||
-          queryTPP?.data.fid_status !== "5") && (
-          <AlertDanger
-            title="Perhatian"
-            message="TPP masih dalam proses perhitungan atau belum disetujui."
-          />
-        )}
+        {queryTPP?.data.fid_status !== "4" &&
+          queryTPP?.data.fid_status !== "5" && (
+            <AlertDanger
+              title="Perhatian"
+              message="TPP masih dalam proses perhitungan atau belum disetujui."
+            />
+          )}
         {(queryTPP?.data.is_peremajaan === "ENTRI" ||
           queryTPP?.data.is_peremajaan === null) && (
           <AlertWarning
@@ -334,13 +334,13 @@ export const ModalInterceptTppPppk = ({ params }) => {
         {queryTPP?.data.is_sync_simgaji !== "1" && (
           <AlertDanger title="Perhatian" message="Data belum tersenkronisasi" />
         )}
-        {(queryTPP?.data.fid_status !== "4" ||
-          queryTPP?.data.fid_status !== "5") && (
-          <AlertDanger
-            title="Perhatian"
-            message="TPP masih dalam proses perhitungan atau belum disetujui."
-          />
-        )}
+        {queryTPP?.data.fid_status !== "4" &&
+          queryTPP?.data.fid_status !== "5" && (
+            <AlertDanger
+              title="Perhatian"
+              message="TPP masih dalam proses perhitungan atau belum disetujui."
+            />
+          )}
         {queryTPP?.data.fid_status === "5" && (
           <AlertSuccess title="Perhatian">
             TPP sudah selesai cetak pada silka online
@@ -409,7 +409,7 @@ export const ModalInterceptTppPppk = ({ params }) => {
   const renderActionKirim = useCallback(() => {
     if (isLoading || isFetching) return "";
     if (queryTPP?.data.is_sync_simgaji === "1") return null;
-    if (queryTPP?.data.fid_status !== "4" || queryTPP?.data.fid_status !== "5")
+    if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
       return null;
     if (queryTPP?.data.fid_status === "5") return null;
     // jika status data peremajaan masih verifikasi, entri, null

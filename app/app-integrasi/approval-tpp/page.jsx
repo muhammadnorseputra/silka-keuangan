@@ -48,7 +48,7 @@ async function ApprovalTpp() {
     if (resultDataTpp?.data.is_sync_simgaji === "1") return null;
     // jika status data tpp tidak sama dengan APPROVE dan CETAK
     if (
-      resultDataTpp?.data.fid_status !== "4" ||
+      resultDataTpp?.data.fid_status !== "4" &&
       resultDataTpp?.data.fid_status !== "5"
     )
       return null;
@@ -101,13 +101,13 @@ async function ApprovalTpp() {
               message="TPP belum tersenkronisasi dengan Badan Keuangan Daerah, silahkan kirim data."
             />
           )}
-          {(resultDataTpp?.data.fid_status !== "4" ||
-            resultDataTpp?.data.fid_status !== "5") && (
-            <AlertWarning
-              title="Perhatian"
-              message="TPP masih dalam proses perhitungan atau belum disetujui."
-            />
-          )}
+          {resultDataTpp?.data.fid_status !== "4" &&
+            resultDataTpp?.data.fid_status !== "5" && (
+              <AlertWarning
+                title="Perhatian"
+                message="TPP masih dalam proses perhitungan atau belum disetujui."
+              />
+            )}
           {(resultDataTpp?.data.is_peremajaan === "ENTRI" ||
             resultDataTpp?.data.is_peremajaan === null) && (
             <AlertWarning
