@@ -68,8 +68,7 @@ export default function ProgresTpp({ KODE_SKPD_SIMPEG, sigapok }) {
     return <p className="mb-4">Memuat Data ...</p>;
 
   let percent = Math.round(
-    (querySigapokCountTpp?.data?.length ??
-      0 / querySilkaCountPns?.data?.total) * 100
+    (querySigapokCountTpp?.data?.length / querySilkaCountPns?.data?.total) * 100
   );
 
   return (
