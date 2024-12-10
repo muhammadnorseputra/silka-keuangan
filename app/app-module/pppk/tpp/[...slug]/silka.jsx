@@ -5,7 +5,12 @@ import { decrypt } from "@/helpers/encrypt";
 import { polaNIP } from "@/helpers/polanip";
 import { ExclamationCircle } from "react-bootstrap-icons";
 import DetailKalkulasi from "./detailKalkulasi";
-import { AlertDanger, AlertSuccess, AlertWarning } from "@/components/alert";
+import {
+  AlertDanger,
+  AlertInfo,
+  AlertSuccess,
+  AlertWarning,
+} from "@/components/alert";
 
 export default async function RenderSilkaService({ slug }) {
   const sigapok = useSessionServer("USER_GAPOK");
@@ -57,7 +62,9 @@ export default async function RenderSilkaService({ slug }) {
         </AlertSuccess>
       )}
       {is_sync_simgaji !== "1" && (
-        <AlertDanger title="Perhatian" message="Data belum tersenkronisasi" />
+        <AlertInfo title="Informasi">
+          TPP belum dikirim, silahkan kirim data
+        </AlertInfo>
       )}
       {fid_status !== "4" && fid_status !== "5" && (
         <AlertDanger title="Perhatian">

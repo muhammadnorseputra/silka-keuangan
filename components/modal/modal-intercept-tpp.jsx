@@ -21,7 +21,7 @@ import { useCallback } from "react";
 import { PlaceholderBar } from "../skeleton/placeholder-bar";
 import { BtnKirimTPP } from "../button/btn-tpp-kirim";
 import { InboxIcon } from "@heroicons/react/24/solid";
-import { AlertDanger, AlertSuccess, AlertWarning } from "../alert";
+import { AlertDanger, AlertInfo, AlertSuccess, AlertWarning } from "../alert";
 import DetailKalkulasi from "@/app/app-module/pppk/tpp/[...slug]/detailKalkulasi";
 
 export default function ModalInterceptTppPegawai({ params }) {
@@ -119,7 +119,9 @@ export default function ModalInterceptTppPegawai({ params }) {
           </AlertSuccess>
         )}
         {queryTPP?.data.is_sync_simgaji !== "1" && (
-          <AlertDanger title="Perhatian" message="Data belum tersenkronisasi" />
+          <AlertInfo title="Informasi">
+            TPP belum dikirim, silahkan kirim data
+          </AlertInfo>
         )}
         {queryTPP?.data.fid_status !== "4" &&
           queryTPP?.data.fid_status !== "5" && (
@@ -332,7 +334,9 @@ export const ModalInterceptTppPppk = ({ params }) => {
     return (
       <>
         {queryTPP?.data.is_sync_simgaji !== "1" && (
-          <AlertDanger title="Perhatian" message="Data belum tersenkronisasi" />
+          <AlertInfo title="Informasi">
+            TPP belum dikirim, silahkan kirim data
+          </AlertInfo>
         )}
         {queryTPP?.data.fid_status !== "4" &&
           queryTPP?.data.fid_status !== "5" && (
