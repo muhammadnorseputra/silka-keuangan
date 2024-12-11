@@ -1,6 +1,6 @@
 import { BtnBackNextUi } from "@/components/button/btn-back";
 import { BtnProfile } from "@/components/button/btn-profile";
-import { Error500 } from "@/components/errors/500";
+// import { Error500 } from "@/components/errors/500";
 import { TablePegawai } from "@/components/tables/table-pegawai";
 import { getPegawaiByUnor } from "@/dummy/data-pegawai-by-unor";
 import { dataUnorByRole } from "@/dummy/data-unor-by-role";
@@ -8,7 +8,7 @@ import { decrypt } from "@/helpers/encrypt";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useSessionServer } from "../server-session";
 import NoInternet from "@/components/errors/NoInternet";
-import ProgresTpp from "@/components/proggres/tpp";
+// import ProgresTpp from "@/components/proggres/tpp";
 
 async function Page({ searchParams }) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -53,7 +53,7 @@ async function Page({ searchParams }) {
               <BtnProfile profile={silka_session} />
             </CardHeader>
             <CardBody>
-              <ProgresTpp KODE_SKPD_SIMPEG={getIdUnker} sigapok={sigapok} />
+              {/* <ProgresTpp KODE_SKPD_SIMPEG={getIdUnker} sigapok={sigapok} /> */}
               {renderBody()}
             </CardBody>
           </Card>

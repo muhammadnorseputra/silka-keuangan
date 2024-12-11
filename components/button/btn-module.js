@@ -23,7 +23,6 @@ const BtnModule = ({ goTo, isDisabled }) => {
   });
 
   useEffect(() => {
-    router.prefetch(goTo);
     if (isPending || stateLoading) {
       toast.loading("Processing ...", {
         id: "Toaster",

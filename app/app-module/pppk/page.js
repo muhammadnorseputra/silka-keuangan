@@ -8,7 +8,7 @@ import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 import { getPppkByUnor } from "@/dummy/data-pppk-by-unor";
 import { decrypt } from "@/helpers/encrypt";
 import NoInternet from "@/components/errors/NoInternet";
-import ProgresTpp from "@/components/proggres/tpp";
+// import ProgresTpp from "@/components/proggres/tpp";
 
 async function Page({ searchParams }) {
   const session = hasSessionServer("USER_GAPOK");
@@ -61,7 +61,7 @@ async function Page({ searchParams }) {
               <BtnProfile profile={silka_session} />
             </CardHeader>
             <CardBody>
-              <ProgresTpp KODE_SKPD_SIMPEG={getIdUnker} sigapok={sigapok}/>
+              {/* <ProgresTpp KODE_SKPD_SIMPEG={getIdUnker} sigapok={sigapok}/> */}
               {renderTable()}
             </CardBody>
           </Card>

@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   staticPageGenerationTimeout: 1000,
+  productionBrowserSourceMaps: false,
   images: {
     remotePatterns: [
       {
@@ -22,23 +23,6 @@ const nextConfig = {
   },
   async headers() {
     return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "DENY",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "strict-origin-when-cross-origin",
-          },
-        ],
-      },
       {
         source: "/sw.js",
         headers: [
