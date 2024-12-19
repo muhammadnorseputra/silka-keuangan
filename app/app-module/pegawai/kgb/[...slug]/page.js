@@ -20,7 +20,7 @@ import BtnKgbConfirm from "@/components/button/btn-kgb-confirm";
 import { checkURLStatus } from "@/helpers/cekurlstatus";
 import { polaNIP } from "@/helpers/polanip";
 import { ShowProfile } from "@/helpers/profile";
-import { AlertDanger, AlertWarning } from "@/components/alert";
+import { AlertDanger, AlertInfo, AlertWarning } from "@/components/alert";
 
 export const revalidate = 0;
 
@@ -159,51 +159,56 @@ export default async function Page({ params }) {
         </div>
       );
     }
+
+    let lastRow = resultDataPerubaahan?.data?.length - 1;
+    const {USER_VERIF, KETERANGAN, VERIFIKASI_TIME} = resultDataPerubaahan?.data[lastRow];
+
     return (
       <>
+      {KETERANGAN && <AlertWarning title={`Hasil Verifikasi (${USER_VERIF} :: ${VERIFIKASI_TIME})`}>{KETERANGAN}</AlertWarning>}
         <div>
           <div className="text-gray-400">NAMA</div>
           <div className="font-bold">
-            {resultDataPerubaahan?.data[0].NAMA ?? "-"}
+            {resultDataPerubaahan?.data[lastRow].NAMA ?? "-"}
           </div>
         </div>
         <div>
           <div className="text-gray-400">NIP</div>
           <div className="font-bold">
-            {polaNIP(resultDataPerubaahan?.data[0].NIP_BARU) ?? "-"}
+            {polaNIP(resultDataPerubaahan?.data[lastRow].NIP_BARU) ?? "-"}
           </div>
         </div>
         <div className="inline-flex flex-row justify-start gap-x-8">
           <div>
             <div className="text-gray-400">STATUS PEGAWAI</div>
             <div className="font-bold">
-              {resultDataPerubaahan?.data[0].STATUS_PEGAWAI_NAMA ?? "-"}
+              {resultDataPerubaahan?.data[lastRow].STATUS_PEGAWAI_NAMA ?? "-"}
             </div>
           </div>
           <div>
             <div className="text-gray-400">PANGKAT PEGAWAI</div>
             <div className="font-bold">
-              {resultDataPerubaahan?.data[0].PANGKAT_NAMA ?? "-"}
+              {resultDataPerubaahan?.data[lastRow].PANGKAT_NAMA ?? "-"}
             </div>
           </div>
         </div>
         <div>
           <div className="text-gray-400">GAJI POKOK BARU</div>
           <div className="font-bold text-2xl text-green-700">
-            {formatRupiah(resultDataPerubaahan?.data[0].GAJI_POKOK) ?? "-"}
+            {formatRupiah(resultDataPerubaahan?.data[lastRow].GAJI_POKOK) ?? "-"}
           </div>
         </div>
         <div className="inline-flex flex-row justify-start gap-x-8">
           <div>
             <div className="text-gray-400">MASA KERJA TAHUN</div>
             <div className="font-bold">
-              {resultDataPerubaahan?.data[0].MASA_KERJA_TAHUN ?? "-"} Tahun
+              {resultDataPerubaahan?.data[lastRow].MASA_KERJA_TAHUN ?? "-"} Tahun
             </div>
           </div>
           <div>
             <div className="text-gray-400">MASA KERJA BULAN</div>
             <div className="font-bold">
-              {resultDataPerubaahan?.data[0].MASA_KERJA_BULAN ?? "-"} Bulan
+              {resultDataPerubaahan?.data[lastRow].MASA_KERJA_BULAN ?? "-"} Bulan
             </div>
           </div>
         </div>
@@ -211,7 +216,7 @@ export default async function Page({ params }) {
           <div>
             <div className="text-gray-400">TERHITUNG MULAI TANGGAL</div>
             <div className="font-bold">
-              {formatTanggalIndonesia(resultDataPerubaahan?.data[0].TMT_SK) ??
+              {formatTanggalIndonesia(resultDataPerubaahan?.data[lastRow].TMT_SK) ??
                 "-"}
             </div>
           </div>
@@ -219,7 +224,7 @@ export default async function Page({ params }) {
             <div className="text-gray-400">TMT KGB BERIKUTNYA</div>
             <div className="font-bold">
               {formatTanggalIndonesia(
-                resultDataPerubaahan?.data[0].TMTBERKALAYAD
+                resultDataPerubaahan?.data[lastRow].TMTBERKALAYAD
               ) ?? "-"}
             </div>
           </div>
@@ -227,26 +232,26 @@ export default async function Page({ params }) {
         <div>
           <div className="text-gray-400">NO SK</div>
           <div className="font-bold">
-            {resultDataPerubaahan?.data[0].NO_SK ?? "-"}
+            {resultDataPerubaahan?.data[lastRow].NO_SK ?? "-"}
           </div>
         </div>
         <div>
           <div className="text-gray-400">TANGGAL SK</div>
           <div className="font-bold">
-            {formatTanggalIndonesia(resultDataPerubaahan?.data[0].TANGGAL_SK) ??
+            {formatTanggalIndonesia(resultDataPerubaahan?.data[lastRow].TANGGAL_SK) ??
               "-"}
           </div>
         </div>
         <div>
           <div className="text-gray-400">PEJABAT SK</div>
           <div className="font-bold">
-            {resultDataPerubaahan?.data[0].PEJABAT_PENETAP ?? "-"}
+            {resultDataPerubaahan?.data[lastRow].PEJABAT_PENETAP ?? "-"}
           </div>
         </div>
         <div>
           <div className="text-gray-400">FILE SK</div>
           <Button
-            href={resultDataPerubaahan?.data[0].PDF}
+            href={resultDataPerubaahan?.data[lastRow].PDF}
             as={Link}
             color="primary"
             // fullWidth
@@ -255,7 +260,7 @@ export default async function Page({ params }) {
             variant="bordered">
             <DocumentTextIcon className="size-4" />
             <Divider orientation="vertical" />
-            <p>{resultDataPerubaahan?.data[0].NO_SK}.pdf</p>
+            <p>{resultDataPerubaahan?.data[lastRow].NO_SK}.pdf</p>
           </Button>
         </div>
       </>
