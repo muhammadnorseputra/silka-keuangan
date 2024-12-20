@@ -2,6 +2,7 @@ import {
   hasSessionServer,
   useSessionServer,
 } from "@/app/app-module/server-session";
+import { AlertSuccess, AlertDanger, AlertInfo } from "@/components/alert";
 import { getTppByNip, getTppByNipppk } from "@/dummy/data-tpp-by-nip";
 import { getTppSigapok } from "@/dummy/sigapok-get-tpp";
 import { formatRupiahManual } from "@/helpers/cx";
@@ -53,38 +54,58 @@ export default async function RenderGapokServices({ slug }) {
     );
   }
 
+  let lastRow = data?.length - 1;
+  const { STATUS_VERIF, KET_VERIFIKASI, USER_VERIF, VERIFIKASI_TIME } =
+    data[lastRow];
+
   return (
     <>
+      {STATUS_VERIF === "1" && (
+        <AlertSuccess title="Status Verifikasi (Disetujui)">
+          {KET_VERIFIKASI} oleh {USER_VERIF} pada {VERIFIKASI_TIME}
+        </AlertSuccess>
+      )}
+      {STATUS_VERIF === "2" && (
+        <AlertDanger
+          title="Status Verifikasi (Ditolak)"
+          message={`oleh ${USER_VERIF} pada ${VERIFIKASI_TIME}, keterangan : ${KET_VERIFIKASI} `}
+        />
+      )}
+      {STATUS_VERIF === "0" && (
+        <AlertInfo title="Status Verifikasi">
+          Menunggu Verifikasi Badan Keuangan Daerah.
+        </AlertInfo>
+      )}
       <div>
         <div className="text-gray-400">NIP</div>
-        <div className="font-bold">{polaNIP(data[0].NIP) ?? "-"}</div>
+        <div className="font-bold">{polaNIP(data[lastRow].NIP) ?? "-"}</div>
       </div>
       <div>
         <div className="text-gray-400">PERIODE TPP</div>
-        <div className="font-bold">{data[0].PERIODE_TPP ?? "-"}</div>
+        <div className="font-bold">{data[lastRow].PERIODE_TPP ?? "-"}</div>
       </div>
       <div>
         <div className="text-gray-400">JUMLAH TPP</div>
         <div className="font-bold text-green-600 text-2xl">
-          {formatRupiahManual(data[0].JML_TPP) ?? "-"}
+          {formatRupiahManual(data[lastRow].JML_TPP) ?? "-"}
         </div>
       </div>
       <div>
         <div className="text-gray-400">TERBILANG</div>
         <div className="font-bold text-gray-400 italic uppercase">
-          {terbilangRupiah(data[0].JML_TPP) ?? "-"}
+          {terbilangRupiah(data[lastRow].JML_TPP) ?? "-"}
         </div>
       </div>
       <div className="inline-flex flex-col justify-start gap-x-8 gap-y-6">
         <div>
           <div className="text-gray-400">DI KIRIM OLEH</div>
           <div className="font-bold">
-            <ShowProfile jenis="PNS" nipnama={data[0].ADDUSER} />
+            <ShowProfile jenis="PNS" nipnama={data[lastRow].ADDUSER} />
           </div>
         </div>
         <div>
           <div className="text-gray-400">DI KIRIM PADA</div>
-          <div className="font-bold">{data[0].ADDTIME ?? "-"}</div>
+          <div className="font-bold">{data[lastRow].ADDTIME ?? "-"}</div>
         </div>
       </div>
     </>

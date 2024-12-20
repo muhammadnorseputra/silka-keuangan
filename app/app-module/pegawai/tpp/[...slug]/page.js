@@ -48,7 +48,7 @@ export default async function Page({ params }) {
                 <Card fullWidth>
                   <CardHeader className="flex justify-between items-center gap-3 bg-blue-100">
                     <div className="flex flex-col">
-                      <p className="text-md">SILKa Online</p>
+                      <p className="text-md dark:text-blue-900">SILKa Online</p>
                       <p className="text-small text-default-500">
                         Data Tambahan Penghasilan Pegawai
                       </p>
@@ -64,7 +64,7 @@ export default async function Page({ params }) {
                 <Card fullWidth>
                   <CardHeader className="flex gap-3 bg-amber-100">
                     <div className="flex flex-col">
-                      <p className="text-md">Sigapok</p>
+                      <p className="text-md dark:text-amber-900">Sigapok</p>
                       <p className="text-small text-default-500">
                         Data Badan Keuangan Daerah
                       </p>

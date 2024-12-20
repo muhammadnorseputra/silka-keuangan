@@ -20,7 +20,12 @@ import BtnKgbConfirm from "@/components/button/btn-kgb-confirm";
 import { checkURLStatus } from "@/helpers/cekurlstatus";
 import { polaNIP } from "@/helpers/polanip";
 import { ShowProfile } from "@/helpers/profile";
-import { AlertDanger, AlertInfo, AlertWarning } from "@/components/alert";
+import {
+  AlertDanger,
+  AlertInfo,
+  AlertSuccess,
+  AlertWarning,
+} from "@/components/alert";
 
 export const revalidate = 0;
 
@@ -161,11 +166,27 @@ export default async function Page({ params }) {
     }
 
     let lastRow = resultDataPerubaahan?.data?.length - 1;
-    const {USER_VERIF, KETERANGAN, VERIFIKASI_TIME} = resultDataPerubaahan?.data[lastRow];
+    const { USER_VERIF, KETERANGAN, FLAG, VERIFIKASI_TIME } =
+      resultDataPerubaahan?.data[lastRow];
 
     return (
       <>
-      {KETERANGAN && <AlertWarning title={`Hasil Verifikasi (${USER_VERIF} :: ${VERIFIKASI_TIME})`}>{KETERANGAN}</AlertWarning>}
+        {FLAG === 2 && (
+          <AlertDanger
+            title="Hasil Verifikasi (Ditolak)"
+            message={`oleh ${USER_VERIF} pada ${VERIFIKASI_TIME}, keterangan : ${KETERANGAN} `}
+          />
+        )}
+        {FLAG === 1 && (
+          <AlertSuccess title="Hasil Verifikasi (Disetujui)">
+            {USER_VERIF} pada {VERIFIKASI_TIME}
+          </AlertSuccess>
+        )}
+        {(FLAG === 0 || FLAG === null) && (
+          <AlertInfo title="Status Verifikasi">
+            Menunggu Verifikasi Badan Keuangan Daerah.
+          </AlertInfo>
+        )}
         <div>
           <div className="text-gray-400">NAMA</div>
           <div className="font-bold">
@@ -195,20 +216,23 @@ export default async function Page({ params }) {
         <div>
           <div className="text-gray-400">GAJI POKOK BARU</div>
           <div className="font-bold text-2xl text-green-700">
-            {formatRupiah(resultDataPerubaahan?.data[lastRow].GAJI_POKOK) ?? "-"}
+            {formatRupiah(resultDataPerubaahan?.data[lastRow].GAJI_POKOK) ??
+              "-"}
           </div>
         </div>
         <div className="inline-flex flex-row justify-start gap-x-8">
           <div>
             <div className="text-gray-400">MASA KERJA TAHUN</div>
             <div className="font-bold">
-              {resultDataPerubaahan?.data[lastRow].MASA_KERJA_TAHUN ?? "-"} Tahun
+              {resultDataPerubaahan?.data[lastRow].MASA_KERJA_TAHUN ?? "-"}{" "}
+              Tahun
             </div>
           </div>
           <div>
             <div className="text-gray-400">MASA KERJA BULAN</div>
             <div className="font-bold">
-              {resultDataPerubaahan?.data[lastRow].MASA_KERJA_BULAN ?? "-"} Bulan
+              {resultDataPerubaahan?.data[lastRow].MASA_KERJA_BULAN ?? "-"}{" "}
+              Bulan
             </div>
           </div>
         </div>
@@ -216,8 +240,9 @@ export default async function Page({ params }) {
           <div>
             <div className="text-gray-400">TERHITUNG MULAI TANGGAL</div>
             <div className="font-bold">
-              {formatTanggalIndonesia(resultDataPerubaahan?.data[lastRow].TMT_SK) ??
-                "-"}
+              {formatTanggalIndonesia(
+                resultDataPerubaahan?.data[lastRow].TMT_SK
+              ) ?? "-"}
             </div>
           </div>
           <div>
@@ -238,8 +263,9 @@ export default async function Page({ params }) {
         <div>
           <div className="text-gray-400">TANGGAL SK</div>
           <div className="font-bold">
-            {formatTanggalIndonesia(resultDataPerubaahan?.data[lastRow].TANGGAL_SK) ??
-              "-"}
+            {formatTanggalIndonesia(
+              resultDataPerubaahan?.data[lastRow].TANGGAL_SK
+            ) ?? "-"}
           </div>
         </div>
         <div>
