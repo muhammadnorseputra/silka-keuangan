@@ -35,13 +35,17 @@ import {
 } from "@heroicons/react/24/solid";
 import { useRouter } from "next-nprogress-bar";
 import { encrypt } from "@/helpers/encrypt";
-import ModalLayanan from "../modal/modal-daftar-layanan";
 import { useModalDaftarLayananContext } from "@/lib/context/modal-daftar-layanan-context";
 import { polaNIP } from "@/helpers/polanip";
 import { useQueryClient } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
 // import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 
 const INITIAL_VISIBLE_COLUMNS = ["nip", "nama", "jabatan", "aksi"];
+
+const SampleModal = dynamic(() => import("../modal/modal-daftar-layanan"), {
+  ssr: false,
+});
 
 export const TablePegawai = ({ unors, pegawais }) => {
   const router = useRouter();
@@ -393,7 +397,7 @@ export const TablePegawai = ({ unors, pegawais }) => {
   }, [datapegawai.length, onRowsPerPageChange, page, pages]);
   return (
     <>
-      <ModalLayanan isOpenModal={isOpen} onClose={() => setIsOpen(false)} />
+      <SampleModal isOpenModal={isOpen} onClose={() => setIsOpen(false)} />
       <Table
         // isStriped
         // isCompact

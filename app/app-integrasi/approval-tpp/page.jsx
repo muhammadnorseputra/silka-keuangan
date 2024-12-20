@@ -16,8 +16,8 @@ export const metadata = {
 };
 
 async function ApprovalTpp() {
-  const silka = useSessionServer("USER_SILKA");
-  const sigapok = useSessionServer("USER_GAPOK");
+  const silka = await useSessionServer("USER_SILKA");
+  const sigapok = await useSessionServer("USER_GAPOK");
   const resultDataTpp = await getTppByNip(silka?.data?.nip);
 
   if (resultDataTpp.status === false) {

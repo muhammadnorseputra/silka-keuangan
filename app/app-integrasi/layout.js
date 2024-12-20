@@ -6,9 +6,9 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import { BtnProfile } from "@/components/button/btn-profile";
 
-export default function Layout({ children }) {
-  const isLogin = hasSessionServer("USER_SILKA");
-  let getProfile = useSessionServer("USER_SILKA");
+export default async function Layout({ children }) {
+  const isLogin = await hasSessionServer("USER_SILKA");
+  let getProfile = await useSessionServer("USER_SILKA");
   if (isLogin === false) {
     return redirect("/auth");
   }

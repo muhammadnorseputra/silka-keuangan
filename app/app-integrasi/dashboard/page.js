@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 export default async function Page() {
-  let getProfile = useSessionServer("USER_SILKA");
+  let getProfile = await useSessionServer("USER_SILKA");
   const { level, nip } = getProfile?.data;
 
   const renderModule = () => {

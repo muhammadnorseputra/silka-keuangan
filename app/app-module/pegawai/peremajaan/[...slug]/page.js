@@ -6,8 +6,8 @@ import { FormPeremajaan } from "@/components/forms/form-peremajaan";
 import { ShowProfile } from "@/helpers/profile";
 
 export default async function Page({ params }) {
-  const sigapok = useSessionServer("USER_GAPOK");
-  const silka = useSessionServer("USER_PEGAWAI");
+  const sigapok = await useSessionServer("USER_GAPOK");
+  const silka = await useSessionServer("USER_PEGAWAI");
 
   const nip = decrypt(params?.slug[0], "bkpsdm");
 

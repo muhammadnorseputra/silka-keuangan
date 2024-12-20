@@ -1,10 +1,15 @@
 import { BtnBackNextUi } from "@/components/button/btn-back";
-import CariASN from "@/components/search/cariasn";
+// import CariASN from "@/components/search/cariasn";
 import { Stars } from "react-bootstrap-icons";
+import dynamic from "next/dynamic";
 
 export const metadata = {
   title: "Cari ASN | SILKa - INEXIS",
 };
+
+const CariASN = dynamic(() => import("@/components/search/cariasn"), {
+  ssr: false,
+});
 
 export default function Page() {
   return (

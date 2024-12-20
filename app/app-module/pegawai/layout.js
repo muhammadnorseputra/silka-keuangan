@@ -5,10 +5,10 @@ export const metadata = {
   title: "Module Pegawai | SILKa - INEXIS",
 };
 
-export default function Layout({ children, modal }) {
+export default async function Layout({ children, modal }) {
   // cek session silka dan sigapok
-  const isLoginGapok = hasSessionServer("USER_GAPOK");
-  const isLoginSilka = hasSessionServer("USER_SILKA");
+  const isLoginGapok = await hasSessionServer("USER_GAPOK");
+  const isLoginSilka = await hasSessionServer("USER_SILKA");
   if (isLoginGapok === false) {
     return redirect("/app-integrasi/dashboard");
   }

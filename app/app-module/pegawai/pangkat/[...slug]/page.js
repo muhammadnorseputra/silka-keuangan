@@ -28,8 +28,8 @@ import {
 } from "@/components/alert";
 
 export default async function Page({ params }) {
-  const sigapok = useSessionServer("USER_GAPOK");
-  const session_silka = useSessionServer("USER_SILKA");
+  const sigapok = await useSessionServer("USER_GAPOK");
+  const session_silka = await useSessionServer("USER_SILKA");
   const NIP = decrypt(params.slug[0], "bkpsdm");
   const riwayat_pangkat = await getPangkatByNip(NIP);
   const resultDataPerubaahan = await getPerubahanData(
@@ -283,7 +283,6 @@ export default async function Page({ params }) {
       </>
     );
   };
-
   const renderButtonVerifikasi = () => {
     if (isBerkas !== "OK") return null;
     if (
@@ -301,6 +300,7 @@ export default async function Page({ params }) {
       />
     );
   };
+
   return (
     <>
       <div className="w-full bg-blue-500 dark:bg-slate-800 h-screen">

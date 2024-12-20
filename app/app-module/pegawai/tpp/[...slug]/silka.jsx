@@ -8,7 +8,6 @@ import { formatRupiahManual } from "@/helpers/cx";
 import { polaNIP } from "@/helpers/polanip";
 import { terbilangRupiah } from "@/helpers/rupiah";
 import { useSession } from "@/lib/session";
-import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { ExclamationCircle } from "react-bootstrap-icons";

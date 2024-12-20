@@ -15,7 +15,7 @@ export const revalidate = 0;
 
 export default async function Page({ params }) {
   const session = hasSessionServer("USER_GAPOK");
-  const sigapok = useSessionServer("USER_GAPOK");
+  const sigapok = await useSessionServer("USER_GAPOK");
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }

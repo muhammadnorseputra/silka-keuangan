@@ -9,8 +9,8 @@ import { BtnRefreshQuery } from "@/components/button/btn-reload";
 export const revalidate = 0;
 
 export default async function Page({ params }) {
-  const sigapok = useSessionServer("USER_GAPOK");
-  const silkaonline = useSessionServer("USER_SILKA");
+  const sigapok = await useSessionServer("USER_GAPOK");
+  const silkaonline = await useSessionServer("USER_SILKA");
 
   const NIP = decrypt(params?.slug[0], "bkpsdm");
 
