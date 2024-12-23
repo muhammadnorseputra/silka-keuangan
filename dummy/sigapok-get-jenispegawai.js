@@ -7,7 +7,7 @@ export const getJenisPegawaiSigapok = async (token) => {
   try {
     const req = await fetch(`${url}/${path}/getJenisPeg`, {
       method: "GET",
-      cache: "no-store",
+      cache: "force-cache",
       headers,
       next: {
         tags: ["getJenisPegawaiSigapok"],

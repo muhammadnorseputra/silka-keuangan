@@ -7,7 +7,7 @@ export const getStatusPegawaiSigapok = async (token) => {
   try {
     const req = await fetch(`${url}/${path}/getStapeg`, {
       method: "GET",
-      cache: "no-store",
+      cache: "force-cache",
       headers,
       next: {
         tags: ["getStatusPegawaiSigapok"],

@@ -8,7 +8,7 @@ export const getUnorByRole = async (nip, role) => {
       `${url}/services/PegawaiWithBasicAuth/getUnorByRole`,
       {
         method: "POST",
-        cache: "no-store",
+        cache: "force-cache",
         headers,
         body: JSON.stringify({
           nip,

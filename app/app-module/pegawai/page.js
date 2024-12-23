@@ -12,8 +12,8 @@ import NoInternet from "@/components/errors/NoInternet";
 
 async function Page({ searchParams }) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const sigapok = useSessionServer("USER_GAPOK");
-  const silka_session = useSessionServer("USER_SILKA");
+  // const sigapok = await useSessionServer("USER_GAPOK");
+  const silka_session = await useSessionServer("USER_SILKA");
   const { unker, unker_id } = silka_session?.data?.pegawai;
   const { nip, level } = silka_session?.data;
   // @ts-ignore

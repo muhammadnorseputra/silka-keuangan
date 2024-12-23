@@ -7,7 +7,7 @@ export const getSkpdSigapok = async (token) => {
   try {
     const req = await fetch(`${url}/${path}/getUnorAntara`, {
       method: "GET",
-      cache: "no-store",
+      cache: "force-cache",
       headers,
       next: {
         tags: ["getSkpdSigapok"],
@@ -36,7 +36,7 @@ export const getSkpdSigapokByKodeSimpeg = async (token, unor_id) => {
       `${url}/${path}/getUnorAntara?kd_simpeg=${unor_id}`,
       {
         method: "GET",
-        cache: "no-store",
+        cache: "force-cache",
         headers,
         next: {
           tags: ["getSkpdSigapok"],

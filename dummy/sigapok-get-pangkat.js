@@ -7,7 +7,7 @@ export const getPangkatSigapok = async (token) => {
   try {
     const req = await fetch(`${url}/${path}/getPangkat`, {
       method: "GET",
-      cache: "no-store",
+      cache: "force-cache",
       headers,
       next: {
         tags: ["getPangkatSigapok"],

@@ -29,12 +29,12 @@ import {
 import { getGapokByPangkat } from "@/dummy/sigapok-get-gapok";
 import { GapokByPangkat } from "@/components/cards/card-gapok";
 
-export const revalidate = 0;
-
 export default async function Page({ params }) {
-  const sigapok = useSessionServer("USER_GAPOK");
-  const session_silka = useSessionServer("USER_SILKA");
   const NIP = decrypt(params.slug[0], "bkpsdm");
+
+  const sigapok = await useSessionServer("USER_GAPOK");
+  const session_silka = await useSessionServer("USER_SILKA");
+
   const resultDataKgb = await getKgbByNip(NIP);
   const resultDataPerubaahan = await getPerubahanData(
     sigapok.access_token, //token
@@ -353,9 +353,11 @@ export default async function Page({ params }) {
               <div className="flex flex-col md:flex-row justify-between items-start gap-x-6 gap-y-3">
                 {/* Get Data Silka */}
                 <Card fullWidth>
-                  <CardHeader className="flex gap-3">
+                  <CardHeader className="flex gap-3 bg-purple-100">
                     <div className="flex flex-col">
-                      <p className="text-md font-bold">SILKa Online</p>
+                      <p className="text-md font-bold dark:text-purple-600">
+                        SILKa Online
+                      </p>
                       <p className="text-small text-default-500">
                         Data Kenaikan Gaji Berkala
                       </p>
@@ -374,9 +376,11 @@ export default async function Page({ params }) {
                 </Card>
                 {/* Get Data Gapok */}
                 <Card fullWidth>
-                  <CardHeader className="flex gap-3">
+                  <CardHeader className="flex gap-3 bg-amber-100">
                     <div className="flex flex-col">
-                      <p className="text-md font-bold">Sigapok Services</p>
+                      <p className="text-md font-bold dark:text-amber-600">
+                        Sigapok Services
+                      </p>
                       <p className="text-small text-default-500">
                         Data Badan Keuangan Daerah
                       </p>

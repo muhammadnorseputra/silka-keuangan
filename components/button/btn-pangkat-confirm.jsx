@@ -1,5 +1,4 @@
 "use client";
-import { useModalContext } from "@/lib/context/modal-context";
 import { Button, Divider } from "@nextui-org/react";
 import { CloudArrowUp } from "react-bootstrap-icons";
 import toast from "react-hot-toast";
@@ -7,8 +6,6 @@ import { useMutation } from "@tanstack/react-query";
 import { savePerubahanData } from "@/dummy/sigapok-post-perubahan";
 import { useRouter } from "next-nprogress-bar";
 import { useEffect, useState } from "react";
-import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
-import { UpdateSyncKGB } from "@/dummy/post-data-tpp";
 import revalidateTag from "@/lib/revalidateTags";
 import { getCurrentDateTime } from "@/helpers/datetime";
 import { ModalPangkatProses } from "../modal/modal-pangkat-proses";
@@ -112,6 +109,7 @@ export default function BtnPangkatConfirm({
   const isPeremajaan = () => {
     return (
       <Button
+        fullWidth
         onPress={() => setIsOpenModal(true)}
         color="primary"
         variant="shadow"
