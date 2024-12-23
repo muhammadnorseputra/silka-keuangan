@@ -26,6 +26,8 @@ import {
   AlertSuccess,
   AlertWarning,
 } from "@/components/alert";
+import { getGapokByPangkat } from "@/dummy/sigapok-get-gapok";
+import { GapokByPangkat } from "@/components/cards/card-gapok";
 
 export default async function Page({ params }) {
   const sigapok = await useSessionServer("USER_GAPOK");
@@ -39,6 +41,18 @@ export default async function Page({ params }) {
     riwayat_pangkat?.data?.row?.tmt, // tmt sk
     riwayat_pangkat?.data?.row?.id_status_pegawai_simgaji //status pegawai
   );
+
+  const { data: resGapok } = await getGapokByPangkat(sigapok.access_token, {
+    MASKER: riwayat_pangkat?.data?.row?.mkgol_thn ?? 0,
+    KDPANGKAT: riwayat_pangkat?.data?.row?.id_pangkat_simgaji,
+    KDKELOMPOK: 2,
+  });
+
+  const getGapok = {
+    resGapok: resGapok[0],
+    pangkat_nama: riwayat_pangkat?.data?.row?.nama_pangkat,
+    golru_nama: riwayat_pangkat?.data?.row?.nama_golru,
+  };
 
   // cek file sk kgb ada atau tidak
   const isBerkas = await checkURLStatus(riwayat_pangkat?.data?.row?.berkas);
@@ -87,9 +101,10 @@ export default async function Page({ params }) {
           </div>
         </div>
         <div>
-          <div className="text-gray-400">GOLONGAN RUANG</div>
+          <div className="text-gray-400">PANGKAT (GOLONGAN RUANG)</div>
           <div className="font-bold">
-            {riwayat_pangkat?.data.row.nama_golru ?? "-"}
+            {riwayat_pangkat?.data?.row?.nama_pangkat} (
+            {riwayat_pangkat?.data.row.nama_golru ?? "-"})
           </div>
         </div>
         <div>
@@ -323,12 +338,13 @@ export default async function Page({ params }) {
               </div>
             </CardHeader>
             <CardBody>
+              <GapokByPangkat props={getGapok} />
               <div className="flex flex-col md:flex-row justify-between items-start gap-x-6 gap-y-3">
                 {/* Get Data Silka */}
                 <Card fullWidth>
                   <CardHeader className="flex gap-3">
                     <div className="flex flex-col">
-                      <p className="text-md">SILKa Online</p>
+                      <p className="text-md font-bold">SILKa Online</p>
                       <p className="text-small text-default-500">
                         Data Kenaikan Pangkat
                       </p>
@@ -349,7 +365,7 @@ export default async function Page({ params }) {
                 <Card fullWidth>
                   <CardHeader className="flex gap-3">
                     <div className="flex flex-col">
-                      <p className="text-md">Sigapok Services</p>
+                      <p className="text-md font-bold">Sigapok Services</p>
                       <p className="text-small text-default-500">
                         Data Badan Keuangan Daerah
                       </p>

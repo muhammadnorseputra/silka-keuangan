@@ -38,7 +38,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
         aria-hidden="true"
         backdrop="opaque"
         classNames={{
-          backdrop: "bg-blue-600/50 backdrop-opacity-20",
+          backdrop: "bg-white/95 dark:bg-blue-800/90 backdrop-opacity-20",
         }}
         isOpen={isOpenModal}
         onClose={onClose}

@@ -26,6 +26,8 @@ import {
   AlertSuccess,
   AlertWarning,
 } from "@/components/alert";
+import { getGapokByPangkat } from "@/dummy/sigapok-get-gapok";
+import { GapokByPangkat } from "@/components/cards/card-gapok";
 
 export const revalidate = 0;
 
@@ -41,6 +43,18 @@ export default async function Page({ params }) {
     resultDataKgb?.data.tmt, // tmt sk
     resultDataKgb?.data.id_status_pegawai_simgaji //status pegawai
   );
+
+  const { data: resGapok } = await getGapokByPangkat(sigapok.access_token, {
+    MASKER: resultDataKgb?.data?.mk_thn ?? 0,
+    KDPANGKAT: resultDataKgb?.data?.pangkat_id_simgaji,
+    KDKELOMPOK: 2,
+  });
+
+  const getGapok = {
+    resGapok: resGapok[0],
+    pangkat_nama: resultDataKgb?.data?.pangkat_nama,
+    golru_nama: resultDataKgb?.data?.golru_nama,
+  };
 
   // cek file sk kgb ada atau tidak
   const isBerkas = await checkURLStatus(resultDataKgb?.data?.berkas);
@@ -60,6 +74,7 @@ export default async function Page({ params }) {
       nama_lengkap,
       gapok_baru,
       golru_nama,
+      pangkat_nama,
       mk_thn,
       mk_bln,
       tmt,
@@ -100,8 +115,10 @@ export default async function Page({ params }) {
           <div className="font-bold">{nip_convert ?? "-"}</div>
         </div>
         <div>
-          <div className="text-gray-400">GOLONGAN RUANG</div>
-          <div className="font-bold">{golru_nama ?? "-"}</div>
+          <div className="text-gray-400">PANGKAT (GOLONGAN RUANG)</div>
+          <div className="font-bold">
+            {pangkat_nama} ({golru_nama ?? "-"})
+          </div>
         </div>
         <div>
           <div className="text-gray-400">GAJI POKOK TERAKHIR</div>
@@ -292,7 +309,6 @@ export default async function Page({ params }) {
       </>
     );
   };
-
   const renderButtonVerifikasi = () => {
     if (isBerkas !== "OK") return null;
     if (
@@ -310,6 +326,7 @@ export default async function Page({ params }) {
       />
     );
   };
+
   return (
     <>
       <div className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
@@ -322,22 +339,23 @@ export default async function Page({ params }) {
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <p className="text-xl flex flex-col">
+                  <div className="text-xl flex flex-col">
                     <span className="uppercase font-bold">
                       Kenaikaan gaji berkala
                     </span>
                     <ShowProfile jenis="PNS" nipnama={NIP} />
-                  </p>
+                  </div>
                 </div>
               </div>
             </CardHeader>
             <CardBody>
+              <GapokByPangkat props={getGapok} />
               <div className="flex flex-col md:flex-row justify-between items-start gap-x-6 gap-y-3">
                 {/* Get Data Silka */}
                 <Card fullWidth>
                   <CardHeader className="flex gap-3">
                     <div className="flex flex-col">
-                      <p className="text-md">SILKa Online</p>
+                      <p className="text-md font-bold">SILKa Online</p>
                       <p className="text-small text-default-500">
                         Data Kenaikan Gaji Berkala
                       </p>
@@ -358,14 +376,14 @@ export default async function Page({ params }) {
                 <Card fullWidth>
                   <CardHeader className="flex gap-3">
                     <div className="flex flex-col">
-                      <p className="text-md">Sigapok Services</p>
+                      <p className="text-md font-bold">Sigapok Services</p>
                       <p className="text-small text-default-500">
                         Data Badan Keuangan Daerah
                       </p>
                     </div>
                   </CardHeader>
                   <Divider />
-                  <CardBody className="flex flex-col gap-y-4 px-8 py-8 h-screen">
+                  <CardBody className="flex flex-col gap-y-4 px-8 py-8">
                     {renderGapokServices()}
                   </CardBody>
                 </Card>
