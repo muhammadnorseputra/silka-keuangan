@@ -10,10 +10,10 @@ export async function GapokByPangkat({ props }) {
         <CardHeader className="bg-green-100">
           <div className="flex flex-col">
             <p className="text-md font-bold dark:text-green-800">
-              Informasi Gaji
+              Informasi Gaji pada INEXIS
             </p>
             <p className="text-small text-default-500">
-              Informasi gaji berdasarkan tabel pangkat dan masa kerja.
+              Berdasarkan Pangkat dan Masa Kerja.
             </p>
           </div>
         </CardHeader>
