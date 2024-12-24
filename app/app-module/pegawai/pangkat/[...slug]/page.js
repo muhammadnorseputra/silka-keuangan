@@ -10,7 +10,12 @@ import {
 } from "@nextui-org/react";
 import { useSessionServer } from "../../../server-session";
 import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
-import { DocumentTextIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowDownLeftIcon,
+  ArrowUpRightIcon,
+  CheckBadgeIcon,
+  DocumentTextIcon,
+} from "@heroicons/react/24/solid";
 import { ExclamationCircle } from "react-bootstrap-icons";
 import { decrypt } from "@/helpers/encrypt";
 import { getPerubahanData } from "@/dummy/sigapok-get-perubahan";
@@ -52,6 +57,19 @@ export default async function Page({ params }) {
     resGapok: resGapok[0],
     pangkat_nama: riwayat_pangkat?.data?.row?.nama_pangkat,
     golru_nama: riwayat_pangkat?.data?.row?.nama_golru,
+  };
+  // cek apakah gapok inexis sama atau beda dengan silka
+  // jika beda naik atau turun icon, jika sama check oke icon
+  const checkGapok = () => {
+    if (riwayat_pangkat?.data?.row?.gapok < resGapok[0].gapok) {
+      return <ArrowDownLeftIcon className="size-6 font-bold text-red-500" />;
+    }
+
+    if (riwayat_pangkat?.data?.row?.gapok > resGapok[0].gapok) {
+      return <ArrowUpRightIcon className="size-6 font-bold text-red-500" />;
+    }
+
+    return <CheckBadgeIcon className="size-7 font-bold text-green-500" />;
   };
 
   // cek file sk kgb ada atau tidak
@@ -109,8 +127,9 @@ export default async function Page({ params }) {
         </div>
         <div>
           <div className="text-gray-400">GAJI POKOK</div>
-          <div className="font-bold text-2xl text-green-700">
-            {`Rp. ${formatRupiah(riwayat_pangkat?.data?.row?.gapok)}`}
+          <div className="inline-flex items-center gap-2 font-bold text-2xl text-green-700">
+            {`Rp. ${formatRupiah(riwayat_pangkat?.data?.row?.gapok)}`}{" "}
+            {checkGapok()}
           </div>
         </div>
         <div className="inline-flex flex-row justify-between">

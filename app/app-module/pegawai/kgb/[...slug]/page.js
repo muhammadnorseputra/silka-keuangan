@@ -11,7 +11,13 @@ import {
 } from "@nextui-org/react";
 import { useSessionServer } from "../../../server-session";
 import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
-import { DocumentTextIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowDownLeftIcon,
+  ArrowUpRightIcon,
+  CheckBadgeIcon,
+  CheckCircleIcon,
+  DocumentTextIcon,
+} from "@heroicons/react/24/solid";
 import { ExclamationCircle } from "react-bootstrap-icons";
 import { decrypt } from "@/helpers/encrypt";
 import { getPerubahanData } from "@/dummy/sigapok-get-perubahan";
@@ -28,6 +34,7 @@ import {
 } from "@/components/alert";
 import { getGapokByPangkat } from "@/dummy/sigapok-get-gapok";
 import { GapokByPangkat } from "@/components/cards/card-gapok";
+import { useCallback } from "react";
 
 export default async function Page({ params }) {
   const NIP = decrypt(params.slug[0], "bkpsdm");
@@ -54,6 +61,20 @@ export default async function Page({ params }) {
     resGapok: resGapok[0],
     pangkat_nama: resultDataKgb?.data?.pangkat_nama,
     golru_nama: resultDataKgb?.data?.golru_nama,
+  };
+
+  // cek apakah gapok inexis sama atau beda dengan silka
+  // jika beda naik atau turun icon, jika sama check oke icon
+  const checkGapok = () => {
+    if (resultDataKgb?.data?.gapok_baru < resGapok[0].gapok) {
+      return <ArrowDownLeftIcon className="size-6 font-bold text-red-500" />;
+    }
+
+    if (resultDataKgb?.data?.gapok_baru > resGapok[0].gapok) {
+      return <ArrowUpRightIcon className="size-6 font-bold text-red-500" />;
+    }
+
+    return <CheckBadgeIcon className="size-7 font-bold text-green-500" />;
   };
 
   // cek file sk kgb ada atau tidak
@@ -122,8 +143,8 @@ export default async function Page({ params }) {
         </div>
         <div>
           <div className="text-gray-400">GAJI POKOK TERAKHIR</div>
-          <div className="font-bold text-2xl text-green-700">
-            {formatRupiah(gapok_baru) ?? "-"}
+          <div className="inline-flex items-center gap-2 font-bold text-2xl text-green-700">
+            {formatRupiah(gapok_baru) ?? "-"} {checkGapok()}
           </div>
         </div>
         <div className="inline-flex flex-row justify-between">

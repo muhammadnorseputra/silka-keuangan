@@ -1,4 +1,11 @@
 import { formatTanggalIndonesia, formatRupiah } from "@/helpers/cx";
+import {
+  ArrowTrendingUpIcon,
+  BanknotesIcon,
+  ChartBarIcon,
+  HashtagIcon,
+  SparklesIcon,
+} from "@heroicons/react/24/solid";
 import { Card, CardHeader, Divider, CardBody } from "@nextui-org/react";
 
 export async function GapokByPangkat({ props }) {
@@ -24,19 +31,30 @@ export async function GapokByPangkat({ props }) {
         <CardBody className="flex flex-col">
           <div className="inline-flex flex-row justify-around gap-x-14">
             <div>
-              <div className="text-gray-400">PANGKAT</div>
+              <div className="inline-flex gap-2 text-gray-400">
+                <SparklesIcon className="size-6" />
+                PANGKAT
+              </div>
               <div className="font-bold">{pangkat_nama}</div>
             </div>
             <div>
-              <div className="text-gray-400">GOLRU</div>
+              <div className="inline-flex gap-2 text-gray-400">
+                <ChartBarIcon className="size-6" />
+                GOLRU
+              </div>
               <div className="font-bold">{golru_nama}</div>
             </div>
             <div>
-              <div className="text-gray-400">MASA KERJA</div>
+              <div className="inline-flex gap-2 text-gray-400">
+                <ArrowTrendingUpIcon className="size-6" /> MASA KERJA
+              </div>
               <div className="font-bold">{masa_kerja} Tahun</div>
             </div>
             <div>
-              <div className="text-gray-400">GAPOK</div>
+              <div className="inline-flex gap-2 text-gray-400">
+                <BanknotesIcon className="size-6" />
+                GAPOK
+              </div>
               <div className="font-bold">{formatRupiah(gapok)}</div>
             </div>
           </div>
