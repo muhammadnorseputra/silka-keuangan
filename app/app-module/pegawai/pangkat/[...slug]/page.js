@@ -61,11 +61,11 @@ export default async function Page({ params }) {
   // cek apakah gapok inexis sama atau beda dengan silka
   // jika beda naik atau turun icon, jika sama check oke icon
   const checkGapok = () => {
-    if (riwayat_pangkat?.data?.row?.gapok < resGapok[0].gapok) {
+    if (parseInt(riwayat_pangkat?.data?.row?.gapok) < resGapok[0].gapok) {
       return <ArrowDownLeftIcon className="size-6 font-bold text-red-500" />;
     }
 
-    if (riwayat_pangkat?.data?.row?.gapok > resGapok[0].gapok) {
+    if (parseInt(riwayat_pangkat?.data?.row?.gapok) > resGapok[0].gapok) {
       return <ArrowUpRightIcon className="size-6 font-bold text-red-500" />;
     }
 
