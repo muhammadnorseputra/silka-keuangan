@@ -62,7 +62,12 @@ export default async function Page() {
           iconColor="text-purple-400 dark:text-purple-200"
           path="/app-module/pppk"
         />
-        <CardModule title="Comming soon !" icon="Stars" path="/" isDisabled />
+        <CardModule
+          title="Tanya AI !"
+          icon="Stars"
+          iconColor="text-orange-400 dark:text-orange-200"
+          path="/app-integrasi/generative-ai"
+        />
       </>
     );
   };
