@@ -478,7 +478,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
                   })}>
                   {satkers?.data?.map((satker) => (
                     <AutocompleteItem
-                      key={satker.kodesatker.trim()}
+                      key={satker.id_satker}
                       textValue={`${satker.nama_satker}`}>
                       {satker.nama_satker}
                     </AutocompleteItem>
