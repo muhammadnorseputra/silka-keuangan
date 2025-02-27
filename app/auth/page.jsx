@@ -6,7 +6,6 @@ import {
   CardBody,
   CardFooter,
   Image,
-  Button,
 } from "@nextui-org/react";
 import Link from "next/link";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
@@ -27,7 +26,7 @@ export default async function Login() {
 
   return (
     <>
-      <div className="md:p-5 max-w-2xl hidden lg:block">
+      <div className="hidden max-w-2xl md:p-5 lg:block">
         <div className="flex items-center justify-start gap-x-3">
           <Image
             isBlurred
@@ -43,11 +42,11 @@ export default async function Login() {
             alt="Logo - Inexis"
           />
         </div>
-        <h2 className="mb-8 mt-8 text-2xl md:text-5xl uppercase font-bold text-blue-600/70 dark:text-white text-balance">
+        <h2 className="mt-8 mb-8 text-2xl font-bold uppercase md:text-5xl text-blue-600/70 dark:text-white text-balance">
           Sistem Informasi Layanan Kepegawaian Terintegrasi Badan Keuangan
           Daerah.
         </h2>
-        <p className="text-lg md:text-2xl mb-5 text-gray-500/80 dark:text-white/50">
+        <p className="mb-5 text-lg md:text-2xl text-gray-500/80 dark:text-white/50">
           Layanan Integrasi Kenaikan Gaji Berkala, Kenaikan Pangkat dan Tambahan
           Penghasilan Pegawai ke Sistem INEXIS Badan Keuangan Daerah Kab.
           Balangan
@@ -66,11 +65,11 @@ export default async function Login() {
         isFooterBlurred
         fullWidth={false}
         shadow="sm"
-        className="px-4 md:px-8 py-3 md:py-6 md:max-w-lg bg-white/30 dark:bg-slate-300/30">
+        className="px-4 py-3 md:px-8 md:py-6 md:max-w-lg bg-white/30 dark:bg-slate-300/30">
         <CardHeader>
           <div className="flex flex-col">
-            <h3 className="text-3xl fw-bold mb-4 flex items-center justify-start gap-x-3">
-              Masuk Aplikasi <LockClosedIcon className="size-6 text-gray-300" />
+            <h3 className="flex items-center justify-start mb-4 text-3xl fw-bold gap-x-3">
+              Masuk Aplikasi <LockClosedIcon className="text-gray-300 size-6" />
             </h3>
             <p className="text-small text-default-400 dark:text-white/70">
               Layanan SILKa Integrasi, silahkan masuk menggunakan akun sso anda
@@ -84,12 +83,12 @@ export default async function Login() {
             color="primary"
             prefetch={false}
             href="/auth/lupa-password"
-            className="text-blue-500 hover:text-blue-800 mt-2">
+            className="mt-2 text-blue-500 hover:text-blue-800">
             Lupa Password ?
           </Link>
         </CardBody>
-        <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
-          <span className="text-gray-300 text-sm text-ellipsis">
+        <CardFooter className="flex flex-col items-center justify-between md:flex-row md:items-end dark:bg-transparent">
+          <span className="text-sm text-gray-300 text-ellipsis">
             &copy; Dikembangakan oleh Bidang PPIK BKPSDM Kab. Balangan
           </span>
         </CardFooter>

@@ -1,8 +1,6 @@
 import { AES } from "crypto-js";
 import { cookies } from "next/headers";
-import { version as uuidVersion } from "uuid";
-import { validate as uuidValidate } from "uuid";
-import { jwtDecode } from "jwt-decode";
+import { version as uuidVersion, validate as uuidValidate } from "uuid";
 
 // validasi uuid jika query uuid bukan versi 7 dan valid
 function uuidValidateV7(uuid) {
@@ -44,23 +42,11 @@ export async function GET(req) {
   const response = await callback(code, scope);
   if (!response.response.status) return Response.json(response);
 
-  // exchange code to get access_token
-  const getAcessToken = await exchange_access_token(code, scope);
-  if (!getAcessToken.response.status) return Response.json(getAcessToken);
-
-  const access_token = getAcessToken.response.access_token;
-
-  // userinfos with access_token
-  // const userinfo = await userinfos(access_token);
-  // if (!userinfo.response.status) return Response.json(userinfo);
-
-  // decoded access_token
-  const decoded = jwtDecode(access_token);
   cookies().set(
     "USER_SILKA",
     AES.encrypt(
       // @ts-ignore
-      JSON.stringify({ data: decoded.data }),
+      JSON.stringify({ data: response.response.data.userinfo }),
       "Bkpsdm@6811#"
     ).toString(),
     {
@@ -68,7 +54,7 @@ export async function GET(req) {
     }
   );
   return Response.redirect(`${fullHost}/app-integrasi/dashboard`, 302);
-  // return Response.json(userinfo);
+  // return Response.json(response);
 }
 
 export const callback = async (code, scope) => {

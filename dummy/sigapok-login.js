@@ -34,7 +34,6 @@ export const loginSigapok = async () => {
 
     return response;
   } catch (err) {
-    // throw new Error(`Gagal koneksi ke server (${err})`);
     return {
       status: false,
       message: `Gagal menghubungkan ke server ${process.env.NEXT_PUBLIC_GAPOK_BASE_URL} (${err})`,

@@ -18,7 +18,7 @@ export default function SSOButton({ query, uuid }) {
       color="primary"
       size="lg"
       radius="lg">
-      Continue with SSO <FingerPrintIcon className="size-6 text-white" />
+      Continue with SSO <FingerPrintIcon className="text-white size-6" />
     </Button>
   );
 }

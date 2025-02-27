@@ -1,5 +1,6 @@
 "use client";
 
+import PropTypes from "prop-types";
 import { useRouter } from "next-nprogress-bar";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
@@ -24,7 +25,7 @@ const BtnModule = ({ goTo, isDisabled }) => {
 
   useEffect(() => {
     if (isPending || stateLoading) {
-      toast.loading("Processing ...", {
+      toast.loading("Connecting to inexis ...", {
         id: "Toaster",
       });
     }
@@ -53,13 +54,12 @@ const BtnModule = ({ goTo, isDisabled }) => {
           setTimeout(() => {
             toast.remove();
             router.push(goTo);
-            // setStateLoading(false);
           }, 1000);
         }
       },
-      onError: (Error) => {
+      onError: (err) => {
         setStateLoading(false);
-        return toast.error(Error.message, {
+        return toast.error(err.message, {
           id: "Toaster",
         });
       },
@@ -67,22 +67,24 @@ const BtnModule = ({ goTo, isDisabled }) => {
   }
 
   return (
-    <>
-      <button
-        onClick={hendleModule}
-        className="inline-flex w-full justify-center disabled:opacity-30 disabled:cursor-not-allowed items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg dark:shadow-sm shadow-lg shadow-blue-500 disabled:shadow-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 group"
-        disabled={isPending || stateLoading || isDisabled}>
-        {isPending || stateLoading ? (
-          <Spinner size="sm" color="default" />
-        ) : (
-          <div className="flex justify-center items-center gap-x-4">
-            Pilih
-            <ArrowRightCircleFill className="size-6 group-hover:text-white/30 ease-in duration-300 group-hover:transition-all" />
-          </div>
-        )}
-      </button>
-    </>
+    <button
+      onClick={hendleModule}
+      className="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg shadow-lg disabled:opacity-30 disabled:cursor-not-allowed dark:shadow-sm shadow-blue-500 disabled:shadow-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 group"
+      disabled={isPending || stateLoading || isDisabled}>
+      {isPending || stateLoading ? (
+        <Spinner size="sm" color="default" />
+      ) : (
+        <div className="flex items-center justify-center gap-x-4">
+          Pilih
+          <ArrowRightCircleFill className="duration-300 ease-in size-6 group-hover:text-white/30 group-hover:transition-all" />
+        </div>
+      )}
+    </button>
   );
+};
+BtnModule.propTypes = {
+  goTo: PropTypes.string.isRequired,
+  isDisabled: PropTypes.bool,
 };
 
 export { BtnModule };
