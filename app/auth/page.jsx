@@ -72,20 +72,13 @@ export default async function Login() {
               Masuk Aplikasi <LockClosedIcon className="text-gray-300 size-6" />
             </h3>
             <p className="text-small text-default-400 dark:text-white/70">
-              Layanan SILKa Integrasi, silahkan masuk menggunakan akun sso anda
-              yang terdaftar dan aktif.
+              Layanan SILKa Integrasi, silahkan masuk menggunakan akun silka-sso
+              anda yang terdaftar dan aktif.
             </p>
           </div>
         </CardHeader>
         <CardBody>
           <SSOButton query={queryString} uuid={state} />
-          <Link
-            color="primary"
-            prefetch={false}
-            href="/auth/lupa-password"
-            className="mt-2 text-blue-500 hover:text-blue-800">
-            Lupa Password ?
-          </Link>
         </CardBody>
         <CardFooter className="flex flex-col items-center justify-between md:flex-row md:items-end dark:bg-transparent">
           <span className="text-sm text-gray-300 text-ellipsis">
