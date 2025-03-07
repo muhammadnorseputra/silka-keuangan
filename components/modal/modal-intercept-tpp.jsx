@@ -408,9 +408,9 @@ export const ModalInterceptTppPppk = ({ params }) => {
   const renderActionKirim = useCallback(() => {
     if (isLoading || isFetching) return "";
     if (queryTPP?.data.is_sync_simgaji === "1") return null;
-    if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
-      return null;
-    if (queryTPP?.data.fid_status === "5") return null;
+    // if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
+    //   return null;
+    // if (queryTPP?.data.fid_status === "5") return null;
     // jika status data peremajaan masih verifikasi, entri, null
     if (
       queryTPP?.data.is_peremajaan === "VERIFIKASI" ||
