@@ -69,10 +69,10 @@ export default function ModalInterceptTppPegawai({ params }) {
     // jika sudah melakukan sinkronisasi
     if (queryTPP?.data.is_sync_simgaji === "1") return null;
     // jika status data tpp tidak sama dengan APPROVE dan CETAK
-    if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
-      return null;
+    // if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
+    // return null;
     // jika status data tpp sudah cetak
-    if (queryTPP?.data.fid_status === "5") return null;
+    // if (queryTPP?.data.fid_status === "5") return null;
     // jika status data peremajaan masih verifikasi, entri, null
     if (
       queryTPP?.data.is_peremajaan === "VERIFIKASI" ||
@@ -82,7 +82,7 @@ export default function ModalInterceptTppPegawai({ params }) {
       return null;
     // jika semua terpenuhi tampilkan tombol kirim
     return (
-      <div className="inline-flex w-full justify-between items-center gap-x-3">
+      <div className="inline-flex items-center justify-between w-full gap-x-3">
         <Button color="danger" variant="light" onPress={() => router.back()}>
           Batal
         </Button>
@@ -113,11 +113,6 @@ export default function ModalInterceptTppPegawai({ params }) {
     } = queryTPP?.data;
     return (
       <>
-        {queryTPP?.data.fid_status === "5" && (
-          <AlertSuccess title="Perhatian">
-            TPP sudah selesai cetak pada silka online
-          </AlertSuccess>
-        )}
         {queryTPP?.data.is_sync_simgaji !== "1" && (
           <AlertInfo title="Informasi">
             TPP belum dikirim, silahkan kirim data
@@ -142,7 +137,7 @@ export default function ModalInterceptTppPegawai({ params }) {
             Peremajaan data belum verifikasi oleh pengelola kepegawaian.
           </AlertWarning>
         )}
-        <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-6">
+        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
           <div>
             <div className="text-gray-400">NIP</div>
             <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
@@ -154,13 +149,13 @@ export default function ModalInterceptTppPegawai({ params }) {
             </div>
           </div>
         </div>
-        <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
+        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
           <div>
             <div className="text-gray-400">JABATAN</div>
             <div className="font-bold">{jabatan ?? "-"}</div>
           </div>
         </div>
-        <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-6">
+        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
           <div>
             <div className="text-gray-400">BULAN</div>
             <div className="font-bold">{bulan ?? "-"}</div>
@@ -177,13 +172,13 @@ export default function ModalInterceptTppPegawai({ params }) {
           <AccordionItem key="1" aria-label="Accordion 1" title="Take Home Pay">
             <div className="mb-3">
               <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
-              <div className="font-bold text-green-600 text-2xl">
+              <div className="text-2xl font-bold text-green-600">
                 {formatRupiahManual(tpp_diterima) ?? "-"}
               </div>
             </div>
             <div>
               <div className="text-gray-400">TERBILANG</div>
-              <div className="font-bold text-gray-400 italic uppercase">
+              <div className="italic font-bold text-gray-400 uppercase">
                 {terbilangRupiah(tpp_diterima) ?? "-"}
               </div>
             </div>
@@ -192,7 +187,7 @@ export default function ModalInterceptTppPegawai({ params }) {
             key="2"
             aria-label="Accordion 2"
             title="Detail Kalkulasi TPP">
-            <div className="inline-flex flex-col sm:flex-row justify-start gap-x-12 gap-y-8">
+            <div className="inline-flex flex-col justify-start sm:flex-row gap-x-12 gap-y-8">
               <div>
                 <div className="text-gray-400">BEBAN KERJA</div>
                 <div className="font-bold">
@@ -212,7 +207,7 @@ export default function ModalInterceptTppPegawai({ params }) {
                 </div>
               </div>
             </div>
-            <div className="inline-flex flex-col sm:flex-row justify-start gap-x-6 gap-y-8 mt-4">
+            <div className="inline-flex flex-col justify-start mt-4 sm:flex-row gap-x-6 gap-y-8">
               <div>
                 <div className="text-gray-400">KELANGKAAN PROFESI</div>
                 <div className="font-bold">
@@ -256,12 +251,12 @@ export default function ModalInterceptTppPegawai({ params }) {
           <ModalContent>
             <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
               SINKRONISASI TPP{" "}
-              <div className="text-sm text-gray-400 font-normal">
+              <div className="text-sm font-normal text-gray-400">
                 Data TPP SILKa Online
               </div>
             </ModalHeader>
-            <ModalBody className="flex flex-column justify-center items-center gap-y-3 rounded-b-xl">
-              <InboxIcon className="size-8 text-gray-300 dark:text-gray-700" />
+            <ModalBody className="flex items-center justify-center flex-column gap-y-3 rounded-b-xl">
+              <InboxIcon className="text-gray-300 size-8 dark:text-gray-700" />
               <p>Data TPP Tidak Ditemukan</p>
             </ModalBody>
           </ModalContent>
@@ -282,12 +277,12 @@ export default function ModalInterceptTppPegawai({ params }) {
             <>
               <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
                 SINKRONISASI TPP{" "}
-                <div className="text-sm text-gray-400 font-normal">
+                <div className="text-sm font-normal text-gray-400">
                   Data TPP SILKa Online
                 </div>
               </ModalHeader>
               <ModalBody>{renderTPP()}</ModalBody>
-              <ModalFooter className="justify-between items-start bg-gray-100 dark:bg-blue-900 rounded-b-xl">
+              <ModalFooter className="items-start justify-between bg-gray-100 dark:bg-blue-900 rounded-b-xl">
                 {renderActionHasil()} {renderActionKirim()}
               </ModalFooter>
             </>
@@ -362,7 +357,7 @@ export const ModalInterceptTppPppk = ({ params }) => {
             Peremajaan data belum verifikasi oleh pengelola kepegawaian.
           </AlertWarning>
         )}
-        <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-6">
+        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
           <div>
             <div className="text-gray-400">NIP</div>
             <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
@@ -374,13 +369,13 @@ export const ModalInterceptTppPppk = ({ params }) => {
             </div>
           </div>
         </div>
-        <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
+        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
           <div>
             <div className="text-gray-400">JABATAN</div>
             <div className="font-bold">{jabatan ?? "-"}</div>
           </div>
         </div>
-        <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-6">
+        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
           <div>
             <div className="text-gray-400">BULAN</div>
             <div className="font-bold">{bulan ?? "-"}</div>
@@ -425,7 +420,7 @@ export const ModalInterceptTppPppk = ({ params }) => {
       return null;
 
     return (
-      <div className="inline-flex w-full justify-between items-center gap-x-3">
+      <div className="inline-flex items-center justify-between w-full gap-x-3">
         <Button color="danger" variant="light" onPress={() => router.back()}>
           Batal
         </Button>
@@ -446,12 +441,12 @@ export const ModalInterceptTppPppk = ({ params }) => {
           <ModalContent>
             <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
               SINKRONISASI TPP{" "}
-              <div className="text-sm text-gray-400 font-normal">
+              <div className="text-sm font-normal text-gray-400">
                 Data TPP SILKa Online
               </div>
             </ModalHeader>
-            <ModalBody className="flex flex-column justify-center items-center gap-y-3">
-              <InboxIcon className="size-8 text-gray-300 dark:text-gray-700" />
+            <ModalBody className="flex items-center justify-center flex-column gap-y-3">
+              <InboxIcon className="text-gray-300 size-8 dark:text-gray-700" />
               <p>Data TPP Tidak Ditemukan</p>
             </ModalBody>
           </ModalContent>
@@ -474,12 +469,12 @@ export const ModalInterceptTppPppk = ({ params }) => {
             <>
               <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
                 SINKRONISASI TPP{" "}
-                <div className="text-sm text-gray-400 font-normal">
+                <div className="text-sm font-normal text-gray-400">
                   Data TPP SILKa Online
                 </div>
               </ModalHeader>
               <ModalBody>{renderTPP()}</ModalBody>
-              <ModalFooter className="justify-between items-start">
+              <ModalFooter className="items-start justify-between">
                 {renderActionHasil()} {renderActionKirim()}
               </ModalFooter>
             </>
