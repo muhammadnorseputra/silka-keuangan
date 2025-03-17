@@ -64,15 +64,15 @@ export default function ModalInterceptTppPegawai({ params }) {
   }, [isFetching, isLoading, queryTPP?.data?.is_sync_simgaji]);
 
   const renderActionKirim = useCallback(() => {
-    // jika loading data dan fetching data
+    // ? jika loading data dan fetching data
     if (isLoading || isFetching) return "";
-    // jika sudah melakukan sinkronisasi
+    // ? jika sudah melakukan sinkronisasi
     if (queryTPP?.data.is_sync_simgaji === "1") return null;
     // jika status data tpp tidak sama dengan APPROVE dan CETAK
-    // if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
-    // return null;
+    if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
+      return null;
     // jika status data tpp sudah cetak
-    // if (queryTPP?.data.fid_status === "5") return null;
+    if (queryTPP?.data.fid_status === "5") return null;
     // jika status data peremajaan masih verifikasi, entri, null
     if (
       queryTPP?.data.is_peremajaan === "VERIFIKASI" ||
@@ -80,7 +80,7 @@ export default function ModalInterceptTppPegawai({ params }) {
       queryTPP?.data.is_peremajaan === null
     )
       return null;
-    // jika semua terpenuhi tampilkan tombol kirim
+    // * jika semua terpenuhi tampilkan tombol kirim
     return (
       <div className="inline-flex items-center justify-between w-full gap-x-3">
         <Button color="danger" variant="light" onPress={() => router.back()}>
@@ -408,9 +408,9 @@ export const ModalInterceptTppPppk = ({ params }) => {
   const renderActionKirim = useCallback(() => {
     if (isLoading || isFetching) return "";
     if (queryTPP?.data.is_sync_simgaji === "1") return null;
-    // if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
-    //   return null;
-    // if (queryTPP?.data.fid_status === "5") return null;
+    if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
+      return null;
+    if (queryTPP?.data.fid_status === "5") return null;
     // jika status data peremajaan masih verifikasi, entri, null
     if (
       queryTPP?.data.is_peremajaan === "VERIFIKASI" ||
