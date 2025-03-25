@@ -2,6 +2,7 @@
 
 import { UpdateSync } from "@/dummy/post-data-tpp";
 import { kirimTPP } from "@/dummy/sigapok-post-tpp";
+import { getCurrentDate } from "@/helpers/datetime";
 import revalidateTag from "@/lib/revalidateTags";
 import { Button, Divider } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -48,13 +49,16 @@ export const BtnKirimTPP = ({
 
   function handleKirim() {
     const PERIODE_TPP = `${bulan.toString().padStart(2, "0")}${tahun}`;
+    // TGL BAYAR MENGGUNAKAN PERIODE SILKA
     const TGL_BAYAR = `${tahun}-${bulan.toString().padStart(2, "0")}-${bulan
       .toString()
       .padStart(2, "0")}`;
+    // TGL BAYAR SESUAI TGL KIRIM
+    const TGL_KIRIM = getCurrentDate();
     const BODY = {
       NIP: nip,
       PERIODE_TPP,
-      TGL_BAYAR,
+      TGL_BAYAR: TGL_KIRIM,
       KD_SKPD: simgaji_id_skpd,
       KD_SATKER: simgaji_id_satker,
       JML_TPP: tpp_diterima,
@@ -102,7 +106,7 @@ export const BtnKirimTPP = ({
         onPress={handleKirim}
         isLoading={isPending}
         isDisabled={isPending}>
-        <CloudArrowUp className="size-5 text-white" />
+        <CloudArrowUp className="text-white size-5" />
         <Divider orientation="vertical" />
         Kirim
       </Button>
