@@ -1,6 +1,6 @@
 import { useSessionServer } from "@/app/app-module/server-session";
 import { BtnKirimTPP } from "@/components/button/btn-tpp-kirim";
-import { getTppByNipppk } from "@/dummy/data-tpp-by-nip";
+import { getTppByNipppk } from "@/dummy/data-tpp-by-nip-v2";
 import { decrypt } from "@/helpers/encrypt";
 import { polaNIP } from "@/helpers/polanip";
 import { ExclamationCircle } from "react-bootstrap-icons";
@@ -18,7 +18,7 @@ export default async function RenderSilkaService({ slug }) {
 
   const NIP = decrypt(slug[0], "bkpsdm");
 
-  const resultDataTpp = await getTppByNipppk(NIP);
+  const resultDataTpp = await getTppByNipppk(NIP, silka?.access_token);
   if (resultDataTpp.status === false) {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
@@ -28,17 +28,17 @@ export default async function RenderSilkaService({ slug }) {
     );
   }
   const {
-    nip,
+    nipppk,
     nama,
     gelar_depan,
-    gelar_blk,
+    gelar_belakang,
     jabatan,
     tahun,
     bulan,
     fid_status,
     is_peremajaan,
     is_sync_simgaji,
-  } = resultDataTpp?.data;
+  } = resultDataTpp?.data[0];
 
   const renderButtonKirim = () => {
     if (is_sync_simgaji === "1") return null;
@@ -49,7 +49,7 @@ export default async function RenderSilkaService({ slug }) {
 
     return (
       <>
-        <BtnKirimTPP {...sigapok} {...resultDataTpp?.data} silka={silka} />
+        <BtnKirimTPP {...sigapok} {...resultDataTpp?.data[0]} silka={silka} />
       </>
     );
   };
@@ -82,25 +82,25 @@ export default async function RenderSilkaService({ slug }) {
           Peremajaan data belum verifikasi oleh pengelola kepegawaian.
         </AlertWarning>
       )}
-      <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
+      <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
         <div>
           <div className="text-gray-400">NIP</div>
-          <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
+          <div className="font-bold">{polaNIP(nipppk) ?? "-"}</div>
         </div>
         <div>
           <div className="text-gray-400">NAMA</div>
           <div className="font-bold">
-            {`${gelar_depan} ${nama} ${gelar_blk}`}
+            {`${gelar_depan} ${nama} ${gelar_belakang}`}
           </div>
         </div>
       </div>
-      <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
+      <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
         <div>
           <div className="text-gray-400">JABATAN</div>
           <div className="font-bold">{jabatan ?? "-"}</div>
         </div>
       </div>
-      <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
+      <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
         <div>
           <div className="text-gray-400">BULAN</div>
           <div className="font-bold">{bulan ?? "-"}</div>
@@ -110,7 +110,7 @@ export default async function RenderSilkaService({ slug }) {
           <div className="font-bold">{tahun ?? "-"}</div>
         </div>
       </div>
-      <DetailKalkulasi data={resultDataTpp?.data} />
+      <DetailKalkulasi data={resultDataTpp?.data[0]} />
       {renderButtonKirim()}
     </>
   );

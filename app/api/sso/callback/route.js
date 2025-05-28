@@ -41,18 +41,21 @@ export async function GET(req) {
   // verify code
   const response = await callback(code, scope);
   if (!response.response.status) return Response.json(response);
-
   cookies().set(
     "USER_SILKA",
     AES.encrypt(
       // @ts-ignore
-      JSON.stringify({ data: response.response.data.userinfo }),
+      JSON.stringify({
+        data: response.response.data.userinfo,
+        access_token: response.response.data.access_token,
+      }),
       "Bkpsdm@6811#"
     ).toString(),
     {
       maxAge: 3600,
     }
   );
+
   return Response.redirect(`${fullHost}/app-integrasi/dashboard`, 302);
   // return Response.json(response);
 }

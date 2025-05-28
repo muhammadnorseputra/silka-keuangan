@@ -51,7 +51,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
         <ModalContent>
           <ModalHeader className="flex flex-col bg-gray-50 dark:bg-gray-800">
             <div>Pilih Layanan Integrasi</div>
-            <div className="text-sm text-gray-400 font-normal">
+            <div className="text-sm font-normal text-gray-400">
               Silahkan pilih menu layanan yang tersedia.
             </div>
           </ModalHeader>
@@ -79,7 +79,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }}
                   description="Peremajaan Data"
                   startContent={
-                    <UserPlusIcon className="size-8 text-blue-600" />
+                    <UserPlusIcon className="text-blue-600 size-8" />
                   }>
                   Peremajaan
                 </ListboxItem>
@@ -100,14 +100,13 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }}
                   description="Verifikasi dan Validasi"
                   startContent={
-                    <DocumentCheckIcon className="size-8 text-green-500" />
+                    <DocumentCheckIcon className="text-green-500 size-8" />
                   }>
                   Verval Data
                 </ListboxItem>
               </ListboxSection>
               <ListboxSection title="Layanan Integrasi">
                 <ListboxItem
-                  isDisabled={jenis === "PPPK"}
                   hideSelectedIcon={jenis === "PPPK"}
                   key="kgb"
                   onClick={() => {
@@ -123,7 +122,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }}
                   description="Verifikasi dan Kirim"
                   startContent={
-                    <DocumentCurrencyDollarIcon className="size-8 text-red-400" />
+                    <DocumentCurrencyDollarIcon className="text-red-400 size-8" />
                   }>
                   Proses Kenaikan Gaji Berkala
                 </ListboxItem>
@@ -162,7 +161,7 @@ export default function ModalLayanan({ isOpenModal = false, onClose }) {
                   }}
                   description="Proses Tambahan Penghasilan Pegawai"
                   startContent={
-                    <CurrencyDollarIcon className="size-8 text-green-400" />
+                    <CurrencyDollarIcon className="text-green-400 size-8" />
                   }>
                   Proses TPP
                 </ListboxItem>

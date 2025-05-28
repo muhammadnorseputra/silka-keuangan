@@ -80,15 +80,29 @@ export default async function RenderGapokServices({ nip: NIP, sigapok }) {
         <div className="text-gray-400">PERIODE TPP</div>
         <div className="font-bold">{data[lastRow].PERIODE_TPP ?? "-"}</div>
       </div>
-      <div>
-        <div className="text-gray-400">JUMLAH TPP</div>
-        <div className="font-bold text-green-600 text-2xl">
-          {formatRupiahManual(data[lastRow].JML_TPP) ?? "-"}
+      <div className="inline-flex flex-col justify-start sm:flex-row gap-x-6 gap-y-8">
+        <div>
+          <div className="text-gray-400">JUMLAH KOTOR</div>
+          <div className="text-xl font-bold text-gray-600">
+            {formatRupiahManual(data[lastRow].KOTOR ?? 0) ?? "-"}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">TOTAL POTONGAN</div>
+          <div className="text-xl font-bold text-red-600">
+            {formatRupiahManual(data[lastRow].JLH_POT ?? 0) ?? "-"}
+          </div>
         </div>
       </div>
       <div>
+        <div className="text-gray-400">JUMLAH TPP</div>
+        <div className="text-2xl font-bold text-green-600">
+          {formatRupiahManual(data[lastRow].JML_TPP) ?? "-"}
+        </div>
+      </div>
+      <div className="pb-6 border-b border-gray-300 border-dashed">
         <div className="text-gray-400">TERBILANG</div>
-        <div className="font-bold text-gray-400 italic uppercase">
+        <div className="italic font-bold text-gray-400 uppercase">
           {terbilangRupiah(data[lastRow].JML_TPP) ?? "-"}
         </div>
       </div>

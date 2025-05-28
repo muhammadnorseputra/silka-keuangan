@@ -5,7 +5,7 @@ export const getPerubahanData = async (
   jenis_kenaikan,
   nip_pegawai,
   tmt_sk,
-  status_peg_id
+  status_peg_id = ""
 ) => {
   const url = process.env.NEXT_PUBLIC_GAPOK_BASE_URL;
   const path = process.env.NEXT_PUBLIC_GAPOK_PATH;

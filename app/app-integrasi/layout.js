@@ -14,13 +14,13 @@ export default async function Layout({ children }) {
   }
   const { unker } = getProfile?.data?.pegawai;
   return (
-    <div className="flex justify-center bg-white dark:bg-slate-900">
-      <div className="card bg-gray-100  dark:bg-slate-800 w-full lg:w-8/12 mx-auto min-h-screen overflow-y-auto">
-        <div className="card-header bg-blue-700 border-0 py-4">
-          <div className="flex flex-row justify-start md:justify-between md:items-center mx-8 pb-4">
-            <div className="inline-flex flex-col sm:flex-row justify-start items-start gap-3 pt-3">
+    <div className="flex justify-center min-h-screen bg-gray-200 dark:bg-slate-900">
+      <div className="w-full mx-auto my-4 overflow-y-auto bg-gray-100 shadow-xl rounded-2xl card dark:bg-slate-800 lg:w-8/12">
+        <div className="py-4 bg-blue-700 border-0 card-header">
+          <div className="flex flex-row justify-start pb-4 mx-8 md:justify-between md:items-center">
+            <div className="inline-flex flex-col items-start justify-start gap-3 pt-3 sm:flex-row">
               <Image
-                className="img-fluid rounded mb-2 md:mb-0"
+                className="mb-2 rounded img-fluid md:mb-0"
                 loading="lazy"
                 src="/logo-balangan.svg"
                 width="50"

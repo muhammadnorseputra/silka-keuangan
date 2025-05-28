@@ -23,7 +23,7 @@ import { DocumentCurrencyDollarIcon } from "@heroicons/react/24/solid";
 //     ssr: false,
 //     loading: () => (
 //       <Skeleton className="rounded-lg">
-//         <div className="h-36 w-full rounded-lg bg-default-300"></div>
+//         <div className="w-full rounded-lg h-36 bg-default-300"></div>
 //       </Skeleton>
 //     ),
 //   }
@@ -35,17 +35,8 @@ export const ModalKgbProses = ({
   onClose,
   handleSubmit,
   isPending,
+  isJenisPegawai = "PNS",
 }) => {
-  const {
-    gapok_baru,
-    golru_nama,
-    berkas,
-    pangkat_nama,
-    mk_thn,
-    mk_bln,
-    tmt_berikutnya,
-    tmt,
-  } = dataSilka.data;
   return (
     <>
       <Modal
@@ -60,7 +51,7 @@ export const ModalKgbProses = ({
         shadow="lg"
         scrollBehavior="outside">
         <ModalContent>
-          <ModalHeader className="flex flex-col sm:flex-row items-center gap-1 shadow-lg">
+          <ModalHeader className="flex flex-col items-center gap-1 shadow-lg sm:flex-row">
             <DocumentCurrencyDollarIcon className="size-8" />{" "}
             <div>VERIFIKASI USULAN KGB</div>
           </ModalHeader>
@@ -76,34 +67,45 @@ export const ModalKgbProses = ({
             <div className="grid grid-flow-row-dense grid-cols-4 gap-4 p-6">
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">GAJI BARU</div>
-                <div className="font-bold text-green-600 text-xl">
-                  Rp. {formatRupiah(gapok_baru) ?? "-"}
+                <div className="text-xl font-bold text-green-600">
+                  Rp. {formatRupiah(dataSilka.data.gapok_baru) ?? "-"}
                 </div>
               </div>
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">GOLONGAN RUANG</div>
                 <div className="font-bold">
-                  {pangkat_nama ?? "-"} ({golru_nama ?? "-"})
+                  {isJenisPegawai == "PNS"
+                    ? dataSilka.data.pangkat_nama
+                    : dataSilka.data.id_pangkat ?? "-"}{" "}
+                  (
+                  {isJenisPegawai == "PNS"
+                    ? dataSilka.data.golru_nama
+                    : dataSilka.data.nama_pangkat ?? "-"}
+                  )
                 </div>
               </div>
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">MASA KERJA TAHUN</div>
-                <div className="font-bold">{mk_thn ?? "-"}</div>
+                <div className="font-bold">{dataSilka.data.mk_thn ?? "-"}</div>
               </div>
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">MASA KERJA BULAN</div>
-                <div className="font-bold">{mk_bln ?? "-"}</div>
+                <div className="font-bold">{dataSilka.data.mk_bln ?? "-"}</div>
               </div>
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">TMT GAJI BARU</div>
                 <div className="font-bold">
-                  {formatTanggalIndonesia(tmt) ?? "-"}
+                  {formatTanggalIndonesia(dataSilka.data.tmt) ?? "-"}
                 </div>
               </div>
               <div className="col-span-4 md:col-span-1">
                 <div className="text-gray-400">TMT BERKALA BERIKUTNYA</div>
                 <div className="font-bold">
-                  {formatTanggalIndonesia(tmt_berikutnya) ?? "-"}
+                  {formatTanggalIndonesia(
+                    isJenisPegawai == "PNS"
+                      ? dataSilka.data.tmt_berikutnya
+                      : dataSilka.data.tmt_gaji_berikutnya
+                  ) ?? "-"}
                 </div>
               </div>
             </div>

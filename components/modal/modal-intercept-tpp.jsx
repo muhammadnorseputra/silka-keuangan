@@ -1,5 +1,5 @@
 "use client";
-import { getTppByNip, getTppByNipppk } from "@/dummy/data-tpp-by-nip";
+import { getTppByNip, getTppByNipppk } from "@/dummy/data-tpp-by-nip-v2";
 import { formatRupiahManual } from "@/helpers/cx";
 import { decrypt } from "@/helpers/encrypt";
 import { polaNIP } from "@/helpers/polanip";
@@ -29,7 +29,7 @@ export default function ModalInterceptTppPegawai({ params }) {
 
   const sigapok = useSession("USER_GAPOK");
   const silka = useSession("USER_SILKA");
-
+  
   const [slug] = params.slug;
 
   const NIP = decrypt(slug, "bkpsdm");
@@ -39,9 +39,9 @@ export default function ModalInterceptTppPegawai({ params }) {
     isLoading,
     isFetching,
   } = useQuery({
-    queryKey: ["queryTPP", slug],
+    queryKey: ["queryTPP", slug, silka.access_token],
     queryFn: async () => {
-      const resultDataTpp = await getTppByNip(NIP);
+      const resultDataTpp = await getTppByNip(NIP, silka?.access_token);
       return resultDataTpp;
     },
     refetchOnWindowFocus: false,
@@ -50,34 +50,37 @@ export default function ModalInterceptTppPegawai({ params }) {
 
   const renderActionHasil = useCallback(() => {
     if (isLoading || isFetching) return "";
-    return queryTPP?.data.is_sync_simgaji !== "1" ? null : (
+    return queryTPP?.data[0].is_sync_simgaji !== "1" ? null : (
       <Button
         // radius="none"
         className="disabled:cursor-not-allowed"
-        isDisabled={queryTPP?.data.is_sync_simgaji !== "1"}
+        isDisabled={queryTPP?.data[0].is_sync_simgaji !== "1"}
         color="success"
         variant="shadow"
         onPress={() => window.location.reload()}>
         Hasil Sinkronisasi
       </Button>
     );
-  }, [isFetching, isLoading, queryTPP?.data?.is_sync_simgaji]);
+  }, [isFetching, isLoading, queryTPP?.data]);
 
   const renderActionKirim = useCallback(() => {
     // ? jika loading data dan fetching data
     if (isLoading || isFetching) return "";
     // ? jika sudah melakukan sinkronisasi
-    if (queryTPP?.data.is_sync_simgaji === "1") return null;
+    if (queryTPP?.data[0].is_sync_simgaji === "1") return null;
     // jika status data tpp tidak sama dengan APPROVE dan CETAK
-    if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
+    if (
+      queryTPP?.data[0].fid_status !== "4" &&
+      queryTPP?.data[0].fid_status !== "5"
+    )
       return null;
     // jika status data tpp sudah cetak
-    if (queryTPP?.data.fid_status === "5") return null;
+    if (queryTPP?.data[0].fid_status === "5") return null;
     // jika status data peremajaan masih verifikasi, entri, null
     if (
-      queryTPP?.data.is_peremajaan === "VERIFIKASI" ||
-      queryTPP?.data.is_peremajaan === "ENTRI" ||
-      queryTPP?.data.is_peremajaan === null
+      queryTPP?.data[0].is_peremajaan === "VERIFIKASI" ||
+      queryTPP?.data[0].is_peremajaan === "ENTRI" ||
+      queryTPP?.data[0].is_peremajaan === null
     )
       return null;
     // * jika semua terpenuhi tampilkan tombol kirim
@@ -86,7 +89,7 @@ export default function ModalInterceptTppPegawai({ params }) {
         <Button color="danger" variant="light" onPress={() => router.back()}>
           Batal
         </Button>
-        <BtnKirimTPP {...sigapok} {...queryTPP?.data} silka={silka} />
+        <BtnKirimTPP {...sigapok} {...queryTPP?.data[0]} silka={silka} />
       </div>
     );
   }, [isFetching, isLoading, queryTPP?.data, router, sigapok, silka]);
@@ -106,33 +109,41 @@ export default function ModalInterceptTppPegawai({ params }) {
       basic_pk,
       basic_kk,
       basic_kp,
+      real_bk,
+      real_pk,
+      real_kk,
+      real_tb,
+      real_kp,
       jml_pph,
       jml_iwp,
       jml_bpjs,
+      jml_pot,
+      total_kotor,
+      total_bersih,
       fid_status,
-    } = queryTPP?.data;
+    } = queryTPP?.data[0];
     return (
       <>
-        {queryTPP?.data.is_sync_simgaji !== "1" && (
+        {queryTPP?.data[0].is_sync_simgaji !== "1" && (
           <AlertInfo title="Informasi">
             TPP belum dikirim, silahkan kirim data
           </AlertInfo>
         )}
-        {queryTPP?.data.fid_status !== "4" &&
-          queryTPP?.data.fid_status !== "5" && (
+        {queryTPP?.data[0].fid_status !== "4" &&
+          queryTPP?.data[0].fid_status !== "5" && (
             <AlertDanger
               title="Perhatian"
               message="TPP masih dalam proses perhitungan atau belum disetujui."
             />
           )}
-        {(queryTPP?.data.is_peremajaan === "ENTRI" ||
-          queryTPP?.data.is_peremajaan === null) && (
+        {(queryTPP?.data[0].is_peremajaan === "ENTRI" ||
+          queryTPP?.data[0].is_peremajaan === null) && (
           <AlertWarning
             title="Perhatian"
             message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
           />
         )}
-        {queryTPP?.data.is_peremajaan === "VERIFIKASI" && (
+        {queryTPP?.data[0].is_peremajaan === "VERIFIKASI" && (
           <AlertWarning title="Perhatian">
             Peremajaan data belum verifikasi oleh pengelola kepegawaian.
           </AlertWarning>
@@ -170,7 +181,21 @@ export default function ModalInterceptTppPegawai({ params }) {
           defaultExpandedKeys={["1", "2"]}
           selectionMode="multiple">
           <AccordionItem key="1" aria-label="Accordion 1" title="Take Home Pay">
-            <div className="mb-3">
+            <div className="inline-flex flex-col justify-start sm:flex-row gap-x-6 gap-y-8">
+              <div>
+                <div className="text-gray-400">JUMLAH KOTOR</div>
+                <div className="text-xl font-bold text-gray-600">
+                  {formatRupiahManual(total_kotor) ?? "-"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-400">TOTAL POTONGAN</div>
+                <div className="text-xl font-bold text-red-600">
+                  {formatRupiahManual(jml_pot) ?? "-"}
+                </div>
+              </div>
+            </div>
+            <div className="pt-3 mt-3 mb-3 border-t border-gray-200 border-dashed">
               <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
               <div className="text-2xl font-bold text-green-600">
                 {formatRupiahManual(tpp_diterima) ?? "-"}
@@ -215,21 +240,21 @@ export default function ModalInterceptTppPegawai({ params }) {
                 </div>
               </div>
               <div>
-                <div className="text-gray-400">PPH21</div>
+                <div className="text-gray-400">POT. PPH21</div>
                 <div className="font-bold">
                   {formatRupiahManual(jml_pph) ?? "-"}
                 </div>
               </div>
               <div>
-                <div className="text-gray-400">IWP</div>
+                <div className="text-gray-400">POT. BPJS</div>
                 <div className="font-bold">
-                  {formatRupiahManual(jml_iwp) ?? "-"}
+                  {formatRupiahManual(jml_bpjs) ?? "-"}
                 </div>
               </div>
               <div>
-                <div className="text-gray-400">BPJS</div>
+                <div className="text-gray-400">POT. IWP</div>
                 <div className="font-bold">
-                  {formatRupiahManual(jml_bpjs) ?? "-"}
+                  {formatRupiahManual(jml_iwp) ?? "-"}
                 </div>
               </div>
             </div>
@@ -298,7 +323,7 @@ export const ModalInterceptTppPppk = ({ params }) => {
 
   const sigapok = useSession("USER_GAPOK");
   const silka = useSession("USER_SILKA");
-
+  console.log("silka", silka);
   const [slug] = params.slug;
 
   const NIP = decrypt(slug, "bkpsdm");
@@ -307,9 +332,9 @@ export const ModalInterceptTppPppk = ({ params }) => {
     isLoading,
     isFetching,
   } = useQuery({
-    queryKey: ["queryTPPPK", slug],
+    queryKey: ["queryTPPPK", slug, silka.access_token],
     queryFn: async () => {
-      const resultDataTpp = await getTppByNipppk(NIP);
+      const resultDataTpp = await getTppByNipppk(NIP, silka.access_token);
       return resultDataTpp;
     },
   });
@@ -317,42 +342,42 @@ export const ModalInterceptTppPppk = ({ params }) => {
   const renderTPP = useCallback(() => {
     if (isLoading || isFetching) return <PlaceholderBar />;
     const {
-      nip,
+      nipppk,
       nama,
       gelar_depan,
-      gelar_blk,
+      gelar_belakang,
       jabatan,
       tahun,
       bulan,
       fid_status,
-    } = queryTPP?.data;
+    } = queryTPP?.data[0];
     return (
       <>
-        {queryTPP?.data.is_sync_simgaji !== "1" && (
+        {queryTPP?.data[0].is_sync_simgaji !== "1" && (
           <AlertInfo title="Informasi">
             TPP belum dikirim, silahkan kirim data
           </AlertInfo>
         )}
-        {queryTPP?.data.fid_status !== "4" &&
-          queryTPP?.data.fid_status !== "5" && (
+        {queryTPP?.data[0].fid_status !== "4" &&
+          queryTPP?.data[0].fid_status !== "5" && (
             <AlertDanger
               title="Perhatian"
               message="TPP masih dalam proses perhitungan atau belum disetujui."
             />
           )}
-        {queryTPP?.data.fid_status === "5" && (
+        {queryTPP?.data[0].fid_status === "5" && (
           <AlertSuccess title="Perhatian">
             TPP sudah selesai cetak pada silka online
           </AlertSuccess>
         )}
-        {(queryTPP?.data.is_peremajaan === "ENTRI" ||
-          queryTPP?.data.is_peremajaan === null) && (
+        {(queryTPP?.data[0].is_peremajaan === "ENTRI" ||
+          queryTPP?.data[0].is_peremajaan === null) && (
           <AlertWarning
             title="Perhatian"
             message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
           />
         )}
-        {queryTPP?.data.is_peremajaan === "VERIFIKASI" && (
+        {queryTPP?.data[0].is_peremajaan === "VERIFIKASI" && (
           <AlertWarning title="Perhatian">
             Peremajaan data belum verifikasi oleh pengelola kepegawaian.
           </AlertWarning>
@@ -360,12 +385,12 @@ export const ModalInterceptTppPppk = ({ params }) => {
         <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
           <div>
             <div className="text-gray-400">NIP</div>
-            <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
+            <div className="font-bold">{polaNIP(nipppk) ?? "-"}</div>
           </div>
           <div>
             <div className="text-gray-400">NAMA</div>
             <div className="font-bold">
-              {`${gelar_depan} ${nama} ${gelar_blk}`}
+              {`${gelar_depan} ${nama} ${gelar_belakang}`}
             </div>
           </div>
         </div>
@@ -385,37 +410,40 @@ export const ModalInterceptTppPppk = ({ params }) => {
             <div className="font-bold">{tahun ?? "-"}</div>
           </div>
         </div>
-        <DetailKalkulasi data={queryTPP?.data} />
+        <DetailKalkulasi data={queryTPP?.data[0]} />
       </>
     );
   }, [isFetching, isLoading, queryTPP?.data]);
 
   const renderActionHasil = useCallback(() => {
     if (isLoading || isFetching) return "";
-    return queryTPP?.data.is_sync_simgaji !== "1" ? null : (
+    return queryTPP?.data[0].is_sync_simgaji !== "1" ? null : (
       <Button
         // radius="none"
         className="disabled:cursor-not-allowed"
-        isDisabled={queryTPP?.data.is_sync_simgaji !== "1"}
+        isDisabled={queryTPP?.data[0].is_sync_simgaji !== "1"}
         color="success"
         variant="shadow"
         onPress={() => window.location.reload()}>
         Hasil Sinkronisasi
       </Button>
     );
-  }, [isFetching, isLoading, queryTPP?.data?.is_sync_simgaji]);
+  }, [isFetching, isLoading, queryTPP?.data]);
 
   const renderActionKirim = useCallback(() => {
     if (isLoading || isFetching) return "";
-    if (queryTPP?.data.is_sync_simgaji === "1") return null;
-    if (queryTPP?.data.fid_status !== "4" && queryTPP?.data.fid_status !== "5")
+    if (queryTPP?.data[0].is_sync_simgaji === "1") return null;
+    if (
+      queryTPP?.data[0].fid_status !== "4" &&
+      queryTPP?.data[0].fid_status !== "5"
+    )
       return null;
-    if (queryTPP?.data.fid_status === "5") return null;
+    if (queryTPP?.data[0].fid_status === "5") return null;
     // jika status data peremajaan masih verifikasi, entri, null
     if (
-      queryTPP?.data.is_peremajaan === "VERIFIKASI" ||
-      queryTPP?.data.is_peremajaan === "ENTRI" ||
-      queryTPP?.data.is_peremajaan === null
+      queryTPP?.data[0].is_peremajaan === "VERIFIKASI" ||
+      queryTPP?.data[0].is_peremajaan === "ENTRI" ||
+      queryTPP?.data[0].is_peremajaan === null
     )
       return null;
 
@@ -424,7 +452,7 @@ export const ModalInterceptTppPppk = ({ params }) => {
         <Button color="danger" variant="light" onPress={() => router.back()}>
           Batal
         </Button>
-        <BtnKirimTPP {...sigapok} {...queryTPP?.data} silka={silka} />
+        <BtnKirimTPP {...sigapok} {...queryTPP?.data[0]} silka={silka} />
       </div>
     );
   }, [isFetching, isLoading, queryTPP?.data, router, sigapok, silka]);
