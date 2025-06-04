@@ -30,7 +30,7 @@ export const BtnKirimTPP = ({
   simgaji_id_skpd,
   simgaji_id_satker,
   silka,
-  jenispeg = "PPPK",
+  jenispeg,
   ...args
 }) => {
   const queryClient = useQueryClient();

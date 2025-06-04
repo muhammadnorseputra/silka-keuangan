@@ -39,7 +39,6 @@ export default async function RenderSilkaService({ slug }) {
     is_peremajaan,
     is_sync_simgaji,
   } = resultDataTpp?.data[0];
-  console.log("resultDataTpp", resultDataTpp.data[0]);
   const renderButtonKirim = () => {
     if (is_sync_simgaji === "1") return null;
     if (fid_status === "5") return null;
