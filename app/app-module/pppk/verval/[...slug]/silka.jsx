@@ -67,23 +67,23 @@ export default function SilkaDataP3k({ access_token, nip }) {
       <>
         <div className="space-y-3">
           <Skeleton className="w-3/5 rounded-lg">
-            <div className="h-6 w-3/5 rounded-lg bg-default-200"></div>
+            <div className="w-3/5 h-6 rounded-lg bg-default-200"></div>
           </Skeleton>
           <Skeleton className="w-4/5 rounded-lg">
-            <div className="h-6 w-4/5 rounded-lg bg-default-200"></div>
+            <div className="w-4/5 h-6 rounded-lg bg-default-200"></div>
           </Skeleton>
           <Skeleton className="w-2/5 rounded-lg">
-            <div className="h-6 w-2/5 rounded-lg bg-default-300"></div>
+            <div className="w-2/5 h-6 rounded-lg bg-default-300"></div>
           </Skeleton>
-          <Skeleton className="w-5/5 rounded-lg">
-            <div className="h-6 w-5/5 rounded-lg bg-default-500"></div>
+          <Skeleton className="rounded-lg w-5/5">
+            <div className="h-6 rounded-lg w-5/5 bg-default-500"></div>
           </Skeleton>
         </div>
       </>
     );
   }
 
-  if (row.status_data === "ENTRI") {
+  if (row.status_data === "ENTRI" || row.status_data === null) {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
         <ExclamationCircle className="size-8" />
@@ -255,7 +255,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
         <div className="text-gray-400">JABATAN</div>
         <div className="font-bold">{row.nama_jabatan}</div>
       </div>
-      <div className="flex flex-col sm:flex-row justify-start gap-x-16">
+      <div className="flex flex-col justify-start sm:flex-row gap-x-16">
         <div>
           <div className="text-gray-400">GAJI POKOK</div>
           <div className="font-bold">{formatRupiah(row.gaji_pokok)}</div>
@@ -269,7 +269,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
           <div className="font-bold">{row.nama_statuspeg ?? "-"}</div>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row justify-start gap-x-16">
+      <div className="flex flex-col justify-start sm:flex-row gap-x-16">
         <div>
           <div className="text-gray-400">TMT AWAL PPPK</div>
           <div className="font-bold">
@@ -288,7 +288,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
         </div>
       </div>
       <Divider />
-      <div className="flex flex-col sm:flex-row justify-start gap-x-16">
+      <div className="flex flex-col justify-start sm:flex-row gap-x-16">
         <div>
           <div className="text-gray-400">
             {row.jenis_kelamin === "L" ? "JUMLAH ISTRI" : "JUMLAH SUAMI"}
@@ -316,7 +316,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
         <div className="font-bold">{row.pejabat_sk ?? "-"}</div>
       </div> */}
       <Divider />
-      <div className="flex flex-col sm:flex-row w-full gap-3 justify-between">
+      <div className="flex flex-col justify-between w-full gap-3 sm:flex-row">
         <Button
           isLoading={rollbackIsPending}
           isDisabled={rollbackIsPending}
@@ -324,7 +324,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
           color="danger"
           variant="shadow"
           onPress={() => handleRollback()}>
-          <UserMinusIcon className="size-5 text-white" />
+          <UserMinusIcon className="text-white size-5" />
           <Divider orientation="vertical" />
           Rollback
         </Button>
@@ -333,7 +333,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
           color="primary"
           variant="shadow"
           onPress={() => setIsOpen(true)}>
-          <HandThumbUpIcon className="size-5 text-white" />
+          <HandThumbUpIcon className="text-white size-5" />
           <Divider orientation="vertical" />
           Approve
         </Button>

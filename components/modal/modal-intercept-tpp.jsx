@@ -29,7 +29,7 @@ export default function ModalInterceptTppPegawai({ params }) {
 
   const sigapok = useSession("USER_GAPOK");
   const silka = useSession("USER_SILKA");
-  
+
   const [slug] = params.slug;
 
   const NIP = decrypt(slug, "bkpsdm");
@@ -323,7 +323,6 @@ export const ModalInterceptTppPppk = ({ params }) => {
 
   const sigapok = useSession("USER_GAPOK");
   const silka = useSession("USER_SILKA");
-  console.log("silka", silka);
   const [slug] = params.slug;
 
   const NIP = decrypt(slug, "bkpsdm");

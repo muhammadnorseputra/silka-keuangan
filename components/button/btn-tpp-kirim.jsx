@@ -30,7 +30,7 @@ export const BtnKirimTPP = ({
   simgaji_id_skpd,
   simgaji_id_satker,
   silka,
-  jenispeg,
+  jenis_asn,
   ...args
 }) => {
   const queryClient = useQueryClient();
@@ -67,7 +67,7 @@ export const BtnKirimTPP = ({
     // TGL BAYAR SESUAI TGL KIRIM
     const TGL_KIRIM = getCurrentDate();
     const BODY = {
-      NIP: jenispeg === "PPPK" ? nipppk : nip,
+      NIP: jenis_asn === "PPPK" ? nipppk : nip,
       PERIODE_TPP,
       TGL_BAYAR: TGL_KIRIM,
       KD_SKPD: simgaji_id_skpd,

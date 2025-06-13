@@ -35,7 +35,8 @@ export default function VervalSilkaPegawai({ sigapok, silka, nip }) {
     row.status_data === "ENTRI" ||
     !row.nama_jenis ||
     !row.nama_statuspeg ||
-    !row.tmt_skmt
+    !row.tmt_skmt ||
+    row.status_data === null
   ) {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
@@ -128,7 +129,7 @@ export default function VervalSilkaPegawai({ sigapok, silka, nip }) {
                 <div className="text-gray-400">JABATAN</div>
                 <div className="font-bold">{row?.nama_jabatan}</div>
               </div>
-              <div className="flex flex-col sm:flex-row justify-start gap-x-16">
+              <div className="flex flex-col justify-start sm:flex-row gap-x-16">
                 <div>
                   <div className="text-gray-400">JENIS PEGAWAI</div>
                   <div className="font-bold">{row?.nama_jenis}</div>
@@ -144,7 +145,7 @@ export default function VervalSilkaPegawai({ sigapok, silka, nip }) {
         <Tab key="keluarga" title="Keluarga">
           <Card shadow="none" fullWidth>
             <CardBody className="gap-y-4">
-              <div className="flex flex-col sm:flex-row justify-start gap-x-16">
+              <div className="flex flex-col justify-start sm:flex-row gap-x-16">
                 <div>
                   <div className="text-gray-400">
                     {row?.jenis_kelamin === "L"

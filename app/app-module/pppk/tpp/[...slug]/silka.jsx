@@ -39,6 +39,7 @@ export default async function RenderSilkaService({ slug }) {
     is_peremajaan,
     is_sync_simgaji,
   } = resultDataTpp?.data[0];
+
   const renderButtonKirim = () => {
     if (is_sync_simgaji === "1") return null;
     if (fid_status === "5") return null;
@@ -48,12 +49,7 @@ export default async function RenderSilkaService({ slug }) {
 
     return (
       <>
-        <BtnKirimTPP
-          {...sigapok}
-          {...resultDataTpp?.data[0]}
-          silka={silka}
-          jenispeg="PPPK"
-        />
+        <BtnKirimTPP {...sigapok} {...resultDataTpp?.data[0]} silka={silka} />
       </>
     );
   };

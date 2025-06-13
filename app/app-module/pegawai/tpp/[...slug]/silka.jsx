@@ -79,12 +79,7 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
     return (
       <>
         <Divider />
-        <BtnKirimTPP
-          {...sigapok}
-          {...row?.data[0]}
-          silka={silka}
-          jenispeg="PNS"
-        />
+        <BtnKirimTPP {...sigapok} {...row?.data[0]} silka={silka} />
       </>
     );
   };
