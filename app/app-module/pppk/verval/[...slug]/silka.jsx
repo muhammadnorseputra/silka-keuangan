@@ -140,7 +140,7 @@ export default function SilkaDataP3k({ access_token, nip }) {
       KDSTAWIN: row.simgaji_id_status_kawin,
       JISTRI: Number(row.jumlah_sutri),
       JANAK: Number(row.jumlah_anak),
-      KDSTAPEG: Number(row.kode_statuspeg), //berdasarkan status pegawai 12 = ppppk
+      KDSTAPEG: row.kode_statuspeg, //berdasarkan status pegawai 12 = ppppk
       KDPANGKAT: row.simgaji_id_pangkat, //kode pangkat beda dengan di simpeg
       MKGOLT: Number(row.maker_tahun),
       BLGOLT: 0,
@@ -171,9 +171,9 @@ export default function SilkaDataP3k({ access_token, nip }) {
       KDJNSTRANS: "",
       INPUTER: row.status_data_add_by,
       KD_JNS_PEG: 4, // 4 = pppk
-      // NOMORSKEP: row.nomor_sk,
-      // PENERBITSKEP: row.pejabat_sk,
-      // TGLSKEP: row.tgl_sk,
+      NOMORSKEP: row.nomor_sk,
+      PENERBITSKEP: row.pejabat_sk,
+      TGLSKEP: row.tgl_sk,
       // KDGURU: "",
       // KATEGORI: row.jenis_formasi,
       // KATEGORI: 4, //kode berdasarkan jenis pegawai 4 = pppk

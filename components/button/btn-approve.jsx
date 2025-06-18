@@ -134,7 +134,7 @@ export const BtnApprove = ({
         isLoading={isPending}
         variant="shadow"
         onPress={() => setIsOpen(true)}>
-        <HandThumbUpIcon className="size-5 text-white" />
+        <HandThumbUpIcon className="text-white size-5" />
         Approve
       </Button>
     </>
