@@ -4,8 +4,7 @@ import { Button } from "@nextui-org/react";
 import { useRouter } from "next-nprogress-bar";
 import { state } from "@/app/auth/state";
 export default function SSOButton({ query, uuid }) {
-  const host = "https://silka-sso.vercel.app";
-  // const host = "http://localhost:3000";
+  const host = process.env.NEXT_PUBLIC_HOST_SSO || "http://localhost:3000";
   const router = useRouter();
 
   return (

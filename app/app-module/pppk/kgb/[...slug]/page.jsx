@@ -300,7 +300,7 @@ export default async function Page({ params }) {
   };
   return (
     <>
-      <div className="w-full bg-[url(/background-wa.jpg)] dark:bg-slate-800">
+      <div className="w-full bg-blue-500 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto">
           <Card
             radius="none"

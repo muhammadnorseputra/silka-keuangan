@@ -3,7 +3,7 @@ import { Card, Skeleton } from "@nextui-org/react";
 export default function Loading() {
   return (
     <>
-      <section className="w-full bg-[url(/background-wa.jpg)] dark:bg-slate-800 h-screen">
+      <section className="w-full h-screen bg-blue-500 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto">
           <Card
             radius="none"
