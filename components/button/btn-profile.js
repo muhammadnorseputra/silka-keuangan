@@ -33,7 +33,7 @@ export const BtnProfile = ({ profile, size = "md" }) => {
     }
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     deleteCookie("USER_SILKA");
     let isCookie = hasCookie("USER_SILKA");
     if (isCookie == false) {
@@ -62,11 +62,11 @@ export const BtnProfile = ({ profile, size = "md" }) => {
             isBordered
             as="button"
             className="transition-transform"
-            color="secondary"
-            name="Jason Hughes"
+            color="default"
+            name={nama_lengkap}
             // @ts-ignore
             size={size}
-            src={picture}
+            src="/assets/user-286.svg"
           />
         </DropdownTrigger>
         <DropdownMenu
@@ -76,7 +76,7 @@ export const BtnProfile = ({ profile, size = "md" }) => {
           closeOnSelect={false}>
           <DropdownItem
             key="profile"
-            className="h-14 gap-2"
+            className="gap-2 h-14"
             textValue="profile">
             <p className="font-semibold">Signed in as ({level})</p>
             <p className="font-semibold">{nama_lengkap}</p>

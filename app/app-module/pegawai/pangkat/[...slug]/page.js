@@ -47,29 +47,31 @@ export default async function Page({ params }) {
     riwayat_pangkat?.data?.row?.id_status_pegawai_simgaji //status pegawai
   );
 
-  const { data: resGapok } = await getGapokByPangkat(sigapok.access_token, {
-    MASKER: riwayat_pangkat?.data?.row?.mkgol_thn ?? 0,
-    KDPANGKAT: riwayat_pangkat?.data?.row?.id_pangkat_simgaji,
-    KDKELOMPOK: 2,
-  });
+  const { message: messageGapokInexis, data: resGapok } =
+    await getGapokByPangkat(sigapok.access_token, {
+      MASKER: riwayat_pangkat?.data?.row?.mkgol_thn ?? 0,
+      KDPANGKAT: riwayat_pangkat?.data?.row?.id_pangkat_simgaji,
+      KDKELOMPOK: "2",
+    });
 
   const getGapok = {
     resGapok: resGapok[0],
     pangkat_nama: riwayat_pangkat?.data?.row?.nama_pangkat,
     golru_nama: riwayat_pangkat?.data?.row?.nama_golru,
   };
+
   // cek apakah gapok inexis sama atau beda dengan silka
   // jika beda naik atau turun icon, jika sama check oke icon
   const checkGapok = () => {
     if (parseInt(riwayat_pangkat?.data?.row?.gapok) < resGapok[0].gapok) {
-      return <ArrowDownLeftIcon className="size-6 font-bold text-red-500" />;
+      return <ArrowDownLeftIcon className="font-bold text-red-500 size-6" />;
     }
 
     if (parseInt(riwayat_pangkat?.data?.row?.gapok) > resGapok[0].gapok) {
-      return <ArrowUpRightIcon className="size-6 font-bold text-red-500" />;
+      return <ArrowUpRightIcon className="font-bold text-red-500 size-6" />;
     }
 
-    return <CheckBadgeIcon className="size-7 font-bold text-green-500" />;
+    return <CheckBadgeIcon className="font-bold text-green-500 size-7" />;
   };
 
   // cek file sk kgb ada atau tidak
@@ -78,7 +80,7 @@ export default async function Page({ params }) {
   const renderSilkaService = () => {
     if (riwayat_pangkat.status === false) {
       return (
-        <div className="flex flex-col items-center justify-center gap-4 h-screen">
+        <div className="flex flex-col items-center justify-center h-screen gap-4">
           <ExclamationCircle className="size-8" />
           <p className="text-gray-400">{riwayat_pangkat.message}</p>
         </div>
@@ -127,7 +129,7 @@ export default async function Page({ params }) {
         </div>
         <div>
           <div className="text-gray-400">GAJI POKOK</div>
-          <div className="inline-flex items-center gap-2 font-bold text-2xl text-green-700">
+          <div className="inline-flex items-center gap-2 text-2xl font-bold text-green-700">
             {`Rp. ${formatRupiah(riwayat_pangkat?.data?.row?.gapok)}`}{" "}
             {checkGapok()}
           </div>
@@ -191,7 +193,7 @@ export default async function Page({ params }) {
   const renderGapokServices = () => {
     if (resultDataPerubaahan.success === false || resultDataPerubaahan.ok) {
       return (
-        <div className="flex flex-col items-center justify-center gap-4 h-screen">
+        <div className="flex flex-col items-center justify-center h-screen gap-4">
           <ExclamationCircle className="size-8" />
           <p className="text-gray-400">{resultDataPerubaahan.message}</p>
         </div>
@@ -247,7 +249,7 @@ export default async function Page({ params }) {
         </div>
         <div>
           <div className="text-gray-400">GAJI POKOK BARU</div>
-          <div className="font-bold text-2xl text-green-700">
+          <div className="text-2xl font-bold text-green-700">
             {`Rp. ${formatRupiah(
               resultDataPerubaahan?.data[lastRow]?.GAJI_POKOK
             )}`}
@@ -337,18 +339,18 @@ export default async function Page({ params }) {
 
   return (
     <>
-      <div className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
+      <div className="w-full h-screen bg-blue-500 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto">
           <Card
             radius="none"
             shadow="lg"
-            className="max-h-screen overflow-y-auto my-auto">
-            <CardHeader className="flex justify-between items-center">
+            className="max-h-screen my-auto overflow-y-auto">
+            <CardHeader className="flex items-center justify-between">
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <div className="text-xl flex flex-col">
-                    <span className="uppercase font-bold">
+                  <div className="flex flex-col text-xl">
+                    <span className="font-bold uppercase">
                       Kenaikaan Pangkat
                     </span>
                     <ShowProfile jenis="PNS" nipnama={NIP} />
@@ -358,12 +360,12 @@ export default async function Page({ params }) {
             </CardHeader>
             <CardBody>
               <GapokByPangkat props={getGapok} />
-              <div className="flex flex-col md:flex-row justify-between items-start gap-x-6 gap-y-3">
+              <div className="flex flex-col items-start justify-between md:flex-row gap-x-6 gap-y-3">
                 {/* Get Data Silka */}
                 <Card fullWidth>
                   <CardHeader className="flex gap-3 bg-purple-100">
                     <div className="flex flex-col">
-                      <p className="text-md font-bold dark:text-purple-600">
+                      <p className="font-bold text-md dark:text-purple-600">
                         SILKa Online
                       </p>
                       <p className="text-small text-default-500">
@@ -372,7 +374,7 @@ export default async function Page({ params }) {
                     </div>
                   </CardHeader>
                   <Divider />
-                  <CardBody className="flex flex-col gap-y-4 px-8 py-8 h-screen">
+                  <CardBody className="flex flex-col h-screen px-8 py-8 gap-y-4">
                     {renderSilkaService()}
                   </CardBody>
                   <Divider />
@@ -386,7 +388,7 @@ export default async function Page({ params }) {
                 <Card fullWidth>
                   <CardHeader className="flex gap-3 bg-amber-100">
                     <div className="flex flex-col">
-                      <p className="text-md font-bold dark:text-amber-600">
+                      <p className="font-bold text-md dark:text-amber-600">
                         Sigapok Services
                       </p>
                       <p className="text-small text-default-500">
@@ -395,7 +397,7 @@ export default async function Page({ params }) {
                     </div>
                   </CardHeader>
                   <Divider />
-                  <CardBody className="flex flex-col gap-y-4 px-8 py-8 h-screen">
+                  <CardBody className="flex flex-col h-screen px-8 py-8 gap-y-4">
                     {renderGapokServices()}
                   </CardBody>
                 </Card>

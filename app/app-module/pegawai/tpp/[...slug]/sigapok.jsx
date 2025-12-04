@@ -32,11 +32,17 @@ export default async function RenderGapokServices({ nip: NIP, sigapok }) {
   };
 
   const { success, message, data, exception } = await getDataTppSigapok();
-  if (exception !== "" && data === null) {
+
+  if (
+    exception !== "" &&
+    data === null &&
+    success === false &&
+    success === "undefined"
+  ) {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
         <ExclamationCircle className="size-8" />
-        <p className="text-gray-400">{message}</p>
+        <p className="text-gray-400">{message || "Data TPP Tidak Ditemukan"}</p>
       </div>
     );
   }

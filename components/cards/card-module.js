@@ -16,9 +16,9 @@ export const CardModule = ({
         "w-full p-6 bg-white border-3 border-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700  duration-300",
         isDisabled
           ? "border-gray-50 cursor-not-allowed"
-          : "hover:border-blue-600 dark:hover:border-blue-500 hover:-translate-y-2 hover:shadow-lg group-hover:[&:not(:hover)]:opacity-20"
+          : "hover:border-blue-600 dark:hover:border-blue-500 hover:-translate-y-2 hover:shadow-xl group-hover:[&:not(:hover)]:opacity-10 hover:scale-110 transition-all"
       )}>
-      <h5 className="mb-4 text-lg flex flex-col items-center tracking-tight text-gray-600 dark:text-white">
+      <h5 className="flex flex-col items-center mb-4 text-lg tracking-tight text-gray-600 dark:text-white">
         <Icon
           iconName={icon}
           size="50"

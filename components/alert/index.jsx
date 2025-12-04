@@ -66,7 +66,7 @@ export const AlertInfo = ({ title, message = "", children = "" }) => {
   );
 };
 
-export const AlertSuccess = ({ title, message = "", children = "" }) => {
+export const AlertSuccess = ({ title, message = "", children }) => {
   return (
     <div
       role="alert"
