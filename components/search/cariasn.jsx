@@ -22,6 +22,7 @@ import {
   Select,
   SelectItem,
   Skeleton,
+  Snippet,
   Spacer,
 } from "@nextui-org/react";
 import { useMutation } from "@tanstack/react-query";
@@ -76,7 +77,7 @@ export default function CariASN() {
         method="POST"
         autoComplete="off"
         noValidate
-        className="flex items-start w-10/12 flex-wrap md:flex-nowrap">
+        className="flex flex-wrap items-start w-10/12 md:flex-nowrap">
         <Input
           type="search"
           placeholder="Masukan NIP atau NAMA"
@@ -111,13 +112,13 @@ export default function CariASN() {
             required: "Pilih jenis pegawai",
           })}>
           <SelectItem key="PNS" value="PNS" textValue="PNS">
-            <div className="flex flex-row items-center justify-start gap-x-2 p-4">
+            <div className="flex flex-row items-center justify-start p-4 gap-x-2">
               <UserGroupIcon className="size-6" />
               <span className="font-bold">PNS</span>
             </div>
           </SelectItem>
           <SelectItem key="PPPK" value="PPPK" textValue="PPPK">
-            <div className="flex flex-row items-center justify-start gap-x-2 p-4">
+            <div className="flex flex-row items-center justify-start p-4 gap-x-2">
               <UserCircleIcon className="size-6" />
               <span className="font-bold">PPPK</span>
             </div>
@@ -128,7 +129,7 @@ export default function CariASN() {
           isLoading={isPendingFn || isLoading || isSubmitting}
           spinner={
             <svg
-              className="animate-spin h-6 w-6 text-current"
+              className="w-6 h-6 text-current animate-spin"
               fill="none"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg">
@@ -190,14 +191,14 @@ export default function CariASN() {
 export const Placeholder = () => {
   return (
     <>
-      <div className="w-full flex justify-center items-start gap-x-6 mx-auto">
+      <div className="flex items-start justify-center w-full mx-auto gap-x-6">
         <div>
-          <Skeleton className="flex rounded-full w-12 h-12" />
+          <Skeleton className="flex w-12 h-12 rounded-full" />
         </div>
-        <div className="w-full flex flex-col gap-2">
-          <Skeleton className="h-5 w-3/5 rounded-lg" />
-          <Skeleton className="h-5 w-4/5 rounded-lg" />
-          <Skeleton className="h-5 w-5/5 rounded-lg" />
+        <div className="flex flex-col w-full gap-2">
+          <Skeleton className="w-3/5 h-5 rounded-lg" />
+          <Skeleton className="w-4/5 h-5 rounded-lg" />
+          <Skeleton className="h-5 rounded-lg w-5/5" />
         </div>
       </div>
     </>
@@ -210,7 +211,7 @@ export const ListPegawai = ({ props }) => {
   if (status === false) {
     return (
       <p className="flex justify-center items-center flex-col gap-8 h-[400px]">
-        <ArchiveBoxXMarkIcon className="size-32 text-gray-500" />
+        <ArchiveBoxXMarkIcon className="text-gray-500 size-32" />
         {message}
       </p>
     );
@@ -218,7 +219,7 @@ export const ListPegawai = ({ props }) => {
   if (!status) {
     return (
       <p className="flex justify-center items-center flex-col gap-8 h-[400px]">
-        <MagnifyingGlassCircleIcon className="size-32 text-gray-300" />
+        <MagnifyingGlassCircleIcon className="text-gray-300 size-32" />
         Silahkan Ketik NIP atau NAMA, kemudian pilih jenis pegawai, lalu klik
         cari.
       </p>
@@ -228,27 +229,20 @@ export const ListPegawai = ({ props }) => {
     <>
       {data?.map((row) => (
         <div key={row.nip}>
-          <div className="group w-full flex flex-col sm:flex-row justify-center items-start gap-x-6 mx-auto hover:bg-gray-100 dark:hover:bg-slate-700 hover:shadow-sm transition-all duration-100 rounded-lg p-3">
+          <div className="flex flex-col items-start justify-center w-full p-3 mx-auto transition-all duration-100 rounded-lg group sm:flex-row gap-x-6 hover:bg-gray-100 dark:hover:bg-slate-700 hover:shadow-sm">
             <div>
-              {row.photo ? (
-                <Avatar
-                  showFallback
-                  fallback={
-                    <PhotoIcon
-                      className="animate-pulse size-8 text-default-500"
-                      fill="currentColor"
-                    />
-                  }
-                  size="lg"
-                  src={`${process.env.NEXT_PUBLIC_SILKA_BASE_URL}/photo/${row.photo}`}
-                />
-              ) : (
-                <Avatar size="lg" name={row.nama_asn} />
-              )}
+              <Avatar size="lg" name={row.nama_asn} />
             </div>
-            <div className="w-full flex flex-col gap-1">
+            <div className="flex flex-col w-full gap-1">
               <div className="font-bold">{row.nama_asn}</div>
-              <h4>{polaNIP(row.nip)}</h4>
+              <Snippet
+                symbol="NIP : "
+                size="md"
+                color="primary"
+                variant="flat"
+                codeString={row.nip}>
+                {polaNIP(row.nip)}
+              </Snippet>
               <div className="text-ellipsis">{row.nama_jabatan}</div>
               <div className="text-ellipsis">{row.nama_unit_kerja}</div>
             </div>
