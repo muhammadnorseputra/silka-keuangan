@@ -4,7 +4,10 @@ import { AlertDanger, AlertSuccess, AlertWarning } from "@/components/alert";
 import { BtnKirimTPP } from "@/components/button/btn-tpp-kirim";
 import { PlaceholderBar } from "@/components/skeleton/placeholder-bar";
 import { getTppByNip } from "@/dummy/data-tpp-by-nip-v2";
-import { formatRupiahManual } from "@/helpers/cx";
+import {
+  formatRupiahManual,
+  formatRupiahManualVersiDesember,
+} from "@/helpers/cx";
 import { polaNIP } from "@/helpers/polanip";
 import { terbilangRupiah } from "@/helpers/rupiah";
 import { useSession } from "@/lib/session";
@@ -212,7 +215,7 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
             <div>
               <div className="text-gray-400">POT. PPH21</div>
               <div className="font-bold">
-                {formatRupiahManual(jml_pph) ?? "-"}
+                {formatRupiahManualVersiDesember(jml_pph, bulan) ?? "-"}
               </div>
             </div>
             <div>

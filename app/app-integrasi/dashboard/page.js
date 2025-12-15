@@ -74,9 +74,9 @@ export default async function Page() {
   return (
     <>
       <div className="w-full">
-        <h1 className="inline-flex items-center justify-center w-full p-6 text-2xl font-bold text-center bg-amber-300 gap-x-3">
+        <h1 className="inline-flex items-center justify-center w-full p-6 text-2xl font-bold text-center bg-amber-300 dark:bg-blue-800 gap-x-3">
           Pilih Layanan Integrasi
-          <SparklesIcon className="text-amber-600 size-7" />
+          <SparklesIcon className="text-amber-600 dark:text-yellow-300 size-7" />
         </h1>
         <section className="grid grid-flow-row grid-cols-1 gap-4 p-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 group">
           {renderModule()}

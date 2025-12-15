@@ -1,6 +1,9 @@
 "use client";
 import { getTppByNip, getTppByNipppk } from "@/dummy/data-tpp-by-nip-v2";
-import { formatRupiahManual } from "@/helpers/cx";
+import {
+  formatRupiahManual,
+  formatRupiahManualVersiDesember,
+} from "@/helpers/cx";
 import { decrypt } from "@/helpers/encrypt";
 import { polaNIP } from "@/helpers/polanip";
 import { terbilangRupiah } from "@/helpers/rupiah";
@@ -242,7 +245,7 @@ export default function ModalInterceptTppPegawai({ params }) {
               <div>
                 <div className="text-gray-400">POT. PPH21</div>
                 <div className="font-bold">
-                  {formatRupiahManual(jml_pph) ?? "-"}
+                  {formatRupiahManualVersiDesember(jml_pph, bulan) ?? "-"}
                 </div>
               </div>
               <div>

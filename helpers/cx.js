@@ -22,6 +22,34 @@ export const formatRupiahManual = (angka) => {
   const hasil = ribuan.join(".").split("").reverse().join("");
   return "Rp. " + hasil;
 };
+
+// fungsi to idr dengan fitur cek jika angka bernilai negatif ganti menjadi 0 jika positif biarkan
+export const formatRupiahManualVersiDesember = (angka, bulan) => {
+  const nilai = Number(angka);
+
+  // jika negatif, NaN, atau null/undefined
+  if (isNaN(nilai) || nilai < 0 || bulan === 12) {
+    return "Rp. " + 0 + " ( " + angka + ")";
+  }
+
+  const reverse = nilai.toString().split("").reverse().join("");
+  const ribuan = reverse.match(/\d{1,3}/g);
+  const hasil = ribuan.join(".").split("").reverse().join("");
+
+  return "Rp. " + hasil;
+};
+
+export const normalizeNumberDesember = (angka, bulan) => {
+  const nilai = Number(angka);
+
+  // jika NaN atau negatif
+  if (isNaN(nilai) || nilai < 0 || bulan === 12) {
+    return 0;
+  }
+
+  return nilai;
+};
+
 // fungsi tanggal indo dari ex: 2019-01-01 => 01 Januari 2019
 export function formatTanggalIndonesia(tanggal = "0000-00-00") {
   const bulanIndonesia = [

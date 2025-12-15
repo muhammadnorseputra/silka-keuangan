@@ -15,7 +15,7 @@ export default async function Layout({ children }) {
   const { unker } = getProfile?.data?.pegawai;
   return (
     <div className="flex justify-center min-h-screen bg-blue-50 dark:bg-slate-700">
-      <div className="w-full mx-auto my-4 overflow-y-auto border bg-gradient-to-b from-gray-100 to-white rounded-2xl card dark:from-slate-800 dark:to-slate-700 lg:w-8/12">
+      <div className="w-full mx-auto my-4 overflow-y-auto border dark:border-slate-600 bg-gradient-to-b from-gray-100 to-white rounded-2xl card dark:from-slate-800 dark:to-slate-700 lg:w-8/12">
         <div className="py-4 bg-blue-700 border-0 dark:bg-slate-600 card-header">
           <div className="flex flex-row justify-start pb-4 mx-8 md:justify-between md:items-center">
             <div className="inline-flex flex-col items-start justify-start gap-3 pt-3 sm:flex-row">

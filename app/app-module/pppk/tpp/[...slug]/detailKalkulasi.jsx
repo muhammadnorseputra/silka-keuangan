@@ -1,11 +1,15 @@
 "use client";
-import { formatRupiahManual } from "@/helpers/cx";
+import {
+  formatRupiahManual,
+  formatRupiahManualVersiDesember,
+} from "@/helpers/cx";
 import { terbilangRupiah } from "@/helpers/rupiah";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import React from "react";
 
 function DetailKalkulasi({ data }) {
   const {
+    bulan,
     tpp_diterima,
     basic_bk,
     basic_pk,
@@ -90,7 +94,7 @@ function DetailKalkulasi({ data }) {
             <div>
               <div className="text-gray-400">POT. PPH21</div>
               <div className="font-bold">
-                {formatRupiahManual(jml_pph) ?? "-"}
+                {formatRupiahManualVersiDesember(jml_pph, bulan) ?? "-"}
               </div>
             </div>
             <div className="flex flex-col justify-start mt-4 sm:flex-row gap-x-6 gap-y-8">

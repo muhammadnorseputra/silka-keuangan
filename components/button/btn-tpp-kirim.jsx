@@ -2,6 +2,7 @@
 
 import { UpdateSync } from "@/dummy/post-data-tpp";
 import { kirimTPP } from "@/dummy/sigapok-post-tpp";
+import { normalizeNumberDesember } from "@/helpers/cx";
 import { getCurrentDate } from "@/helpers/datetime";
 import revalidateTag from "@/lib/revalidateTags";
 import { Button, Divider } from "@nextui-org/react";
@@ -77,10 +78,10 @@ export const BtnKirimTPP = ({
       PRESTASI_KERJA: real_pk,
       KONDISI_KERJA: real_kk,
       KELANGKAAN: real_kp,
-      TJ_PPH: jml_pph,
+      TJ_PPH: normalizeNumberDesember(jml_pph, bulan),
       TJ_BPJS: jml_bpjs,
       KOTOR: total_kotor,
-      POT_PPH: jml_pph,
+      POT_PPH: normalizeNumberDesember(jml_pph, bulan),
       POT_BPJS: jml_bpjs,
       POT_IWP1: jml_iwp,
       JLH_POT: jml_pot,
