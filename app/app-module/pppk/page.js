@@ -1,7 +1,7 @@
 import { BtnBackNextUi } from "@/components/button/btn-back";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import { redirect } from "next/navigation";
-import { hasSessionServer, useSessionServer } from "../server-session";
+import { hasSessionServer, getSessionServer } from "../server-session";
 import { BtnProfile } from "@/components/button/btn-profile";
 import { TablePppk } from "@/components/tables/table-pppk";
 import { dataUnorByRole } from "@/dummy/data-unor-by-role";
@@ -12,8 +12,8 @@ import NoInternet from "@/components/errors/NoInternet";
 
 async function Page({ searchParams }) {
   const session = hasSessionServer("USER_GAPOK");
-  const sigapok = useSessionServer("USER_GAPOK");
-  const silka_session = useSessionServer("USER_SILKA");
+  const sigapok = getSessionServer("USER_GAPOK");
+  const silka_session = getSessionServer("USER_SILKA");
 
   if (session === false) {
     return redirect("/app-integrasi/dashboard");

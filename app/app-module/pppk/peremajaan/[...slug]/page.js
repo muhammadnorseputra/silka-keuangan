@@ -3,14 +3,14 @@ import { FormPeremajaan } from "@/components/forms/form-peremajaan-pppk";
 import { decrypt } from "@/helpers/encrypt";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { redirect } from "next/navigation";
-import { hasSessionServer, useSessionServer } from "../../../server-session";
+import { hasSessionServer, getSessionServer } from "../../../server-session";
 import { polaNIP } from "@/helpers/polanip";
 import { ShowProfile } from "@/helpers/profile";
 
 export default async function Page({ params }) {
   const session = hasSessionServer("USER_GAPOK");
-  const sigapok = useSessionServer("USER_GAPOK");
-  const session_silka = useSessionServer("USER_SILKA");
+  const sigapok = getSessionServer("USER_GAPOK");
+  const session_silka = getSessionServer("USER_SILKA");
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }

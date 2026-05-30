@@ -1,4 +1,4 @@
-import { useSessionServer } from "@/app/app-module/server-session";
+import { getSessionServer } from "@/app/app-module/server-session";
 import {
   AlertDanger,
   AlertInfo,
@@ -29,8 +29,8 @@ import { ExclamationCircle } from "react-bootstrap-icons";
 export default async function Page({ params }) {
   const nipppk = decrypt(params.slug[0], "bkpsdm");
 
-  const sigapok = await useSessionServer("USER_GAPOK");
-  const silka = await useSessionServer("USER_SILKA");
+  const sigapok = await getSessionServer("USER_GAPOK");
+  const silka = await getSessionServer("USER_SILKA");
 
   const response = await getKgbPPPK(nipppk, silka.access_token);
   const response_gapok = await getPerubahanData(

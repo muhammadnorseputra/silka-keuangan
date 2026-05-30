@@ -8,7 +8,7 @@ import { Button, Tooltip } from "@nextui-org/react";
 export const BtnBack = ({ path, ...args }) => {
   const router = useRouter();
   return (
-    <Button {...args} onClick={() => router.push(path)}>
+    <Button {...args} onPress={() => router.push(path)}>
       Kembali Login <Icon iconName="LockFill" size={20} color="white" />
     </Button>
   );
@@ -33,7 +33,7 @@ export const BtnBackNextUi = ({
         color="primary"
         aria-label="back"
         radius="full"
-        onClick={handleBack}>
+        onPress={handleBack}>
         <Icon iconName="ArrowLeftCircleFill" size="20" color="white" />
       </Button>
     </Tooltip>

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { BtnBackNextUi } from "@/components/button/btn-back";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
-import { hasSessionServer, useSessionServer } from "../../../server-session";
+import { hasSessionServer, getSessionServer } from "../../../server-session";
 import { redirect } from "next/navigation";
 import RenderSilkaService from "./silka";
 import RenderGapokServices from "./sigapok";
@@ -15,7 +15,7 @@ export const revalidate = 0;
 
 export default async function Page({ params }) {
   const session = hasSessionServer("USER_GAPOK");
-  const sigapok = await useSessionServer("USER_GAPOK");
+  const sigapok = await getSessionServer("USER_GAPOK");
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }

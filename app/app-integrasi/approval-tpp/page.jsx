@@ -1,5 +1,5 @@
 import DetailKalkulasi from "@/app/app-module/pppk/tpp/[...slug]/detailKalkulasi";
-import { useSessionServer } from "@/app/app-module/server-session";
+import { getSessionServer } from "@/app/app-module/server-session";
 import { AlertDanger, AlertSuccess, AlertWarning } from "@/components/alert";
 import { BtnBackNextUi } from "@/components/button/btn-back";
 import { Reload } from "@/components/button/btn-reload";
@@ -16,8 +16,8 @@ export const metadata = {
 };
 
 async function ApprovalTpp() {
-  const silka = await useSessionServer("USER_SILKA");
-  const sigapok = await useSessionServer("USER_GAPOK");
+  const silka = await getSessionServer("USER_SILKA");
+  const sigapok = await getSessionServer("USER_GAPOK");
   const resultDataTpp = await getTppByNip(silka?.data?.nip);
 
   if (resultDataTpp.status === false) {
@@ -63,7 +63,7 @@ async function ApprovalTpp() {
       return null;
 
     return (
-      <div className="inline-flex w-full justify-between items-center gap-x-3">
+      <div className="inline-flex items-center justify-between w-full gap-x-3">
         <BtnKirimTPP
           {...sigapok}
           {...resultDataTpp?.data}
@@ -77,7 +77,7 @@ async function ApprovalTpp() {
   return (
     <>
       <Card shadow="sm" className="max-w-3xl mx-auto my-5">
-        <CardHeader className="flex justify-start gap-x-4 items-center bg-white border-b border-gray-200 dark:border-blue-700 dark:bg-blue-900 rounded-t-xl">
+        <CardHeader className="flex items-center justify-start bg-white border-b border-gray-200 gap-x-4 dark:border-blue-700 dark:bg-blue-900 rounded-t-xl">
           <BtnBackNextUi />
           <div>
             <h2 className="text-lg font-bold">Kirim TPP</h2>
@@ -86,7 +86,7 @@ async function ApprovalTpp() {
             </p>
           </div>
           {resultDataTpp?.data.is_sync_simgaji === "1" && (
-            <CheckBadgeIcon className="size-10 text-green-600 ms-auto" />
+            <CheckBadgeIcon className="text-green-600 size-10 ms-auto" />
           )}
         </CardHeader>
         <CardBody>
@@ -120,8 +120,8 @@ async function ApprovalTpp() {
               Peremajaan data belum verifikasi oleh pengelola kepegawaian.
             </AlertWarning>
           )}
-          <div className="flex flex-col gap-3 mt-3 p-5">
-            <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
+          <div className="flex flex-col gap-3 p-5 mt-3">
+            <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
               <div>
                 <div className="text-gray-400">NIP</div>
                 <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
@@ -133,13 +133,13 @@ async function ApprovalTpp() {
                 </div>
               </div>
             </div>
-            <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
+            <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
               <div>
                 <div className="text-gray-400">JABATAN</div>
                 <div className="font-bold">{jabatan ?? "-"}</div>
               </div>
             </div>
-            <div className="inline-flex flex-col sm:flex-row justify-start gap-x-8 gap-y-8">
+            <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
               <div>
                 <div className="text-gray-400">BULAN</div>
                 <div className="font-bold">{bulan ?? "-"}</div>
@@ -152,7 +152,7 @@ async function ApprovalTpp() {
           </div>
           <DetailKalkulasi data={resultDataTpp?.data} />
         </CardBody>
-        <CardFooter className="w-full justify-end items-start bg-gray-100 dark:bg-blue-900 rounded-b-xl">
+        <CardFooter className="items-start justify-end w-full bg-gray-100 dark:bg-blue-900 rounded-b-xl">
           {renderActionKirim()}
         </CardFooter>
       </Card>

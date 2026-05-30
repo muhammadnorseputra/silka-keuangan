@@ -6,7 +6,7 @@ import {
   CardHeader,
   Divider,
 } from "@nextui-org/react";
-import { hasSessionServer, useSessionServer } from "../../../server-session";
+import { hasSessionServer, getSessionServer } from "../../../server-session";
 import { redirect } from "next/navigation";
 import { decrypt } from "@/helpers/encrypt";
 import { getPegawaiByNip } from "@/dummy/data-pegawai-by-nip";
@@ -19,8 +19,8 @@ export const revalidate = 0;
 
 export default async function Page({ params }) {
   const session = hasSessionServer("USER_GAPOK");
-  const sigapok = useSessionServer("USER_GAPOK");
-  const silkaonline = useSessionServer("USER_SILKA");
+  const sigapok = getSessionServer("USER_GAPOK");
+  const silkaonline = getSessionServer("USER_SILKA");
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }

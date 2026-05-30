@@ -232,7 +232,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
         <Card className="w-full h-screen mt-3">
           <CardBody className="flex flex-col items-center justify-center gap-6">
             <SuccessUpdated style={{ width: 400 }}>
-              <h1 className="font-bold text-lg inline-flex items-center flex-col gap-y-3 mx-8 sm:mx-0">
+              <h1 className="inline-flex flex-col items-center mx-8 text-lg font-bold gap-y-3 sm:mx-0">
                 Data anda sudah diperbaharui pada{" "}
                 <span className="text-gray-400">
                   {" "}
@@ -292,7 +292,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
               </div>
             }>
             <Card>
-              <CardBody className="grid grid-flow-row md:grid-cols-3 gap-6 pt-8 px-6">
+              <CardBody className="grid grid-flow-row gap-6 px-6 pt-8 md:grid-cols-3">
                 <Input
                   isReadOnly
                   variant="flat"
@@ -449,7 +449,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
               </div>
             }>
             <Card>
-              <CardBody className="grid grid-flow-row-dense grid-cols-4 grid-rows-4 gap-6 py-8 px-6">
+              <CardBody className="grid grid-flow-row-dense grid-cols-4 grid-rows-4 gap-6 px-6 py-8">
                 <Autocomplete
                   allowsCustomValue
                   isReadOnly
@@ -703,7 +703,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
                   berstatus HIDUP dan TANGGUNGAN
                 </AlertInfo>
               </CardHeader>
-              <CardBody className="grid grid-flow-row-dense grid-cols-2 grid-rows-2 gap-6 py-8 px-6">
+              <CardBody className="grid grid-flow-row-dense grid-cols-2 grid-rows-2 gap-6 px-6 py-8">
                 <Input
                   isReadOnly
                   size="lg"
@@ -744,7 +744,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
               </div>
             }>
             <Card>
-              <CardBody className="grid grid-flow-row-dense grid-cols-2 grid-rows-2 gap-6 py-8 px-6">
+              <CardBody className="grid grid-flow-row-dense grid-cols-2 grid-rows-2 gap-6 px-6 py-8">
                 {/* <Autocomplete
                   isRequired
                   isLoading={isLoadingBank || isFetchingBank}
@@ -834,7 +834,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
                   isInvalid={errors?.no_hp ? true : false}
                   {...register("no_hp", {
                     pattern: {
-                      value: /^\d{1,12}$/,
+                      value: /^\d{1,13}$/,
                       message: "Tidak valid, hanya boleh angka dan maksimal 12",
                     },
                   })}
@@ -889,7 +889,7 @@ const FormPeremajaan = ({ sigapok, silka, nip }) => {
             </Card>
           </Tab>
         </Tabs>
-        <div className="w-full flex justify-between items-center my-4 gap-x-3">
+        <div className="flex items-center justify-between w-full my-4 gap-x-3">
           <Button
             fullWidth
             color="primary"

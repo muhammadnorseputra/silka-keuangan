@@ -1,13 +1,13 @@
 import { BtnBackNextUi } from "@/components/button/btn-back";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
-import { useSessionServer } from "../../../server-session";
+import { getSessionServer } from "../../../server-session";
 import { decrypt } from "@/helpers/encrypt";
 import { FormPeremajaan } from "@/components/forms/form-peremajaan";
 import { ShowProfile } from "@/helpers/profile";
 
 export default async function Page({ params }) {
-  const sigapok = await useSessionServer("USER_GAPOK");
-  const silka = await useSessionServer("USER_PEGAWAI");
+  const sigapok = await getSessionServer("USER_GAPOK");
+  const silka = await getSessionServer("USER_PEGAWAI");
 
   const nip = decrypt(params?.slug[0], "bkpsdm");
 

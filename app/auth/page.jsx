@@ -11,6 +11,8 @@ import Link from "next/link";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import SSOButton from "@/components/button/btn-sso";
 import { v7 as uuidv7 } from "uuid";
+import { getSessionDatabase, getSessionServer } from "../app-module/server-session";
+import { redirect } from "next/navigation";
 
 export default async function Login() {
   const state = uuidv7();
@@ -23,6 +25,17 @@ export default async function Login() {
   };
 
   const queryString = new URLSearchParams(params).toString();
+
+  // session
+  const session = await getSessionServer("USER_SILKA");
+  const sessionFromDB = await getSessionDatabase(
+    session?.access_token
+  );
+
+  if(sessionFromDB.status)
+  {
+    return redirect('/app-integrasi/dashboard')
+  }
 
   return (
     <>

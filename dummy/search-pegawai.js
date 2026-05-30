@@ -1,9 +1,9 @@
 "use server";
 
-import { useSessionServer } from "@/app/app-module/server-session";
+import { getSessionServer } from "@/app/app-module/server-session";
 
 export const SearchPegawai = async ({jenis, nipnama}) => {
-  const account = useSessionServer("USER_SILKA");
+  const account = getSessionServer("USER_SILKA");
   const { nip } = account?.data
   const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
   try {

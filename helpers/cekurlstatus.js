@@ -12,6 +12,6 @@ export async function checkURLStatus(url) {
       return "ERROR";
     }
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
   }
 }

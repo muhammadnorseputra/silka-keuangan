@@ -1,4 +1,4 @@
-import { useSessionServer } from "@/app/app-module/server-session";
+import { getSessionServer } from "@/app/app-module/server-session";
 import { BtnKirimTPP } from "@/components/button/btn-tpp-kirim";
 import { getTppByNipppk } from "@/dummy/data-tpp-by-nip-v2";
 import { decrypt } from "@/helpers/encrypt";
@@ -13,8 +13,8 @@ import {
 } from "@/components/alert";
 
 export default async function RenderSilkaService({ slug }) {
-  const sigapok = useSessionServer("USER_GAPOK");
-  const silka = useSessionServer("USER_SILKA");
+  const sigapok = getSessionServer("USER_GAPOK");
+  const silka = getSessionServer("USER_SILKA");
 
   const NIP = decrypt(slug[0], "bkpsdm");
 

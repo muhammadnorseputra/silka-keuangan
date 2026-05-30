@@ -1,14 +1,15 @@
 import {
   hasSessionServer,
-  useSessionServer,
+  getSessionServer,
 } from "@/app/app-module/server-session";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { BtnProfile } from "@/components/button/btn-profile";
 
+// @ts-ignore
 export default async function Layout({ children }) {
   const isLogin = await hasSessionServer("USER_SILKA");
-  let getProfile = await useSessionServer("USER_SILKA");
+  let getProfile = await getSessionServer("USER_SILKA");
   if (isLogin === false) {
     return redirect("/auth");
   }

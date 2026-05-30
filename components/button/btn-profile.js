@@ -20,10 +20,14 @@ import { useModalContext } from "@/lib/context/modal-context";
 import ModalContainer from "../modal/modal-container";
 import { MoonIcon, PhotoIcon, SunIcon } from "@heroicons/react/24/solid";
 import { useTheme } from "next-themes";
+import RevokeToken from "@/lib/auth-revoke-client";
+import toast from "react-hot-toast";
+// @ts-ignore
 export const BtnProfile = ({ profile, size = "md" }) => {
+  // @ts-ignore
   const { isOpen, setIsOpen } = useModalContext();
   const { theme, setTheme } = useTheme();
-  const { picture, nama_lengkap, level } = profile?.data;
+  const { nip, picture, nama_lengkap, level } = profile?.data;
 
   const handleTheme = () => {
     if (theme === "light") {
@@ -33,13 +37,29 @@ export const BtnProfile = ({ profile, size = "md" }) => {
     }
   };
 
-  const handleLogout = () => {
-    deleteCookie("USER_SILKA");
-    let isCookie = hasCookie("USER_SILKA");
-    if (isCookie == false) {
-      window.location.replace("/auth");
-      setIsOpen(false);
-    }
+  const handleLogout = async () => {
+    await toast.promise(
+      (async () => {
+        const revoke = await RevokeToken(nip, profile?.access_token);
+
+        if (!revoke.response.status) {
+          throw new Error(revoke.response.message || "Logout gagal");
+        }
+        setIsOpen(false);
+
+        // delay biar toast sukses sempat tampil
+        setTimeout(() => {
+          window.location.replace("/auth");
+        }, 1000);
+
+        return true;
+      })(),
+      {
+        loading: "Sedang logout...",
+        success: "Logout berhasil 👋",
+        error: (err) => err?.message || "Terjadi kesalahan",
+      },
+    );
   };
 
   return (
@@ -49,7 +69,8 @@ export const BtnProfile = ({ profile, size = "md" }) => {
         aria-label="Menu"
         placement="bottom-end"
         // backdrop="blur"
-        closeOnSelect={true}>
+        closeOnSelect={true}
+      >
         <DropdownTrigger>
           <Avatar
             showFallback
@@ -73,23 +94,27 @@ export const BtnProfile = ({ profile, size = "md" }) => {
           aria-label="Profile Actions"
           aria-hidden="true"
           variant="solid"
-          closeOnSelect={false}>
+          closeOnSelect={false}
+        >
           <DropdownItem
             key="profile"
             className="gap-2 h-14"
-            textValue="profile">
+            textValue="profile"
+          >
             <p className="font-semibold">Signed in as ({level})</p>
             <p className="font-semibold">{nama_lengkap}</p>
           </DropdownItem>
           <DropdownSection
             title="Preferences"
             aria-label="preferences"
-            showDivider>
+            showDivider
+          >
             <DropdownItem
               key="mode"
               color="default"
               closeOnSelect={false}
-              textValue="mode">
+              textValue="mode"
+            >
               <Switch
                 isSelected={theme === "dark" ? true : false}
                 size="sm"
@@ -102,7 +127,8 @@ export const BtnProfile = ({ profile, size = "md" }) => {
                   ) : (
                     <MoonIcon className="size-6" />
                   )
-                }>
+                }
+              >
                 Ubah Tampilan UI
               </Switch>
             </DropdownItem>
@@ -111,7 +137,8 @@ export const BtnProfile = ({ profile, size = "md" }) => {
             key="logout"
             color="danger"
             textValue="logout"
-            onPress={() => setIsOpen(true)}>
+            onPress={() => setIsOpen(true)}
+          >
             Log Out
           </DropdownItem>
         </DropdownMenu>
@@ -121,7 +148,8 @@ export const BtnProfile = ({ profile, size = "md" }) => {
         backdrop="blur"
         placement="center"
         isOpenModal={isOpen}
-        onClose={() => setIsOpen(false)}>
+        onClose={() => setIsOpen(false)}
+      >
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
             System says !
@@ -133,7 +161,8 @@ export const BtnProfile = ({ profile, size = "md" }) => {
             <Button
               color="danger"
               variant="light"
-              onPress={() => setIsOpen(false)}>
+              onPress={() => setIsOpen(false)}
+            >
               Tidak
             </Button>
             <Button color="primary" onPress={handleLogout}>

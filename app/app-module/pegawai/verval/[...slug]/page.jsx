@@ -1,6 +1,6 @@
 import { BtnBackNextUi } from "@/components/button/btn-back";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
-import { useSessionServer } from "../../../server-session";
+import { getSessionServer } from "../../../server-session";
 import { decrypt } from "@/helpers/encrypt";
 import VervalSigapokPegawai from "./sigapok";
 import VervalSilkaPegawai from "./silka";
@@ -9,8 +9,8 @@ import { BtnRefreshQuery } from "@/components/button/btn-reload";
 export const revalidate = 0;
 
 export default async function Page({ params }) {
-  const sigapok = await useSessionServer("USER_GAPOK");
-  const silkaonline = await useSessionServer("USER_SILKA");
+  const sigapok = await getSessionServer("USER_GAPOK");
+  const silkaonline = await getSessionServer("USER_SILKA");
 
   const NIP = decrypt(params?.slug[0], "bkpsdm");
 

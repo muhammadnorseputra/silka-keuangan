@@ -1,6 +1,6 @@
 import {
   hasSessionServer,
-  useSessionServer,
+  getSessionServer,
 } from "@/app/app-module/server-session";
 import { AlertSuccess, AlertDanger, AlertInfo } from "@/components/alert";
 import { getTppByNip, getTppByNipppk } from "@/dummy/data-tpp-by-nip";
@@ -15,7 +15,7 @@ import { ExclamationCircle } from "react-bootstrap-icons";
 
 export default async function RenderGapokServices({ slug }) {
   const session = hasSessionServer("USER_GAPOK");
-  const sigapok = useSessionServer("USER_GAPOK");
+  const sigapok = getSessionServer("USER_GAPOK");
   if (session === false) {
     return redirect("/app-integrasi/dashboard");
   }

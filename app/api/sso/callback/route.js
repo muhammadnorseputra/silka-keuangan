@@ -1,5 +1,6 @@
 import { AES } from "crypto-js";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import { version as uuidVersion, validate as uuidValidate } from "uuid";
 
 // validasi uuid jika query uuid bukan versi 7 dan valid
@@ -24,7 +25,7 @@ export async function GET(req) {
 
   if (
     !state ||
-    state !== req.cookies.get("sso_state")?.value ||
+    state !== req.cookies.get("sso_state_silkainexis")?.value ||
     !uuidValidateV7(state)
   ) {
     return Response.json(
@@ -39,14 +40,27 @@ export async function GET(req) {
   }
 
   // verify code
-  const response = await callback(code, scope);
-  if (!response.response.status) return Response.json(response);
+  const response = await getAccessTokenWithCode(code, scope);
+
+  if(!response.response.status)
+  {
+    const res = NextResponse.redirect(
+      `${fullHost}/auth/callback`, 302
+    );
+    // @ts-ignore
+    res.cookies.set("callback_data_sso_silkainexis", JSON.stringify(response.response));
+    return res;
+  }
+
+  // get profile if access_token valid
+  const profile = await userinfos(response.response.data.access_token)
+  
   cookies().set(
     "USER_SILKA",
     AES.encrypt(
       // @ts-ignore
       JSON.stringify({
-        data: response.response.data.userinfo,
+        data: profile.response.data,
         access_token: response.response.data.access_token,
       }),
       "Bkpsdm@6811#"
@@ -56,11 +70,18 @@ export async function GET(req) {
     }
   );
 
-  return Response.redirect(`${fullHost}/app-integrasi/dashboard`, 302);
-  // return Response.json(response);
+  const res = NextResponse.redirect(
+    `${fullHost}/auth/callback`, 302
+  );
+  // @ts-ignore
+  res.cookies.set("callback_data_sso_silkainexis", JSON.stringify({
+      'status': response.response.status,
+      'message': response.response.message
+  }));
+  return res;
 }
 
-export const callback = async (code, scope) => {
+export const codeVerify = async (code, scope) => {
   const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
   try {
     const req = await fetch(`${url}/services/v2/oauth/sso/code_verify`, {
@@ -87,10 +108,10 @@ export const callback = async (code, scope) => {
   }
 };
 
-export const exchange_access_token = async (code, scope) => {
+export const getAccessTokenWithCode = async (code, scope) => {
   const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
   try {
-    const req = await fetch(`${url}/services/v2/oauth/sso/access_token`, {
+    const req = await fetch(`${url}/services/v2/oauth/sso/access_token_db_with_code`, {
       method: "POST",
       cache: "no-store",
       headers: {
@@ -114,7 +135,8 @@ export const exchange_access_token = async (code, scope) => {
   }
 };
 
-export const userinfos = async ({ access_token }) => {
+// @ts-ignore
+export const userinfos = async (access_token) => {
   const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
   try {
     const req = await fetch(`${url}/services/v2/oauth/sso/userinfo`, {
@@ -122,8 +144,10 @@ export const userinfos = async ({ access_token }) => {
       headers: {
         apiKey: process.env.SSO_APIKEY,
         "Content-Type": "application/json",
-        Authorization: `Bearer ${access_token}`,
       },
+      body: JSON.stringify({
+        access_token
+      })
     });
 
     const result = await req.json();

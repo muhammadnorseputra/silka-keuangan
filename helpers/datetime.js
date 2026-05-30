@@ -22,4 +22,3 @@ function getCurrentDate() {
 }
 
 export { getCurrentDateTime, getCurrentDate };
-// console.log(getCurrentDateTime());

@@ -9,7 +9,7 @@ import {
   Divider,
   Link,
 } from "@nextui-org/react";
-import { useSessionServer } from "../../../server-session";
+import { getSessionServer } from "../../../server-session";
 import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
 import {
   ArrowDownLeftIcon,
@@ -39,8 +39,8 @@ import { useCallback } from "react";
 export default async function Page({ params }) {
   const NIP = decrypt(params.slug[0], "bkpsdm");
 
-  const sigapok = await useSessionServer("USER_GAPOK");
-  const session_silka = await useSessionServer("USER_SILKA");
+  const sigapok = await getSessionServer("USER_GAPOK");
+  const session_silka = await getSessionServer("USER_SILKA");
 
   const resultDataKgb = await getKgbByNip(NIP);
   const resultDataPerubaahan = await getPerubahanData(

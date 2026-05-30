@@ -1,7 +1,7 @@
 import { CardModule } from "@/components/cards/card-module";
 
 import { encrypt } from "@/helpers/encrypt";
-import { useSessionServer } from "@/app/app-module/server-session";
+import { getSessionServer } from "@/app/app-module/server-session";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 
 export const metadata = {
@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 export default async function Page() {
-  let getProfile = await useSessionServer("USER_SILKA");
+  let getProfile = await getSessionServer("USER_SILKA");
   const { level, nip } = getProfile?.data;
 
   const renderModule = () => {

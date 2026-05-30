@@ -6,14 +6,14 @@ import { getPegawaiByUnor } from "@/dummy/data-pegawai-by-unor";
 import { dataUnorByRole } from "@/dummy/data-unor-by-role";
 import { decrypt } from "@/helpers/encrypt";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
-import { useSessionServer } from "../server-session";
+import { getSessionServer } from "../server-session";
 import NoInternet from "@/components/errors/NoInternet";
 // import ProgresTpp from "@/components/proggres/tpp";
 
 async function Page({ searchParams }) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  // const sigapok = await useSessionServer("USER_GAPOK");
-  const silka_session = await useSessionServer("USER_SILKA");
+  // const sigapok = await getSessionServer("USER_GAPOK");
+  const silka_session = await getSessionServer("USER_SILKA");
   const { unker, unker_id } = silka_session?.data?.pegawai;
   const { nip, level } = silka_session?.data;
   // @ts-ignore

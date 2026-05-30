@@ -8,7 +8,7 @@ import {
   Divider,
   Link,
 } from "@nextui-org/react";
-import { useSessionServer } from "../../../server-session";
+import { getSessionServer } from "../../../server-session";
 import { formatRupiah, formatTanggalIndonesia } from "@/helpers/cx";
 import {
   ArrowDownLeftIcon,
@@ -35,8 +35,8 @@ import { getGapokByPangkat } from "@/dummy/sigapok-get-gapok";
 import { GapokByPangkat } from "@/components/cards/card-gapok";
 
 export default async function Page({ params }) {
-  const sigapok = await useSessionServer("USER_GAPOK");
-  const session_silka = await useSessionServer("USER_SILKA");
+  const sigapok = await getSessionServer("USER_GAPOK");
+  const session_silka = await getSessionServer("USER_SILKA");
   const NIP = decrypt(params.slug[0], "bkpsdm");
   const riwayat_pangkat = await getPangkatByNip(NIP);
   const resultDataPerubaahan = await getPerubahanData(
