@@ -4,15 +4,15 @@ import { Spinner } from "@nextui-org/react";
 import { useEffect } from "react";
 import { getCookie } from "cookies-next";
 
-export default function Page() {
-  const getCookieData = getCookie("callback_data_sso_silkainexis");
-  const data = getCookieData ? JSON.parse(getCookieData.toString()) : null;
+export default function Page(req) {
+  const getCookieCallbackSSO = getCookie("callback_data_sso_silkainexis");
+  const data = getCookieCallbackSSO ? JSON.parse(getCookieCallbackSSO.toString()) : null;
+  const { status } = req.searchParams;
 
   useEffect(() => {
     // contoh simpan token/session di sini
-
     if (window.opener) {
-      if (!data?.status) {
+      if (status === 'gagal' && !data?.status) {
         return window.opener.postMessage(
           {
             type: "SSO_FAILED",
@@ -30,12 +30,12 @@ export default function Page() {
     }
 
     window.close();
-  }, [data?.status]);
+  }, [data?.status, status]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen text-xl">
-      <Spinner className="mr-2" />
-      {data.status ? data?.message : 'Login Gagal'}
+    <div className="flex flex-col items-center justify-center h-screen text-xl text-white">
+      <Spinner className="mr-2" color="white" />
+      {data?.message}
     </div>
   );
 }

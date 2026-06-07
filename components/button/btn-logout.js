@@ -28,7 +28,7 @@ export default function BtnLogout() {
       color="warning"
       variant="shadow"
       startContent={<ArrowLeftEndOnRectangleIcon className="size-6" />}
-      onClick={handleLogout}>
+      onPress={handleLogout}>
       Logout
     </Button>
   );

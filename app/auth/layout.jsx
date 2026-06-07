@@ -5,8 +5,8 @@ export const metadata = {
 
 export default function Layout({ children }) {
   return (
-    <section className="bg-[url('https://pagedone.io/asset/uploads/1691055810.png')] bg-cover lg:bg-center lg:bg-cover lg:bg-fixed">
-      <div className="min-h-screen bg-white/10 dark:bg-black/30 mx-auto flex items-center flex-col md:flex-row justify-around py-4 md:py-0 px-4 md:px-8">
+    <section className="bg-[url('/33960364-b6f6-4064-93ce-6817ee78806d.png')] bg-cover lg:bg-center lg:bg-cover lg:bg-fixed">
+      <div className="flex flex-col items-center justify-around min-h-screen px-4 py-4 mx-auto 2xl:justify-center 2xl:gap-x-8 bg-white/10 dark:bg-black/30 md:flex-row md:py-0 md:px-8">
         {children}
       </div>
     </section>

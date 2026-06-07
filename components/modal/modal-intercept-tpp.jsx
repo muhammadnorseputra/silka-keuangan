@@ -17,16 +17,46 @@ import {
   Button,
   Accordion,
   AccordionItem,
+  Divider,
+  ScrollShadow,
 } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next-nprogress-bar";
 import { useCallback } from "react";
 import { PlaceholderBar } from "../skeleton/placeholder-bar";
 import { BtnKirimTPP } from "../button/btn-tpp-kirim";
-import { InboxIcon } from "@heroicons/react/24/solid";
+import {
+  CalculatorIcon,
+  ChartBarIcon,
+  InboxIcon,
+} from "@heroicons/react/24/solid";
 import { AlertDanger, AlertInfo, AlertSuccess, AlertWarning } from "../alert";
 import DetailKalkulasi from "@/app/app-module/pppk/tpp/[...slug]/detailKalkulasi";
+// @ts-ignore
+import SquaresPlusIcon from "@heroicons/react/24/outline/SquaresPlusIcon";
+import {
+  BookmarkIcon,
+  BriefcaseIcon,
+  BuildingOffice2Icon,
+  CalendarDaysIcon,
+  // @ts-ignore
+  ChartPieIcon,
+  CheckBadgeIcon,
+  CheckCircleIcon,
+  Cog6ToothIcon,
+  // @ts-ignore
+  DocumentCurrencyDollarIcon,
+  DocumentMinusIcon,
+  IdentificationIcon,
+  MinusCircleIcon,
+  ShieldCheckIcon,
+  StarIcon,
+  UserIcon,
+  WalletIcon,
+} from "@heroicons/react/24/outline";
+import { Download } from "react-bootstrap-icons";
 
+// @ts-ignore
 export default function ModalInterceptTppPegawai({ params }) {
   const router = useRouter();
 
@@ -51,41 +81,50 @@ export default function ModalInterceptTppPegawai({ params }) {
     enabled: !!NIP,
   });
 
-  const renderActionHasil = useCallback(() => {
-    if (isLoading || isFetching) return "";
-    return queryTPP?.data[0].is_sync_simgaji !== "1" ? null : (
-      <Button
-        // radius="none"
-        className="disabled:cursor-not-allowed"
-        isDisabled={queryTPP?.data[0].is_sync_simgaji !== "1"}
-        color="success"
-        variant="shadow"
-        onPress={() => window.location.reload()}>
-        Hasil Sinkronisasi
-      </Button>
-    );
-  }, [isFetching, isLoading, queryTPP?.data]);
+  const renderActionHasil = useCallback(
+    // @ts-ignore
+    (onClose) => {
+      if (isLoading || isFetching) return;
+      if (queryTPP?.data[0].is_sync_simgaji !== "1") return;
+      return (
+        <>
+          <Button
+            // radius="none"
+            className="disabled:cursor-not-allowed"
+            isDisabled={queryTPP?.data[0].is_sync_simgaji !== "1"}
+            color="success"
+            variant="flat"
+            startContent={<Download color="text-green-800" size={12} />}
+            onPress={() => window.location.reload()}
+          >
+            Hasil Sinkronisasi
+          </Button>
+          <Button
+            color="primary"
+            variant="bordered"
+            onPress={onClose}
+            className="border-1 border-blue-500/50"
+          >
+            Tutup
+          </Button>
+        </>
+      );
+    },
+    [isFetching, isLoading, queryTPP?.data],
+  );
 
   const renderActionKirim = useCallback(() => {
     // ? jika loading data dan fetching data
-    if (isLoading || isFetching) return "";
+    if (isLoading || isFetching) return;
     // ? jika sudah melakukan sinkronisasi
-    if (queryTPP?.data[0].is_sync_simgaji === "1") return null;
+    if (queryTPP?.data[0].is_sync_simgaji === "1") return;
     // jika status data tpp tidak sama dengan APPROVE dan CETAK
-    if (
-      queryTPP?.data[0].fid_status !== "4" &&
-      queryTPP?.data[0].fid_status !== "5"
-    )
-      return null;
+    if (["4", "5"].includes(queryTPP?.data[0].fid_status)) return;
     // jika status data tpp sudah cetak
-    if (queryTPP?.data[0].fid_status === "5") return null;
+    if (queryTPP?.data[0].fid_status === "5") return;
     // jika status data peremajaan masih verifikasi, entri, null
-    if (
-      queryTPP?.data[0].is_peremajaan === "VERIFIKASI" ||
-      queryTPP?.data[0].is_peremajaan === "ENTRI" ||
-      queryTPP?.data[0].is_peremajaan === null
-    )
-      return null;
+    if (["VERIFIKASI", "ENTRI", null].includes(queryTPP?.data[0].is_peremajaan))
+      return;
     // * jika semua terpenuhi tampilkan tombol kirim
     return (
       <div className="inline-flex items-center justify-between w-full gap-x-3">
@@ -112,17 +151,24 @@ export default function ModalInterceptTppPegawai({ params }) {
       basic_pk,
       basic_kk,
       basic_kp,
+      // @ts-ignore
       real_bk,
+      // @ts-ignore
       real_pk,
+      // @ts-ignore
       real_kk,
+      // @ts-ignore
       real_tb,
+      // @ts-ignore
       real_kp,
       jml_pph,
       jml_iwp,
       jml_bpjs,
       jml_pot,
       total_kotor,
+      // @ts-ignore
       total_bersih,
+      // @ts-ignore
       fid_status,
     } = queryTPP?.data[0];
     return (
@@ -151,113 +197,198 @@ export default function ModalInterceptTppPegawai({ params }) {
             Peremajaan data belum verifikasi oleh pengelola kepegawaian.
           </AlertWarning>
         )}
-        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
-          <div>
-            <div className="text-gray-400">NIP</div>
-            <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
-          </div>
-          <div>
-            <div className="text-gray-400">NAMA</div>
-            <div className="font-bold">
-              {`${gelar_depan} ${nama} ${gelar_belakang}`}
+        <div className="flex flex-col p-6 my-4 border border-gray-200 rounded-lg gap-y-5">
+          <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
+            <div className="inline-flex items-start justify-start gap-x-4">
+              <IdentificationIcon className="text-blue-600 size-6" />
+              <div className="inline-flex flex-col">
+                <div className="text-xs text-gray-400">NIP</div>
+                <div className="text-sm font-semibold">
+                  {polaNIP(nip) ?? "-"}
+                </div>
+              </div>
+            </div>
+            <div className="inline-flex items-start justify-start gap-x-4">
+              <UserIcon className="text-blue-600 size-6" />
+              <div className="inline-flex flex-col">
+                <div className="text-xs text-gray-400">NAMA</div>
+                <div className="text-sm font-semibold">
+                  {`${gelar_depan} ${nama} ${gelar_belakang}`}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
-          <div>
-            <div className="text-gray-400">JABATAN</div>
-            <div className="font-bold">{jabatan ?? "-"}</div>
+          <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
+            <div className="inline-flex items-start justify-start gap-x-4">
+              <BriefcaseIcon className="text-blue-600 size-6" />
+              <div className="inline-flex flex-col">
+                <div className="text-xs text-gray-400">JABATAN</div>
+                <div className="text-sm font-semibold">{jabatan ?? "-"}</div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
-          <div>
-            <div className="text-gray-400">BULAN</div>
-            <div className="font-bold">{bulan ?? "-"}</div>
-          </div>
-          <div>
-            <div className="text-gray-400">TAHUN</div>
-            <div className="font-bold">{tahun ?? "-"}</div>
+          <Divider />
+          <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
+            <div className="inline-flex items-start justify-start gap-x-4">
+              <CalendarDaysIcon className="text-blue-600 size-6" />
+              <div className="inline-flex flex-col">
+                <div className="text-xs text-gray-400">BULAN</div>
+                <div className="text-sm font-semibold">{bulan ?? "-"}</div>
+              </div>
+            </div>
+            <div className="inline-flex items-start justify-start gap-x-4">
+              <CalendarDaysIcon className="text-blue-600 size-6" />
+              <div className="inline-flex flex-col">
+                <div className="text-xs text-gray-400">TAHUN</div>
+                <div className="text-sm font-semibold">{tahun ?? "-"}</div>
+              </div>
+            </div>
           </div>
         </div>
         <Accordion
-          variant="bordered"
+          variant="light"
           defaultExpandedKeys={["1", "2"]}
-          selectionMode="multiple">
-          <AccordionItem key="1" aria-label="Accordion 1" title="Take Home Pay">
-            <div className="inline-flex flex-col justify-start sm:flex-row gap-x-6 gap-y-8">
-              <div>
-                <div className="text-gray-400">JUMLAH KOTOR</div>
-                <div className="text-xl font-bold text-gray-600">
-                  {formatRupiahManual(total_kotor) ?? "-"}
+          selectionMode="multiple"
+        >
+          <AccordionItem
+            key="1"
+            aria-label="Accordion 1"
+            title="Ringkasan TPP"
+            startContent={<ChartBarIcon className="text-blue-600 size-6" />}
+          >
+            <div className="flex flex-col justify-start sm:flex-row gap-x-2 gap-y-8">
+              <div className="inline-flex items-center justify-start flex-1 px-4 py-5 border border-blue-100 rounded-lg gap-x-4 bg-blue-50">
+                <div className="p-2 bg-blue-100 rounded-full">
+                  <CalendarDaysIcon className="text-blue-600 size-5" />
+                </div>
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400">JUMLAH KOTOR</div>
+                  <div className="text-lg font-semibold text-gray-600">
+                    {formatRupiahManual(total_kotor) ?? "-"}
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="text-gray-400">TOTAL POTONGAN</div>
-                <div className="text-xl font-bold text-red-600">
-                  {formatRupiahManual(jml_pot) ?? "-"}
+              <div className="inline-flex items-center justify-start flex-1 px-4 py-3 border border-red-100 rounded-lg gap-x-4 bg-red-50">
+                <div className="p-2 bg-red-100 rounded-full">
+                  <MinusCircleIcon className="text-red-600 size-5" />
+                </div>
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400">TOTAL POTONGAN</div>
+                  <div className="text-lg font-semibold text-red-600">
+                    {formatRupiahManual(jml_pot) ?? "-"}
+                  </div>
+                </div>
+              </div>
+              <div className="inline-flex items-center justify-start flex-1 px-4 py-3 border border-green-100 rounded-lg bg-green-50 gap-x-4">
+                <div className="p-2 bg-green-100 rounded-full">
+                  <CheckCircleIcon className="text-green-500 size-5" />
+                </div>
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400">TAKE HOME PAY</div>
+                  <div className="text-lg font-semibold text-green-500">
+                    {formatRupiahManual(tpp_diterima) ?? "-"}
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="pt-3 mt-3 mb-3 border-t border-gray-200 border-dashed">
-              <div className="text-gray-400">JUMLAH TPP DI TERIMA</div>
-              <div className="text-2xl font-bold text-green-600">
-                {formatRupiahManual(tpp_diterima) ?? "-"}
+            <div className="flex items-center justify-start w-full px-4 py-5 my-4 rounded-lg gap-x-4 bg-amber-50 border-amber-100">
+              <div className="p-2 rounded-full bg-amber-100">
+                <CheckBadgeIcon className="text-amber-600 size-5" />
               </div>
-            </div>
-            <div>
-              <div className="text-gray-400">TERBILANG</div>
-              <div className="italic font-bold text-gray-400 uppercase">
-                {terbilangRupiah(tpp_diterima) ?? "-"}
+              <div className="inline-flex flex-col">
+                <div className="text-xs text-gray-400">TERBILANG</div>
+                <div className="text-sm italic text-black capitalize">
+                  {terbilangRupiah(tpp_diterima) ?? "-"}
+                </div>
               </div>
             </div>
           </AccordionItem>
           <AccordionItem
             key="2"
             aria-label="Accordion 2"
-            title="Detail Kalkulasi TPP">
-            <div className="inline-flex flex-col justify-start sm:flex-row gap-x-12 gap-y-8">
-              <div>
-                <div className="text-gray-400">BEBAN KERJA</div>
-                <div className="font-bold">
-                  {formatRupiahManual(basic_bk) ?? "-"}
+            title="Detail Kalkulasi TPP"
+            startContent={<CalculatorIcon className="text-blue-600 size-6" />}
+          >
+            <div className="flex flex-col justify-start sm:flex-row gap-x-2 gap-y-2">
+              <div className="inline-flex items-center justify-start flex-1 px-2 py-3 border rounded-lg bg-gray-50 gap-x-3">
+                <div className="p-2 bg-blue-100 rounded-full">
+                  <BriefcaseIcon className="text-blue-500 size-5" />
+                </div>
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400">BEBAN KERJA</div>
+                  <div className="font-semibold">
+                    {formatRupiahManual(basic_bk) ?? "-"}
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="text-gray-400">PRESTASI KERJA</div>
-                <div className="font-bold">
-                  {formatRupiahManual(basic_pk) ?? "-"}
+              <div className="inline-flex items-center justify-start flex-1 px-2 py-3 border rounded-lg bg-gray-50 gap-x-3">
+                <div className="p-2 bg-purple-100 rounded-full">
+                  <BookmarkIcon className="text-purple-500 size-5" />
+                </div>
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400">PRESTASI KERJA</div>
+                  <div className="font-semibold">
+                    {formatRupiahManual(basic_pk) ?? "-"}
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="text-gray-400">KONDISI KERJA</div>
-                <div className="font-bold">
-                  {formatRupiahManual(basic_kk) ?? "-"}
+              <div className="inline-flex items-center justify-start flex-1 px-2 py-3 border rounded-lg bg-gray-50 gap-x-3">
+                <div className="p-2 bg-green-100 rounded-full">
+                  <Cog6ToothIcon className="text-green-500 size-5" />
+                </div>
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400">KONDISI KERJA</div>
+                  <div className="font-semibold">
+                    {formatRupiahManual(basic_kk) ?? "-"}
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="inline-flex flex-col justify-start mt-4 sm:flex-row gap-x-6 gap-y-8">
-              <div>
-                <div className="text-gray-400">KELANGKAAN PROFESI</div>
-                <div className="font-bold">
-                  {formatRupiahManual(basic_kp) ?? "-"}
+            <div className="flex flex-col justify-start mt-2 sm:flex-row gap-x-2 gap-y-2">
+              <div className="inline-flex items-center justify-start flex-1 px-2 py-3 border rounded-lg gap-x-3">
+                <div className="p-2 rounded-full bg-amber-100">
+                  <StarIcon className="text-amber-500 size-5" />
+                </div>
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400 text-nowrap">
+                    KELANGKAAN PROFESI
+                  </div>
+                  <div className="text-sm font-semibold">
+                    {formatRupiahManual(basic_kp) ?? "-"}
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="text-gray-400">POT. PPH21</div>
-                <div className="font-bold">
-                  {formatRupiahManualVersiDesember(jml_pph, bulan) ?? "-"}
+              <div className="inline-flex items-center justify-start flex-1 px-2 py-3 border rounded-lg gap-x-3">
+                <div className="p-2 rounded-full bg-cyan-100">
+                  <DocumentMinusIcon className="text-cyan-500 size-5" />
+                </div>
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400">POT. PPH21</div>
+                  <div className="text-sm font-semibold">
+                    {formatRupiahManualVersiDesember(jml_pph, bulan) ?? "-"}
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="text-gray-400">POT. BPJS</div>
-                <div className="font-bold">
-                  {formatRupiahManual(jml_bpjs) ?? "-"}
+              <div className="inline-flex items-center justify-start flex-1 px-2 py-3 border rounded-lg gap-x-3">
+                <div className="p-2 bg-pink-100 rounded-full">
+                  <ShieldCheckIcon className="text-pink-500 size-5" />
+                </div>
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400">POT. BPJS</div>
+                  <div className="text-sm font-semibold">
+                    {formatRupiahManual(jml_bpjs) ?? "-"}
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="text-gray-400">POT. IWP</div>
-                <div className="font-bold">
-                  {formatRupiahManual(jml_iwp) ?? "-"}
+              <div className="inline-flex items-center justify-start flex-1 px-2 py-3 border rounded-lg gap-x-3">
+                <div className="p-2 rounded-full bg-lime-100">
+                  <BuildingOffice2Icon className="text-lime-500 size-5" />
+                </div>
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400">POT. IWP</div>
+                  <div className="text-sm font-semibold">
+                    {formatRupiahManual(jml_iwp) ?? "-"}
+                  </div>
                 </div>
               </div>
             </div>
@@ -265,27 +396,39 @@ export default function ModalInterceptTppPegawai({ params }) {
         </Accordion>
       </>
     );
-  }, [isFetching, isLoading, queryTPP?.data]);
+  }, [isLoading, isFetching, queryTPP?.data]);
 
-  if (queryTPP?.status === false) {
+  if (!queryTPP?.status) {
     return (
       <>
         <Modal
           size="2xl"
           backdrop="blur"
           isOpen={true}
-          scrollBehavior="outside"
-          onClose={() => router.back()}>
+          scrollBehavior="inside"
+          onClose={() => router.back()}
+          classNames={{
+            closeButton:
+              "top-4 right-6 border border-gray-100 rounded-lg text-gray-400 hover:bg-gray-200/50 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 focus:outline-none focus:ring-offset-2 data-[state=open]:bg-gray-100/50",
+          }}
+        >
           <ModalContent>
-            <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
-              SINKRONISASI TPP{" "}
-              <div className="text-sm font-normal text-gray-400">
-                Data TPP SILKa Online
+            <ModalHeader className="flex items-center justify-start gap-x-4 ">
+              <div className="inline-flex items-center justify-center p-2 text-center bg-blue-100 rounded-lg">
+                <WalletIcon className="text-blue-500 w-7 h-7" />
+              </div>
+              <div className="flex flex-col items-start justify-start">
+                <div>Sinkronisasi TPP</div>
+                <div className="text-sm font-normal text-gray-400">
+                  Data TPP SILKa Online
+                </div>
               </div>
             </ModalHeader>
-            <ModalBody className="flex items-center justify-center flex-column gap-y-3 rounded-b-xl">
-              <InboxIcon className="text-gray-300 size-8 dark:text-gray-700" />
-              <p>Data TPP Tidak Ditemukan</p>
+            <ModalBody className="flex items-center justify-center flex-column gap-y-3">
+              <div className="p-3 bg-gray-50 rounded-xl">
+                <InboxIcon className="text-gray-300 size-8 dark:text-gray-700" />
+              </div>
+              <p className="text-gray-300">Data TPP Tidak Ditemukan</p>
             </ModalBody>
           </ModalContent>
         </Modal>
@@ -295,23 +438,35 @@ export default function ModalInterceptTppPegawai({ params }) {
   return (
     <>
       <Modal
-        size="2xl"
+        size="3xl"
         backdrop="blur"
         isOpen={true}
-        scrollBehavior="outside"
-        onClose={() => router.back()}>
+        scrollBehavior="normal"
+        onClose={() => router.back()}
+        classNames={{
+          closeButton:
+            "top-4 right-6 border border-gray-100 rounded-lg text-gray-400 hover:bg-gray-200/50 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 focus:outline-none focus:ring-offset-2 data-[state=open]:bg-gray-100/50",
+        }}
+      >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
-                SINKRONISASI TPP{" "}
-                <div className="text-sm font-normal text-gray-400">
-                  Data TPP SILKa Online
+              <ModalHeader className="flex items-center justify-start gap-x-4 ">
+                <div className="inline-flex items-center justify-center p-2 text-center bg-blue-100 rounded-lg">
+                  <WalletIcon className="text-blue-500 w-7 h-7" />
+                </div>
+                <div className="flex flex-col items-start justify-start">
+                  <div>Sinkronisasi TPP</div>
+                  <div className="text-sm font-normal text-gray-400">
+                    Data TPP SILKa Online
+                  </div>
                 </div>
               </ModalHeader>
-              <ModalBody>{renderTPP()}</ModalBody>
-              <ModalFooter className="items-start justify-between bg-gray-100 dark:bg-blue-900 rounded-b-xl">
-                {renderActionHasil()} {renderActionKirim()}
+              <ModalBody>
+                <ScrollShadow>{renderTPP()}</ScrollShadow>
+              </ModalBody>
+              <ModalFooter className="flex items-center justify-between px-8 mt-2 rounded-b-xl bg-gray-50 dark:bg-blue-800/30">
+                {renderActionHasil(onClose)} {renderActionKirim()}
               </ModalFooter>
             </>
           )}
@@ -321,6 +476,7 @@ export default function ModalInterceptTppPegawai({ params }) {
   );
 }
 
+// @ts-ignore
 export const ModalInterceptTppPppk = ({ params }) => {
   const router = useRouter();
 
@@ -351,6 +507,7 @@ export const ModalInterceptTppPppk = ({ params }) => {
       jabatan,
       tahun,
       bulan,
+      // @ts-ignore
       fid_status,
     } = queryTPP?.data[0];
     return (
@@ -360,56 +517,80 @@ export const ModalInterceptTppPppk = ({ params }) => {
             TPP belum dikirim, silahkan kirim data
           </AlertInfo>
         )}
-        {queryTPP?.data[0].fid_status !== "4" &&
-          queryTPP?.data[0].fid_status !== "5" && (
-            <AlertDanger
-              title="Perhatian"
-              message="TPP masih dalam proses perhitungan atau belum disetujui."
-            />
-          )}
+
+        {!["4", "5"].includes(queryTPP?.data[0].fid_status) && (
+          <AlertDanger
+            title="Perhatian"
+            message="TPP masih dalam proses perhitungan atau belum disetujui."
+          />
+        )}
+
         {queryTPP?.data[0].fid_status === "5" && (
           <AlertSuccess title="Perhatian">
             TPP sudah selesai cetak pada silka online
           </AlertSuccess>
         )}
-        {(queryTPP?.data[0].is_peremajaan === "ENTRI" ||
-          queryTPP?.data[0].is_peremajaan === null) && (
+
+        {["ENTRI", null].includes(queryTPP?.data[0].is_peremajaan) && (
           <AlertWarning
             title="Perhatian"
             message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
           />
         )}
+
         {queryTPP?.data[0].is_peremajaan === "VERIFIKASI" && (
-          <AlertWarning title="Perhatian">
-            Peremajaan data belum verifikasi oleh pengelola kepegawaian.
-          </AlertWarning>
+          <AlertWarning
+            title="Perhatian"
+            message="Peremajaan data belum verifikasi oleh pengelola kepegawaian."
+          />
         )}
-        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
-          <div>
-            <div className="text-gray-400">NIP</div>
-            <div className="font-bold">{polaNIP(nipppk) ?? "-"}</div>
-          </div>
-          <div>
-            <div className="text-gray-400">NAMA</div>
-            <div className="font-bold">
-              {`${gelar_depan} ${nama} ${gelar_belakang}`}
+
+        <div className="flex flex-col p-6 my-4 border-2 border-gray-200 rounded-lg gap-y-5">
+          <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
+            <div className="inline-flex items-start justify-start gap-x-4">
+              <IdentificationIcon className="text-blue-600 size-6" />
+              <div className="inline-flex flex-col">
+                <div className="text-xs text-gray-400">NIP</div>
+                <div className="text-sm font-semibold">
+                  {polaNIP(nipppk) ?? "-"}
+                </div>
+              </div>
+              <div className="inline-flex items-start justify-start gap-x-4">
+                <UserIcon className="text-blue-600 size-6" />
+                <div className="inline-flex flex-col">
+                  <div className="text-xs text-gray-400">NAMA</div>
+                  <div className="text-sm font-semibold">
+                    {`${gelar_depan} ${nama} ${gelar_belakang}`}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
-          <div>
-            <div className="text-gray-400">JABATAN</div>
-            <div className="font-bold">{jabatan ?? "-"}</div>
+          <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
+            <div className="inline-flex items-start justify-start gap-x-4">
+              <BriefcaseIcon className="text-blue-600 size-6" />
+              <div className="inline-flex flex-col">
+                <div className="text-xs text-gray-400">JABATAN</div>
+                <div className="text-sm font-semibold">{jabatan ?? "-"}</div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
-          <div>
-            <div className="text-gray-400">BULAN</div>
-            <div className="font-bold">{bulan ?? "-"}</div>
-          </div>
-          <div>
-            <div className="text-gray-400">TAHUN</div>
-            <div className="font-bold">{tahun ?? "-"}</div>
+          <Divider />
+          <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6">
+            <div className="inline-flex items-start justify-start gap-x-4">
+              <CalendarDaysIcon className="text-blue-600 size-6" />
+              <div className="inline-flex flex-col">
+                <div className="text-xs text-gray-400">BULAN</div>
+                <div className="text-sm font-semibold">{bulan ?? "-"}</div>
+              </div>
+            </div>
+            <div className="inline-flex items-start justify-start gap-x-4">
+              <CalendarDaysIcon className="text-blue-600 size-6" />
+              <div className="inline-flex flex-col">
+                <div className="text-xs text-gray-400">TAHUN</div>
+                <div className="text-sm font-semibold">{tahun ?? "-"}</div>
+              </div>
+            </div>
           </div>
         </div>
         <DetailKalkulasi data={queryTPP?.data[0]} />
@@ -417,37 +598,46 @@ export const ModalInterceptTppPppk = ({ params }) => {
     );
   }, [isFetching, isLoading, queryTPP?.data]);
 
-  const renderActionHasil = useCallback(() => {
-    if (isLoading || isFetching) return "";
-    return queryTPP?.data[0].is_sync_simgaji !== "1" ? null : (
-      <Button
-        // radius="none"
-        className="disabled:cursor-not-allowed"
-        isDisabled={queryTPP?.data[0].is_sync_simgaji !== "1"}
-        color="success"
-        variant="shadow"
-        onPress={() => window.location.reload()}>
-        Hasil Sinkronisasi
-      </Button>
-    );
-  }, [isFetching, isLoading, queryTPP?.data]);
+  const renderActionHasil = useCallback(
+    // @ts-ignore
+    (onClose) => {
+      if (isLoading || isFetching) return;
+      if (queryTPP?.data[0].is_sync_simgaji !== "1") return;
+      return (
+        <>
+          <Button
+            // radius="none"
+            className="disabled:cursor-not-allowed"
+            isDisabled={queryTPP?.data[0].is_sync_simgaji !== "1"}
+            color="success"
+            variant="flat"
+            startContent={<Download color="text-green-800" size={12} />}
+            onPress={() => window.location.reload()}
+          >
+            Hasil Sinkronisasi
+          </Button>
+          <Button
+            color="primary"
+            variant="bordered"
+            onPress={onClose}
+            className="border-1 border-blue-500/50"
+          >
+            Tutup
+          </Button>
+        </>
+      );
+    },
+    [isFetching, isLoading, queryTPP?.data],
+  );
 
   const renderActionKirim = useCallback(() => {
-    if (isLoading || isFetching) return "";
-    if (queryTPP?.data[0].is_sync_simgaji === "1") return null;
-    if (
-      queryTPP?.data[0].fid_status !== "4" &&
-      queryTPP?.data[0].fid_status !== "5"
-    )
-      return null;
-    if (queryTPP?.data[0].fid_status === "5") return null;
+    if (isLoading || isFetching) return;
+    if (queryTPP?.data[0].is_sync_simgaji === "1") return;
+    if (["4", "5"].includes(queryTPP?.data[0].fid_status)) return;
+    if (queryTPP?.data[0].fid_status === "5") return;
     // jika status data peremajaan masih verifikasi, entri, null
-    if (
-      queryTPP?.data[0].is_peremajaan === "VERIFIKASI" ||
-      queryTPP?.data[0].is_peremajaan === "ENTRI" ||
-      queryTPP?.data[0].is_peremajaan === null
-    )
-      return null;
+    if (["VERIFIKASI", "ENTRI", null].includes(queryTPP?.data[0].is_peremajaan))
+      return;
 
     return (
       <div className="inline-flex items-center justify-between w-full gap-x-3">
@@ -459,7 +649,7 @@ export const ModalInterceptTppPppk = ({ params }) => {
     );
   }, [isFetching, isLoading, queryTPP?.data, router, sigapok, silka]);
 
-  if (queryTPP?.status === false) {
+  if (!queryTPP?.status) {
     return (
       <>
         <Modal
@@ -467,17 +657,29 @@ export const ModalInterceptTppPppk = ({ params }) => {
           backdrop="blur"
           isOpen={true}
           scrollBehavior="outside"
-          onClose={() => router.back()}>
+          onClose={() => router.back()}
+          classNames={{
+            closeButton:
+              "top-4 right-6 border border-gray-100 rounded-lg text-gray-400 hover:bg-gray-200/50 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 focus:outline-none focus:ring-offset-2 data-[state=open]:bg-gray-100/50",
+          }}
+        >
           <ModalContent>
-            <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
-              SINKRONISASI TPP{" "}
-              <div className="text-sm font-normal text-gray-400">
-                Data TPP SILKa Online
+            <ModalHeader className="flex items-center justify-start gap-x-4 ">
+              <div className="inline-flex items-center justify-center p-2 text-center bg-blue-100 rounded-lg">
+                <WalletIcon className="text-blue-500 w-7 h-7" />
+              </div>
+              <div className="flex flex-col items-start justify-start">
+                <div>Sinkronisasi TPP</div>
+                <div className="text-sm font-normal text-gray-400">
+                  Data TPP SILKa Online
+                </div>
               </div>
             </ModalHeader>
             <ModalBody className="flex items-center justify-center flex-column gap-y-3">
-              <InboxIcon className="text-gray-300 size-8 dark:text-gray-700" />
-              <p>Data TPP Tidak Ditemukan</p>
+              <div className="p-3 bg-gray-50 rounded-xl">
+                <InboxIcon className="text-gray-300 size-8 dark:text-gray-700" />
+              </div>
+              <p className="text-gray-300">Data TPP Tidak Ditemukan</p>
             </ModalBody>
           </ModalContent>
         </Modal>
@@ -489,23 +691,35 @@ export const ModalInterceptTppPppk = ({ params }) => {
     <>
       <Modal
         aria-hidden="true"
-        size="2xl"
+        size="3xl"
         backdrop="blur"
         isOpen={true}
         scrollBehavior="outside"
-        onClose={() => router.back()}>
+        onClose={() => router.back()}
+        classNames={{
+          closeButton:
+            "top-4 right-6 border border-gray-100 rounded-lg text-gray-400 hover:bg-gray-200/50 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 focus:outline-none focus:ring-offset-2 data-[state=open]:bg-gray-100/50",
+        }}
+      >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 bg-gray-100 dark:bg-blue-900 rounded-t-xl">
-                SINKRONISASI TPP{" "}
-                <div className="text-sm font-normal text-gray-400">
-                  Data TPP SILKa Online
+              <ModalHeader className="flex items-center justify-start gap-x-4 ">
+                <div className="inline-flex items-center justify-center p-2 text-center bg-blue-100 rounded-lg">
+                  <WalletIcon className="text-blue-500 w-7 h-7" />
+                </div>
+                <div className="flex flex-col items-start justify-start">
+                  <div>Sinkronisasi TPP</div>
+                  <div className="text-sm font-normal text-gray-400">
+                    Data TPP SILKa Online
+                  </div>
                 </div>
               </ModalHeader>
-              <ModalBody>{renderTPP()}</ModalBody>
-              <ModalFooter className="items-start justify-between">
-                {renderActionHasil()} {renderActionKirim()}
+              <ModalBody>
+                <ScrollShadow>{renderTPP()}</ScrollShadow>
+              </ModalBody>
+              <ModalFooter className="flex items-center justify-between px-8 mt-2 rounded-b-xl bg-gray-50 dark:bg-blue-800/30">
+                {renderActionHasil(onClose)} {renderActionKirim()}
               </ModalFooter>
             </>
           )}

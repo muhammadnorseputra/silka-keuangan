@@ -11,6 +11,12 @@ import {
 import { polaNIP } from "@/helpers/polanip";
 import { terbilangRupiah } from "@/helpers/rupiah";
 import { useSession } from "@/lib/session";
+import {
+  IdentificationIcon,
+  UserIcon,
+  BriefcaseIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/solid";
 import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { ExclamationCircle } from "react-bootstrap-icons";
@@ -31,7 +37,7 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
 
   if (isFetching || isPending) return <PlaceholderBar />;
 
-  if (row.status === false) {
+  if (!row.status) {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
         <ExclamationCircle className="size-8" />
@@ -66,19 +72,14 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
 
   const renderButtonKirim = () => {
     // jika sudah melakukan sinkronisasi
-    if (row?.data[0].is_sync_simgaji === "1") return null;
+    if (row?.data[0].is_sync_simgaji === "1") return;
     // jika status data tpp tidak sama dengan APPROVE dan CETAK
-    if (row?.data[0].fid_status !== "4" && row?.data[0].fid_status !== "5")
-      return null;
+    if (!["4", "5"].includes(row?.data[0].fid_status)) return;
     // jika status data tpp sudah cetak
-    if (row?.data[0].fid_status === "5") return null;
+    if (row?.data[0].fid_status === "5") return;
     // jika status data peremajaan masih verifikasi, entri, null
-    if (
-      row?.data[0].is_peremajaan === "VERIFIKASI" ||
-      row?.data[0].is_peremajaan === "ENTRI" ||
-      row?.data[0].is_peremajaan === null
-    )
-      return null;
+    if (["VERIFIKASI", "ENTRI", null].includes(row?.data[0].is_peremajaan))
+      return;
     return (
       <>
         <Divider />
@@ -112,38 +113,66 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
           message="Data Pegawai belum diremajakan, silahkan melakukan peremajaan data terlebih dahulu"
         />
       )}
-      <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
-        <div>
-          <div className="text-gray-400">NIP</div>
-          <div className="font-bold">{polaNIP(nip) ?? "-"}</div>
-        </div>
-        <div>
-          <div className="text-gray-400">NAMA</div>
-          <div className="font-bold">
-            {`${gelar_depan} ${nama} ${gelar_belakang}`}
+      <div className="flex flex-col border border-gray-200 rounded-lg shadow">
+        <div className="flex flex-col justify-start sm:flex-row divide-x-1">
+          <div className="inline-flex items-center justify-start flex-1 p-3 border-b gap-x-4">
+            <div className="p-2 rounded-lg bg-blue-50">
+              <IdentificationIcon className="text-blue-600 size-6" />
+            </div>
+            <div className="inline-flex flex-col">
+              <div className="text-xs text-gray-400">NIP</div>
+              <div className="text-sm font-semibold">{polaNIP(nip) ?? "-"}</div>
+            </div>
+          </div>
+          <div className="inline-flex items-center justify-start flex-1 p-3 border-b gap-x-4">
+            <div className="p-2 rounded-lg bg-blue-50">
+            <UserIcon className="text-blue-600 size-5" />
+            </div>
+            <div className="inline-flex flex-col">
+              <div className="text-xs text-gray-400">NAMA</div>
+              <div className="text-sm font-semibold">
+                {`${gelar_depan} ${nama} ${gelar_belakang}`}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
-        <div>
-          <div className="text-gray-400">JABATAN</div>
-          <div className="font-bold">{jabatan ?? "-"}</div>
+        <div className="flex flex-col justify-start px-3 py-4 border-b sm:flex-row">
+          <div className="inline-flex items-center justify-start gap-x-4">
+            <div className="p-2 rounded-lg bg-blue-50">
+            <BriefcaseIcon className="text-blue-600 size-6" />
+            </div>
+            <div className="inline-flex flex-col">
+              <div className="text-xs text-gray-400">JABATAN</div>
+              <div className="text-sm font-semibold">{jabatan ?? "-"}</div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
-        <div>
-          <div className="text-gray-400">BULAN</div>
-          <div className="font-bold">{bulan ?? "-"}</div>
-        </div>
-        <div>
-          <div className="text-gray-400">TAHUN</div>
-          <div className="font-bold">{tahun ?? "-"}</div>
+        <div className="flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6 divide-x-1">
+          <div className="inline-flex items-center justify-start flex-1 p-3 px-3 gap-x-4">
+            <div className="p-2 rounded-lg bg-blue-50">
+            <CalendarDaysIcon className="text-blue-600 size-6" />
+            </div>
+            <div className="inline-flex flex-col">
+              <div className="text-xs text-gray-400">BULAN</div>
+              <div className="text-sm font-semibold">{bulan ?? "-"}</div>
+            </div>
+          </div>
+          <div className="inline-flex items-center justify-start flex-1 p-3 px-3 gap-x-4">
+            <div className="p-2 rounded-lg bg-blue-50">
+            <CalendarDaysIcon className="text-blue-600 size-6" />
+            </div>
+            <div className="inline-flex flex-col">
+              <div className="text-xs text-gray-400">TAHUN</div>
+              <div className="text-sm font-semibold">{tahun ?? "-"}</div>
+            </div>
+          </div>
         </div>
       </div>
       <Accordion
         variant="bordered"
         defaultExpandedKeys={["1", "2"]}
-        selectionMode="multiple">
+        selectionMode="multiple"
+      >
         <AccordionItem key="1" aria-label="Accordion 1" title="Take Home Pay">
           <div className="inline-flex flex-col justify-start sm:flex-row gap-x-6 gap-y-8">
             <div>
@@ -175,7 +204,8 @@ export default function RenderSilkaService({ nip: NIP, sigapok }) {
         <AccordionItem
           key="2"
           aria-label="Accordion 2"
-          title="Detail Kalkulasi TPP">
+          title="Detail Kalkulasi TPP"
+        >
           <div className="inline-flex flex-col justify-start sm:flex-row gap-x-12 gap-y-8">
             <div>
               <div className="text-gray-400">BEBAN KERJA</div>

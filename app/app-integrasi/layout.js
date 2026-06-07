@@ -5,6 +5,7 @@ import {
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { BtnProfile } from "@/components/button/btn-profile";
+import { BuildingOfficeIcon } from "@heroicons/react/24/solid";
 
 // @ts-ignore
 export default async function Layout({ children }) {
@@ -15,10 +16,10 @@ export default async function Layout({ children }) {
   }
   const { unker } = getProfile?.data?.pegawai;
   return (
-    <div className="flex justify-center min-h-screen bg-blue-50 dark:bg-slate-700">
-      <div className="w-full mx-auto my-4 overflow-y-auto border dark:border-slate-600 bg-gradient-to-b from-gray-100 to-white rounded-2xl card dark:from-slate-800 dark:to-slate-700 lg:w-8/12">
-        <div className="py-4 bg-blue-700 border-0 dark:bg-slate-600 card-header">
-          <div className="flex flex-row justify-start pb-4 mx-8 md:justify-between md:items-center">
+    <div className="flex justify-center bg-blue-50 dark:bg-slate-700">
+      <div className="w-full mx-auto my-4 card sm:w-10/12 2xl:w-8/12">
+        <div className="py-2 bg-white border-0 shadow-lg rounded-2xl dark:bg-slate-600 card-header dark:shadow-slate-700">
+          <div className="flex flex-row justify-start pb-4 mx-6 md:justify-between md:items-center">
             <div className="inline-flex flex-col items-start justify-start gap-3 pt-3 sm:flex-row">
               <Image
                 className="mb-2 rounded img-fluid md:mb-0"
@@ -29,12 +30,15 @@ export default async function Layout({ children }) {
                 quality={90}
                 alt="Logo"
               />
-              <div className="text-base text-white">
+              <div className="text-base text-gray-700 dark:text-gray-300">
                 <p className="font-bold">
                   Sistem Informasi Layanan Kepegawaian Terintegrasi
                 </p>
                 <p className="font-bold fs-6">Pemerintah Kab. Balangan</p>
-                <p>{unker}</p>
+                <p className="flex items-center">
+                  <BuildingOfficeIcon className="inline w-5 h-5 mr-2 text-blue-400" />
+                  {unker}
+                </p>
               </div>
             </div>
             <div className="inline-flex justify-start mt-4 md:mt-0">
@@ -42,7 +46,7 @@ export default async function Layout({ children }) {
             </div>
           </div>
         </div>
-        <div className="card-body">{children}</div>
+        <div>{children}</div>
       </div>
     </div>
   );

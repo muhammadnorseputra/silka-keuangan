@@ -4,7 +4,12 @@ import { SearchPegawai } from "@/dummy/search-pegawai";
 import { polaNIP } from "@/helpers/polanip";
 import {
   ArchiveBoxXMarkIcon,
+  ArrowRightIcon,
+  BriefcaseIcon,
+  BuildingLibraryIcon,
   ChevronUpDownIcon,
+  DocumentTextIcon,
+  InboxIcon,
   MagnifyingGlassCircleIcon,
   PhotoIcon,
   UserCircleIcon,
@@ -31,6 +36,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useModalDaftarLayananContext } from "@/lib/context/modal-daftar-layanan-context";
 import ModalLayanan from "../modal/modal-daftar-layanan";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 export default function CariASN() {
   const { isOpen, setIsOpen, setJenis } = useModalDaftarLayananContext();
@@ -67,7 +73,7 @@ export default function CariASN() {
         },
       });
     },
-    [mutate, setJenis]
+    [mutate, setJenis],
   );
   return (
     <>
@@ -77,15 +83,19 @@ export default function CariASN() {
         method="POST"
         autoComplete="off"
         noValidate
-        className="flex flex-wrap items-start w-10/12 md:flex-nowrap">
+        className="relative flex flex-wrap items-center p-8 mx-8 rounded-lg shadow-lg bg-gradient-to-b from-white to-gray-100 dark:from-slate-800 dark:to-slate-900 md:flex-nowrap gap-x-4 gap-y-4 -top-16"
+      >
         <Input
           type="search"
           placeholder="Masukan NIP atau NAMA"
-          radius="none"
+          label="Kata Kunci"
+          labelPlacement="outside"
+          radius="lg"
           size="lg"
-          name="filter"
-          variant="underlined"
-          startContent={<MagnifyingGlassCircleIcon className="size-6" />}
+          variant="bordered"
+          startContent={
+            <MagnifyingGlassCircleIcon className="text-gray-500 size-8" />
+          }
           isInvalid={errors?.filter ? true : false}
           errorMessage={errors?.filter?.message && `${errors.filter.message}`}
           {...register("filter", {
@@ -96,43 +106,52 @@ export default function CariASN() {
             },
           })}
         />
-        <Divider orientation="vertical" />
         <Select
           selectorIcon={<ChevronUpDownIcon className="size-8" />}
           label="Jenis Pegawai"
           placeholder="Pilih jenis pegawai"
-          size="sm"
-          radius="none"
-          variant="underlined"
-          labelPlacement="inside"
-          name="type"
+          size="lg"
+          labelPlacement="outside"
+          radius="lg"
+          variant="bordered"
           isInvalid={errors?.type ? true : false}
           errorMessage={errors?.type?.message && `${errors.type.message}`}
           {...register("type", {
             required: "Pilih jenis pegawai",
-          })}>
+          })}
+        >
           <SelectItem key="PNS" value="PNS" textValue="PNS">
-            <div className="flex flex-row items-center justify-start p-4 gap-x-2">
-              <UserGroupIcon className="size-6" />
+            <div className="flex flex-row items-center justify-start p-2 gap-x-2">
+              <div className="p-2 rounded-lg bg-green-200/50 dark:bg-green-100/30">
+                <UserGroupIcon className="text-green-300 size-6" />
+              </div>
               <span className="font-bold">PNS</span>
             </div>
           </SelectItem>
           <SelectItem key="PPPK" value="PPPK" textValue="PPPK">
-            <div className="flex flex-row items-center justify-start p-4 gap-x-2">
-              <UserCircleIcon className="size-6" />
+            <div className="flex flex-row items-center justify-start p-2 gap-x-2">
+              <div className="p-2 rounded-lg bg-purple-200/50 dark:bg-purple-100/30">
+                <UserCircleIcon className="text-purple-300 size-6" />
+              </div>
               <span className="font-bold">PPPK</span>
             </div>
           </SelectItem>
         </Select>
         <Button
+          startContent={
+            isPendingFn || isLoading || isSubmitting ? null : (
+              <MagnifyingGlassIcon className="w-9 h-9" />
+            )
+          }
           isDisabled={isPendingFn || isLoading || isSubmitting}
           isLoading={isPendingFn || isLoading || isSubmitting}
           spinner={
             <svg
-              className="w-6 h-6 text-current animate-spin"
+              className="w-6 h-6 text-current duration-100 animate-spin"
               fill="none"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <circle
                 className="opacity-25"
                 cx="12"
@@ -148,28 +167,39 @@ export default function CariASN() {
               />
             </svg>
           }
-          variant="flat"
+          variant="shadow"
           color="primary"
           size="lg"
-          radius="none"
+          radius="lg"
           type="submit"
-          className="lg:max-w-[100px]"
-          fullWidth>
+          fullWidth={false}
+          className="min-w-[200px] relative top-3"
+        >
           {isPendingFn || isLoading || isSubmitting ? "" : "Cari"}
         </Button>
       </form>
-      <Card className="my-8 w-10/12 max-h-[500px] overflow-y-auto">
-        <ScrollShadow size={100} className="h-[500px]">
-          <CardHeader className="sticky top-0">
+      <Card className="mx-8 overflow-y-auto border-0 -top-12" disableRipple>
+        <ScrollShadow size={100} isEnabled={false} className="h-[500px]">
+          <CardHeader className="sticky top-0 z-10 px-8 py-4 bg-white border-b dark:bg-gray-900 dark:border-gray-700">
             {
               //@ts-ignore
               data?.status !== false && data?.status ? (
-                <p className="font-bold">
-                  {
-                    // @ts-ignore
-                    data?.message
-                  }
-                </p>
+                <div className="inline-flex items-start flex-start gap-x-4">
+                  <div className="p-2 rounded-lg bg-green-200/50 dark:bg-green-100/30">
+                    <DocumentTextIcon className="text-green-400 size-6" />
+                  </div>
+                  <div className="flex flex-col items-start justify-start">
+                    <span className="text-lg font-bold text-gray-700 dark:text-gray-300">
+                      Hasil Pencarian
+                    </span>
+                    <span className="text-sm text-gray-400 dark:text-gray-300">
+                      {
+                        // @ts-ignore
+                        data?.message
+                      }
+                    </span>
+                  </div>
+                </div>
               ) : (
                 ""
               )
@@ -211,17 +241,16 @@ export const ListPegawai = ({ props }) => {
   if (status === false) {
     return (
       <p className="flex justify-center items-center flex-col gap-8 h-[400px]">
-        <ArchiveBoxXMarkIcon className="text-gray-500 size-32" />
-        {message}
+        <ArchiveBoxXMarkIcon className="text-gray-400 dark:text-gray-300 size-32" />
+        <span className="text-gray-300 dark:text-gray-400">{message}</span>
       </p>
     );
   }
   if (!status) {
     return (
       <p className="flex justify-center items-center flex-col gap-8 h-[400px]">
-        <MagnifyingGlassCircleIcon className="text-gray-300 size-32" />
-        Silahkan Ketik NIP atau NAMA, kemudian pilih jenis pegawai, lalu klik
-        cari.
+        <InboxIcon className="text-gray-400 dark:text-gray-300 size-32" />
+        <span className="text-gray-300 dark:text-gray-400">Data tidak ditemukan atau kosong.</span>
       </p>
     );
   }
@@ -229,30 +258,35 @@ export const ListPegawai = ({ props }) => {
     <>
       {data?.map((row) => (
         <div key={row.nip}>
-          <div className="flex flex-col items-start justify-center w-full p-3 mx-auto transition-all duration-100 rounded-lg group sm:flex-row gap-x-6 hover:bg-gray-100 dark:hover:bg-slate-700 hover:shadow-sm">
+          <div className="flex flex-col items-center justify-center w-full p-4 transition-all duration-100 rounded-lg group sm:flex-row gap-x-6 hover:bg-gray-100 dark:hover:bg-slate-700 hover:shadow-sm">
             <div>
-              <Avatar size="lg" name={row.nama_asn} />
+              <Avatar size="lg" name={row.nama_asn} className="font-semibold text-blue-900 bg-blue-200" />
             </div>
             <div className="flex flex-col w-full gap-1">
-              <div className="font-bold">{row.nama_asn}</div>
+              <div className="font-bold text-gray-700 dark:text-gray-300">{row.nama_asn}</div>
               <Snippet
                 symbol="NIP : "
-                size="md"
+                size="sm"
                 color="primary"
                 variant="flat"
-                codeString={row.nip}>
+                codeString={row.nip}
+                className="rounded-lg w-max"
+              >
                 {polaNIP(row.nip)}
               </Snippet>
-              <div className="text-ellipsis">{row.nama_jabatan}</div>
-              <div className="text-ellipsis">{row.nama_unit_kerja}</div>
+              <div className="inline-flex items-center justify-start text-gray-600 gap-x-2 text-ellipsis dark:text-gray-400"><BriefcaseIcon className="inline-block w-4 h-4" />{row.nama_jabatan}</div>
+              <div className="inline-flex items-center justify-start text-gray-600 gap-x-2 text-ellipsis dark:text-gray-400"><BuildingLibraryIcon className="inline-block w-4 h-4" />{row.nama_unit_kerja}</div>
             </div>
             <div className="hidden group-hover:block">
               <Button
+                className="font-bold text-blue-500"
+                variant="light"
                 onPress={() => {
                   setIsOpen(true);
                   setData(row);
-                }}>
-                Pilih Layanan
+                }}
+              >
+                Pilih Layanan <ArrowRightIcon className="inline w-4 h-4 ml-2" />
               </Button>
             </div>
           </div>

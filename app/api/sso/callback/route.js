@@ -41,11 +41,12 @@ export async function GET(req) {
 
   // verify code
   const response = await getAccessTokenWithCode(code, scope);
+  // const response = await codeVerify(code, scope);
 
   if(!response.response.status)
   {
     const res = NextResponse.redirect(
-      `${fullHost}/auth/callback`, 302
+      `${fullHost}/auth/callback?status=gagal`, 302
     );
     // @ts-ignore
     res.cookies.set("callback_data_sso_silkainexis", JSON.stringify(response.response));
@@ -53,7 +54,7 @@ export async function GET(req) {
   }
 
   // get profile if access_token valid
-  const profile = await userinfos(response.response.data.access_token)
+  const profile = await userinfos(response.response.access_token)
   
   cookies().set(
     "USER_SILKA",
@@ -61,7 +62,7 @@ export async function GET(req) {
       // @ts-ignore
       JSON.stringify({
         data: profile.response.data,
-        access_token: response.response.data.access_token,
+        access_token: response.response.access_token,
       }),
       "Bkpsdm@6811#"
     ).toString(),
@@ -71,12 +72,11 @@ export async function GET(req) {
   );
 
   const res = NextResponse.redirect(
-    `${fullHost}/auth/callback`, 302
+    `${fullHost}/auth/callback?status=success`, 302
   );
-  // @ts-ignore
   res.cookies.set("callback_data_sso_silkainexis", JSON.stringify({
-      'status': response.response.status,
-      'message': response.response.message
+      status: response.response.status,
+      message: response.response.message
   }));
   return res;
 }
@@ -111,7 +111,7 @@ export const codeVerify = async (code, scope) => {
 export const getAccessTokenWithCode = async (code, scope) => {
   const url = process.env.NEXT_PUBLIC_SILKA_BASE_URL;
   try {
-    const req = await fetch(`${url}/services/v2/oauth/sso/access_token_db_with_code`, {
+    const req = await fetch(`${url}/services/v2/oauth/sso/access_token`, {
       method: "POST",
       cache: "no-store",
       headers: {

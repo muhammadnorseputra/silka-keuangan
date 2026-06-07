@@ -1,6 +1,6 @@
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
-export const AlertDanger = ({ title, message = "", children = null }) => {
+export const AlertDanger = ({ title = "", message = "", children = null }) => {
   return (
     <div
       role="alert"
@@ -26,7 +26,7 @@ export const AlertDanger = ({ title, message = "", children = null }) => {
   );
 };
 
-export const AlertWarning = ({ title = null, message = null, children = null }) => {
+export const AlertWarning = ({ title = "", message = "", children = ""}) => {
   return (
     <div
       role="alert"
@@ -52,7 +52,7 @@ export const AlertWarning = ({ title = null, message = null, children = null }) 
   );
 };
 
-export const AlertInfo = ({ title, message = "", children = "" }) => {
+export const AlertInfo = ({ title = "", message = "", children = "" }) => {
   return (
     <div
       role="alert"
@@ -66,7 +66,7 @@ export const AlertInfo = ({ title, message = "", children = "" }) => {
   );
 };
 
-export const AlertSuccess = ({ title, message = "", children }) => {
+export const AlertSuccess = ({ title = "", message = "", children }) => {
   return (
     <div
       role="alert"

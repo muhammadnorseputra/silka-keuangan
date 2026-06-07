@@ -34,18 +34,18 @@ async function Page({ searchParams }) {
   };
   return (
     <>
-      <section className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
+      <section className="w-full h-screen bg-blue-400 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto">
           <Card
             radius="none"
             shadow="lg"
-            className="max-h-screen overflow-y-auto h-screen">
-            <CardHeader className="flex justify-between items-start sm:items-center">
-              <div className="inline-flex items-start sm:items-center gap-3">
+            className="h-screen max-h-screen overflow-y-auto">
+            <CardHeader className="flex items-start justify-between sm:items-center">
+              <div className="inline-flex items-start gap-3 sm:items-center">
                 <BtnBackNextUi goTo="/app-integrasi/dashboard" />
                 <div className="flex flex-col">
                   <div className="text-xl uppercase">DATA Pegawai</div>
-                  <div className="text-small text-default-500 pr-5 sm:pr-0">
+                  <div className="pr-5 text-small text-default-500 sm:pr-0">
                     {unker}
                   </div>
                 </div>

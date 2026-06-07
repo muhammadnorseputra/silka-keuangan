@@ -5,6 +5,7 @@ import { Button } from "@nextui-org/react";
 import { useRouter } from "next-nprogress-bar";
 import { state } from "@/app/auth/state";
 import toast from "react-hot-toast";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 export default function SSOButton({ query, uuid }) {
 
   const host = process.env.NEXT_PUBLIC_HOST_SSO || "http://localhost:3000";
@@ -16,8 +17,8 @@ export default function SSOButton({ query, uuid }) {
     try {
       setLoading(true);
       
-      const width = 500;
-      const height = 700;
+      const width = 700;
+      const height = 900;
 
       const left = window.screenX + (window.outerWidth - width) / 2;
       const top = window.screenY + (window.outerHeight - height) / 2;
@@ -94,12 +95,14 @@ export default function SSOButton({ query, uuid }) {
         loginSSO();
       }}
       fullWidth
-      color="primary"
+      color="success"
       isDisabled={loading}
       isLoading={loading}
+      variant="shadow"
       size="lg"
-      radius="lg">
-      Continue with SSO <FingerPrintIcon className="text-white size-6" />
+      radius="md"
+      className="flex">
+      <span className="flex-1">Continue with SSO</span> <ArrowRightIcon className="text-black size-6" />
     </Button>
   );
 }

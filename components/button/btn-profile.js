@@ -14,6 +14,7 @@ import {
   ModalFooter,
   ModalHeader,
   Switch,
+  User,
   useSwitch,
 } from "@nextui-org/react";
 import { useModalContext } from "@/lib/context/modal-context";
@@ -41,8 +42,8 @@ export const BtnProfile = ({ profile, size = "md" }) => {
     await toast.promise(
       (async () => {
         const revoke = await RevokeToken(nip, profile?.access_token);
-
-        if (!revoke.response.status) {
+        
+        if (!revoke?.response.status) {
           throw new Error(revoke.response.message || "Logout gagal");
         }
         setIsOpen(false);
@@ -64,6 +65,7 @@ export const BtnProfile = ({ profile, size = "md" }) => {
 
   return (
     <>
+    
       <Dropdown
         aria-haspopup="dialog"
         aria-label="Menu"
@@ -72,22 +74,12 @@ export const BtnProfile = ({ profile, size = "md" }) => {
         closeOnSelect={true}
       >
         <DropdownTrigger>
-          <Avatar
-            showFallback
-            fallback={
-              <PhotoIcon
-                className="animate-pulse size-8 text-default-500"
-                fill="currentColor"
-              />
-            }
-            isBordered
-            as="button"
-            className="transition-transform"
-            color="default"
+          <User
+            avatarProps={{
+              src: picture || "/assets/user-286.svg",
+            }}
+            description={level}
             name={nama_lengkap}
-            // @ts-ignore
-            size={size}
-            src="/assets/user-286.svg"
           />
         </DropdownTrigger>
         <DropdownMenu

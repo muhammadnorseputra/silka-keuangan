@@ -23,18 +23,18 @@ export default async function Page({ params }) {
   const NIP = decrypt(params?.slug[0], "bkpsdm");
   return (
     <>
-      <div className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
-        <div className="max-w-6xl mx-auto">
+      <div className="w-full h-screen bg-blue-400 dark:bg-slate-800">
+        <div className="mx-auto">
           <Card
-            shadow="lg"
+            shadow="none"
             radius="none"
-            className="max-h-screen overflow-y-auto my-auto h-screen">
-            <CardHeader className="flex justify-between items-center">
+            className="h-screen max-h-screen my-auto overflow-y-auto">
+            <CardHeader className="flex items-center justify-between">
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <div className="text-xl flex flex-col">
-                    <span className="uppercase font-bold">
+                  <div className="flex flex-col text-xl">
+                    <span className="font-bold uppercase">
                       Tambahan Penghasilan Pegawai
                     </span>
                     <ShowProfile jenis="PNS" nipnama={NIP} />
@@ -43,10 +43,10 @@ export default async function Page({ params }) {
               </div>
             </CardHeader>
             <CardBody>
-              <div className="flex flex-col md:flex-row justify-between items-start gap-x-6 gap-y-3">
+              <div className="flex flex-col items-start justify-between md:flex-row gap-x-6 gap-y-3">
                 {/* Get Data Silka */}
                 <Card fullWidth>
-                  <CardHeader className="flex justify-between items-center gap-3 bg-blue-100">
+                  <CardHeader className="flex items-center justify-between gap-3 bg-blue-50">
                     <div className="flex flex-col">
                       <p className="text-md dark:text-blue-900">SILKa Online</p>
                       <p className="text-small text-default-500">
@@ -56,7 +56,7 @@ export default async function Page({ params }) {
                     <BtnRefreshQuery queryKey={["silka.tpp.nip", NIP]} />
                   </CardHeader>
                   <Divider />
-                  <CardBody className="flex flex-col gap-y-8 px-8 py-8">
+                  <CardBody className="flex flex-col px-8 py-8 gap-y-4">
                     <RenderSilkaService nip={NIP} sigapok={sigapok} />
                   </CardBody>
                 </Card>
@@ -71,7 +71,7 @@ export default async function Page({ params }) {
                     </div>
                   </CardHeader>
                   <Divider />
-                  <CardBody className="flex flex-col gap-y-8 px-8 py-8">
+                  <CardBody className="flex flex-col px-8 py-8 gap-y-8">
                     <Suspense fallback={<PlaceholderBar />}>
                       <RenderGapokServices nip={NIP} sigapok={sigapok} />
                     </Suspense>

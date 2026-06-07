@@ -87,20 +87,19 @@ export const FormAuth = () => {
           radius="sm"
           variant="flat"
           labelPlacement="inside"
-          name="type"
           isInvalid={errors?.type ? true : false}
           errorMessage={errors?.type?.message && `${errors.type.message}`}
           {...register("type", {
             required: "Pilih type account",
           })}>
           <SelectItem key="PERSONAL" value="PERSONAL" textValue="PERSONAL">
-            <div className="flex flex-row items-center justify-start gap-x-2 p-4">
+            <div className="flex flex-row items-center justify-start p-4 gap-x-2">
               <UserCircleIcon className="size-6" />
               <span className="font-bold">Personal PNS</span>
             </div>
           </SelectItem>
           <SelectItem key="UMPEG" value="UMPEG" textValue="UMPEG">
-            <div className="flex flex-row items-center justify-start gap-x-2 p-4">
+            <div className="flex flex-row items-center justify-start p-4 gap-x-2">
               <UserGroupIcon className="size-6" />
               <span className="font-bold">Pengelola Kepegawaian</span>
             </div>
@@ -129,7 +128,7 @@ export const FormAuth = () => {
             },
           })}
           startContent={
-            <UserIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0" />
+            <UserIcon className="flex-shrink-0 pointer-events-none size-5 text-default-400" />
           }
         />
         <Input
@@ -151,7 +150,7 @@ export const FormAuth = () => {
             errors?.password?.message && `${errors.password.message}`
           }
           startContent={
-            <KeyIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0" />
+            <KeyIcon className="flex-shrink-0 pointer-events-none size-5 text-default-400" />
           }
           endContent={
             <Tooltip
@@ -163,9 +162,9 @@ export const FormAuth = () => {
                 onClick={toggleVisibility}
                 aria-label="toggle password visibility">
                 {!isVisible ? (
-                  <EyeSlashIcon className="size-6 text-gray-400 dark:text-gray-200" />
+                  <EyeSlashIcon className="text-gray-400 size-6 dark:text-gray-200" />
                 ) : (
-                  <EyeIcon className="size-6 text-gray-800 dark:text-gray-400" />
+                  <EyeIcon className="text-gray-800 size-6 dark:text-gray-400" />
                 )}
               </button>
             </Tooltip>
@@ -182,7 +181,7 @@ export const FormAuth = () => {
           variant="solid"
           spinner={
             <svg
-              className="animate-spin h-5 w-5 text-current"
+              className="w-5 h-5 text-current animate-spin"
               fill="none"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg">
