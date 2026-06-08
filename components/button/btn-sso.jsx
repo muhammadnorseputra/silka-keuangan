@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { FingerPrintIcon } from "@heroicons/react/24/solid";
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { useRouter } from "next-nprogress-bar";
 import { state } from "@/app/auth/state";
 import toast from "react-hot-toast";
@@ -16,7 +16,6 @@ export default function SSOButton({ query, uuid }) {
   const loginSSO = () => {
     try {
       setLoading(true);
-      
       const width = 700;
       const height = 900;
 

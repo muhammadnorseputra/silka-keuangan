@@ -37,6 +37,7 @@ export default async function Login() {
     state,
   };
 
+  // @ts-ignore
   const queryString = new URLSearchParams(params).toString();
 
   // session
@@ -64,7 +65,7 @@ export default async function Login() {
             src="/logo-inexis.png"
             as={NextImage}
             width={200}
-            height={100}
+            height={120}
             quality={100}
             alt="Logo - Inexis"
           />

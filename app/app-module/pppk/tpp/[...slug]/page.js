@@ -21,8 +21,8 @@ export default async function Page({ params }) {
 
   return (
     <>
-      <div className="w-full h-screen bg-blue-500 dark:bg-slate-800">
-        <div className="mx-auto">
+      <div className="w-full h-screen bg-blue-400 dark:bg-slate-800">
+        <div className="max-w-4xl mx-auto">
           <Card
             radius="none"
             shadow="lg"
@@ -41,7 +41,7 @@ export default async function Page({ params }) {
               </div>
             </CardHeader>
             <CardBody>
-              <div className="flex flex-col items-start justify-between md:flex-row gap-x-6 gap-y-3">
+              <div className="flex flex-col items-start justify-between gap-x-6 gap-y-3">
                 {/* Get Data Silka */}
                 <Card fullWidth>
                   <CardHeader className="flex gap-3">

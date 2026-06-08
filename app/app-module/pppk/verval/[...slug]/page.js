@@ -28,18 +28,18 @@ export default async function Page({ params }) {
 
   return (
     <>
-      <div className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
+      <div className="w-full h-screen bg-blue-400 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto">
           <Card
             radius="none"
             shadow="lg"
-            className="max-h-screen overflow-y-auto my-auto">
-            <CardHeader className="flex justify-between items-center">
+            className="max-h-screen my-auto overflow-y-auto">
+            <CardHeader className="flex items-center justify-between">
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <div className="text-xl flex flex-col">
-                    <span className="uppercase font-bold">
+                  <div className="flex flex-col text-xl">
+                    <span className="font-bold uppercase">
                       Verifikasi & Validasi Data Peremajaan
                     </span>
                     <ShowProfile jenis="PPPK" nipnama={NIP}/>
@@ -48,7 +48,7 @@ export default async function Page({ params }) {
               </div>
             </CardHeader>
             <CardBody>
-              <div className="flex flex-col md:flex-row justify-between items-start gap-x-6 gap-y-3">
+              <div className="flex flex-col items-start justify-between md:flex-row gap-x-6 gap-y-3">
                 {/* Get Data Silka PPPK */}
                 <Card fullWidth>
                   <CardHeader className="flex gap-3">
@@ -60,7 +60,7 @@ export default async function Page({ params }) {
                     </div>
                   </CardHeader>
                   <Divider />
-                  <CardBody className="flex flex-col gap-y-4 px-8 py-8">
+                  <CardBody className="flex flex-col px-8 py-8 gap-y-4">
                     <SilkaDataP3k {...sigapok} nip={NIP} />
                   </CardBody>
                 </Card>
@@ -75,7 +75,7 @@ export default async function Page({ params }) {
                     </div>
                   </CardHeader>
                   <Divider />
-                  <CardBody className="flex flex-col gap-y-4 px-8 py-8">
+                  <CardBody className="flex flex-col px-8 py-8 gap-y-4">
                     <SigapokDataP3k sigapok={sigapok} nip={NIP} />
                   </CardBody>
                 </Card>

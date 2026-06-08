@@ -128,7 +128,9 @@ export const BtnKirimTPP = ({
         variant="shadow"
         onPress={handleKirim}
         isLoading={isPending}
-        isDisabled={isPending}>
+        isDisabled={isPending}
+        className="disabled:cursor-not-allowed hover:disabled:cursor-not-allowed"
+        >
         <CloudArrowUp className="text-white size-5" />
         <Divider orientation="vertical" />
         Kirim

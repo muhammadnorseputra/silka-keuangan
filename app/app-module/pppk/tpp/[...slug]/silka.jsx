@@ -11,6 +11,7 @@ import {
   AlertSuccess,
   AlertWarning,
 } from "@/components/alert";
+import { IdentificationIcon, UserIcon, BriefcaseIcon, CalendarDaysIcon } from "@heroicons/react/24/solid";
 
 export default async function RenderSilkaService({ slug }) {
   const sigapok = getSessionServer("USER_GAPOK");
@@ -82,32 +83,59 @@ export default async function RenderSilkaService({ slug }) {
           Peremajaan data belum verifikasi oleh pengelola kepegawaian.
         </AlertWarning>
       )}
-      <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
-        <div>
-          <div className="text-gray-400">NIP</div>
-          <div className="font-bold">{polaNIP(nipppk) ?? "-"}</div>
-        </div>
-        <div>
-          <div className="text-gray-400">NAMA</div>
-          <div className="font-bold">
-            {`${gelar_depan} ${nama} ${gelar_belakang}`}
+      <div className="flex flex-col border border-gray-200 rounded-lg shadow">
+        <div className="flex flex-col justify-start sm:flex-row divide-x-1">
+          <div className="inline-flex items-center justify-start flex-1 p-3 border-b gap-x-4">
+            <div className="p-2 rounded-lg bg-blue-50">
+              <IdentificationIcon className="text-blue-600 size-6" />
+            </div>
+            <div className="inline-flex flex-col">
+              <div className="text-xs text-gray-400">NIP</div>
+              <div className="text-sm font-semibold">{polaNIP(nipppk) ?? "-"}</div>
+            </div>
+          </div>
+          <div className="inline-flex items-center justify-start flex-1 p-3 border-b gap-x-4">
+            <div className="p-2 rounded-lg bg-blue-50">
+            <UserIcon className="text-blue-600 size-5" />
+            </div>
+            <div className="inline-flex flex-col">
+              <div className="text-xs text-gray-400">NAMA</div>
+              <div className="text-sm font-semibold">
+                {`${gelar_depan} ${nama} ${gelar_belakang}`}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
-        <div>
-          <div className="text-gray-400">JABATAN</div>
-          <div className="font-bold">{jabatan ?? "-"}</div>
+        <div className="flex flex-col justify-start px-3 py-4 border-b sm:flex-row">
+          <div className="inline-flex items-center justify-start gap-x-4">
+            <div className="p-2 rounded-lg bg-blue-50">
+            <BriefcaseIcon className="text-blue-600 size-6" />
+            </div>
+            <div className="inline-flex flex-col">
+              <div className="text-xs text-gray-400">JABATAN</div>
+              <div className="text-sm font-semibold">{jabatan ?? "-"}</div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="inline-flex flex-col justify-start sm:flex-row gap-x-8 gap-y-8">
-        <div>
-          <div className="text-gray-400">BULAN</div>
-          <div className="font-bold">{bulan ?? "-"}</div>
-        </div>
-        <div>
-          <div className="text-gray-400">TAHUN</div>
-          <div className="font-bold">{tahun ?? "-"}</div>
+        <div className="flex flex-col justify-start sm:flex-row gap-x-8 gap-y-6 divide-x-1">
+          <div className="inline-flex items-center justify-start flex-1 p-3 px-3 gap-x-4">
+            <div className="p-2 rounded-lg bg-blue-50">
+            <CalendarDaysIcon className="text-blue-600 size-6" />
+            </div>
+            <div className="inline-flex flex-col">
+              <div className="text-xs text-gray-400">BULAN</div>
+              <div className="text-sm font-semibold">{bulan ?? "-"}</div>
+            </div>
+          </div>
+          <div className="inline-flex items-center justify-start flex-1 p-3 px-3 gap-x-4">
+            <div className="p-2 rounded-lg bg-blue-50">
+            <CalendarDaysIcon className="text-blue-600 size-6" />
+            </div>
+            <div className="inline-flex flex-col">
+              <div className="text-xs text-gray-400">TAHUN</div>
+              <div className="text-sm font-semibold">{tahun ?? "-"}</div>
+            </div>
+          </div>
         </div>
       </div>
       <DetailKalkulasi data={resultDataTpp?.data[0]} />

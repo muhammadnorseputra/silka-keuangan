@@ -339,7 +339,7 @@ export default async function Page({ params }) {
 
   return (
     <>
-      <div className="w-full h-screen bg-blue-500 dark:bg-slate-800">
+      <div className="w-full h-screen bg-blue-400 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto">
           <Card
             radius="none"

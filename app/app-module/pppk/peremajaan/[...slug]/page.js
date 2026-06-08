@@ -18,18 +18,18 @@ export default async function Page({ params }) {
 
   return (
     <>
-      <div className="w-full bg-blue-500 dark:bg-slate-800 h-screen">
+      <div className="w-full h-screen bg-blue-400 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto">
           <Card
             radius="none"
             shadow="none"
             className="max-h-screen overflow-y-auto">
-            <CardHeader className="flex justify-between items-center">
+            <CardHeader className="flex items-center justify-between">
               <div className="inline-flex items-center gap-4">
                 <BtnBackNextUi goTo="/app-module/kgb" title="Kembali" />
                 <div className="flex flex-col">
-                  <div className="text-xl flex flex-col">
-                    <span className="uppercase font-bold">
+                  <div className="flex flex-col text-xl">
+                    <span className="font-bold uppercase">
                       Peremajaan Data PPPK
                     </span>
                     <ShowProfile jenis="PPPK" nipnama={nipppk} />
